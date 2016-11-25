@@ -8,6 +8,8 @@ JC = javac
 
 CLASSES = \
 	Card.java \
+	Deck.java \
+	TestCardMain.java \
 
 TESTC = 
 
