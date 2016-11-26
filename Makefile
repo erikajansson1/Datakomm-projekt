@@ -8,8 +8,13 @@ JC = javac
 
 CLASSES = \
 	Card.java \
+	Addition.java \
+	AdditionInterface.java \
+	AdditionServer.java \
 
-TESTC = 
+TESTC = \
+	AllTest.java \
+	CardTest.java \
 
 
 all: $(CLASSES:.java=.class)
