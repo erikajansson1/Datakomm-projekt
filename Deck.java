@@ -4,11 +4,16 @@ import java.util.*;
 public class Deck {
     private Card card;
     private int amountOfCards;
+    public String[] cardTypes = {"Heart", "Spade", "Club", "Diamond"};
 
     //Create deck, TODO: Make sure 52 cards are made of specific class.
-    public Deck (Card card, int amountOfCards) {
-	this.card = card;
-	this.amountOfCards = amountOfCards;
+    public Deck (int amountOfCards) {
+    this.amountOfCards = amountOfCards;
+	for (int i = 0; i < cardTypes.length; i++) {
+	  for (int cardNumber = 0; cardNumber < 13; cardNumber++){
+			this.card = new Card(cardNumber, cardTypes[i].toString());
+		}
+	}
     }
 
     //Get one card from deck, (Do we want to be able to grab more?)
