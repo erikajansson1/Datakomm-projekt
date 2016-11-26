@@ -2,7 +2,7 @@ import java.util.*;
 
 //Deck class
 public class Deck {
-    private Card card;
+    private Card card; // this should be list
     private int amountOfCards;
     public String[] cardTypes = {"Heart", "Spade", "Club", "Diamond"};
 

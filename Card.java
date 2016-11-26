@@ -1,4 +1,3 @@
-import java.util.*;
 
 public class Card {
     private int rank;
