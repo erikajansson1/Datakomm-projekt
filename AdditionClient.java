@@ -4,8 +4,8 @@ public class AdditionClient {
     public static void main (String[] args) {
 	AdditionInterface hello;
 	try {
-	    System.setSecurityManager(new RMISecurityManager());
-	    hello = (AdditionInterface)Naming.lookup("//192.168.0.101:1099/ABC");
+	    // System.setSecurityManager(new SecurityManager());
+	    hello = (AdditionInterface)Naming.lookup("rmi://localhost/ABC:1099");
 	    int result=hello.add(9,10);
 	    System.out.println("Result is :"+result);
  

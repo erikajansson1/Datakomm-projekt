@@ -11,6 +11,7 @@ CLASSES = \
 	Addition.java \
 	AdditionInterface.java \
 	AdditionServer.java \
+	AdditionClient.java \
 
 TESTC = \
 	AllTest.java \
