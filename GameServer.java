@@ -1,6 +1,8 @@
 import java.rmi.*;
 import java.rmi.server.*;
-import java.rmi.registry.*; 
+import java.rmi.registry.*;
+import java.util.ArrayList;
+
 
        
  
@@ -30,11 +32,22 @@ public class GameServer {
 
 	    try
 		{
-		    Game newGame = new Game();			   		   
-		    Naming.rebind("rmi://localhost/ABC:1099", newGame);
+		    Game game1 = new Game(2,1,50);
+		    Game game2 = new Game(2,2,500);
+		    ArrayList<Game> gameArray = new ArrayList<Game>();
+		    /*
+		      gameArray.add(game1);
+		      gameArray.add(game2);
+		      Naming.rebind("rmi://localhost/game2:1099", gameArray);
+		    */
+		    
+		    Naming.rebind("rmi://localhost/game1:1099", game1);
+		    Naming.rebind("rmi://localhost/game2:1099", game2);
 		    System.out.println("Game Server is ready.");
+		    GameClient.main(argv);
 		}catch (Exception e) {
 		System.out.println("Game Server failed: " + e);
+
 	}
     }
 }
