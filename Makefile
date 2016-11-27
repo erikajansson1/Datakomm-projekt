@@ -8,8 +8,14 @@ JC = javac
 
 CLASSES = \
 	Card.java \
+	Game.java \
+	GameInterface.java \
+	GameServer.java \
+	GameClient.java \
 
-TESTC = 
+TESTC = \
+	AllTest.java \
+	CardTest.java \
 
 
 all: $(CLASSES:.java=.class)
