@@ -30,11 +30,8 @@ public class GameServer {
 
 	    try
 		{
-		    Game Hello = new Game();			   		   
-		    System.out.println("hej");
-		    Naming.rebind("rmi://localhost/ABC:1099", Hello);
-		    System.out.println("hej");
-		    
+		    Game newGame = new Game();			   		   
+		    Naming.rebind("rmi://localhost/ABC:1099", newGame);
 		    System.out.println("Game Server is ready.");
 		}catch (Exception e) {
 		System.out.println("Game Server failed: " + e);
