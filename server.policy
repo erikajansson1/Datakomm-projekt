@@ -1,3 +1,0 @@
-grant codeBase "file:${com.sun.aas.instanceRoot}/applications/cejug-clfds/-" {
-    permission java.util.PropertyPermission "java.security.manager", "write";
-}

@@ -1,3 +1,0 @@
-grant codeBase "file:/.../build/sparc_SunOS/sec/-" {
-   permission java.util.PropertyPermission "*", "read,write";
- };

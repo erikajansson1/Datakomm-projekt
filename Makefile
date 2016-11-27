@@ -8,10 +8,10 @@ JC = javac
 
 CLASSES = \
 	Card.java \
-	Addition.java \
-	AdditionInterface.java \
-	AdditionServer.java \
-	AdditionClient.java \
+	Game.java \
+	GameInterface.java \
+	GameServer.java \
+	GameClient.java \
 
 TESTC = \
 	AllTest.java \

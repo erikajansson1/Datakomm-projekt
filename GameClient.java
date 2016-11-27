@@ -1,11 +1,11 @@
 import java.rmi.*;
  
-public class AdditionClient {
+public class GameClient {
     public static void main (String[] args) {
-	AdditionInterface hello;
+	GameInterface hello;
 	try {
 	    // System.setSecurityManager(new SecurityManager());
-	    hello = (AdditionInterface)Naming.lookup("rmi://localhost/ABC:1099");
+	    hello = (GameInterface)Naming.lookup("rmi://localhost/ABC:1099");
 	    int result=hello.add(9,10);
 	    System.out.println("Result is :"+result);
  

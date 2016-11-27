@@ -4,7 +4,7 @@ import java.rmi.registry.*;
 
        
  
-public class AdditionServer {
+public class GameServer {
     public static void main (String[] argv) {
             System.out.println("RMI server started");
 
@@ -30,14 +30,14 @@ public class AdditionServer {
 
 	    try
 		{
-		    Addition Hello = new Addition();			   		   
+		    Game Hello = new Game();			   		   
 		    System.out.println("hej");
 		    Naming.rebind("rmi://localhost/ABC:1099", Hello);
 		    System.out.println("hej");
 		    
-		    System.out.println("Addition Server is ready.");
+		    System.out.println("Game Server is ready.");
 		}catch (Exception e) {
-		System.out.println("Addition Server failed: " + e);
+		System.out.println("Game Server failed: " + e);
 	}
     }
 }
