@@ -2,35 +2,43 @@ import java.util.*;
 
 //Deck class
 public class Deck {
-    private Card card; // this should be list
+    private Card[] cardList;
     private int amountOfCards;
     public String[] cardTypes = {"Heart", "Spade", "Club", "Diamond"};
 
-    //Create deck, TODO: Make sure 52 cards are made of specific class.
-    public Deck (int amountOfCards) {
-    this.amountOfCards = amountOfCards;
+    //Create deck of 52 cards(a whole deck)
+    public Deck () {
+    this.amountOfCards = 52;
 	for (int i = 0; i < cardTypes.length; i++) {
 	  for (int cardNumber = 0; cardNumber < 13; cardNumber++){
-			this.card = new Card(cardNumber, cardTypes[i].toString());
+			this.cardList[(((i+1)*cardNumber)-1)] = new Card(cardNumber, cardTypes[i].toString());
 		}
+	  }       
 	}
-    }
+    
 
     //Get one card from deck, (Do we want to be able to grab more?)
+    //Takes the last card in the deck since it upside down
     public Card getCard() {
-	return card;
+    	Card getCard = cardList[amountOfCards];
+    	cardList[amountOfCards] = null;
+    	amountOfCards--;
+    	return getCard;
     }
     
-    //Mix up the deck so everyting is not in order
-    public Card mixup() {
-    return card;	
+    //Mix up the deck so everything is not in order, TODO: Do we need to return?
+    public Card[] mixup() {
+    	Collections.shuffle(Arrays.asList(cardList));
+    	return cardList;	
     }
     
     /*Add a card to the deck (This could be useful for the deck you have in the middle)
      * Do we want to have the circle game deck to be a own deck class?
     */
-    public Card addCard() {
-    return card;
+    public void addCard(Card newCard) {
+    cardList[amountOfCards++] = newCard;
+    amountOfCards++;
+    return;
     }
    
 }
