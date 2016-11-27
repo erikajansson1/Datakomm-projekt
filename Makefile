@@ -10,6 +10,8 @@ CLASSES = \
 	Card.java \
 	Deck.java \
 	TestCardMain.java \
+	Game.java \
+	Player.java \
 
 TESTC = 
 
