@@ -9,17 +9,17 @@ public class AdditionServer {
             System.out.println("RMI server started");
 
             // Create and install a security manager
-            if (System.getSecurityManager() == null) 
+	    /* if (System.getSecurityManager() == null) 
 		{
 		    System.setSecurityManager(new SecurityManager());
 		    System.out.println("Security manager installed.");
 		}
             else
                 System.out.println("Security manager already exists.");
-
+	    */
             try  //special exception handler for registry creation
 		{
-		    LocateRegistry.createRegistry(2005); 
+		    LocateRegistry.createRegistry(1099); 
 		    System.out.println("java RMI registry created.");
 		}
             catch (RemoteException e)
@@ -32,7 +32,7 @@ public class AdditionServer {
 		{
 		    Addition Hello = new Addition();			   		   
 		    System.out.println("hej");
-		    Naming.rebind("rmi://localhost/ABC:2005", Hello);
+		    Naming.rebind("rmi://localhost/ABC:1099", Hello);
 		    System.out.println("hej");
 		    
 		    System.out.println("Addition Server is ready.");
