@@ -1,3 +1,4 @@
+import java.util.*;
 
 public class Card {
     private int rank;
@@ -10,6 +11,11 @@ public class Card {
 
     public String getSuit() {
 	return suit;
+    }
+
+    public String getCard(){
+	String dispCard = "["+ suit + Integer.toString(rank) + "]";
+    return dispCard;
     }
     
 }
