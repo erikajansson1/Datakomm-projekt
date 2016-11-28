@@ -21,5 +21,23 @@ public class Game {
 	public void looseGame(){ // Should have decided player that lost
 		return;
 	}
-	
+
+
+    //Method to hand out the card from the middle deck to the player who lost
+
+    //Hantera felslag
+
+    //Hantera rättaslag
+
+    //Hantera minnet av vilka kort som är aktuella för slag
+
+    //Få in information från server om vem som var långsammast, dela ut "mitten högen" till denna spelare
+
+      /*Räkna antalet gånger ett kort(inte ett unikt kort...) lagts på bordet
+      Round funktion
+      Hur annars medelar vi andra spelare att vi lagt ut nånting
+      While loop, väntar till att round uppdaterar, alltså någon lägger ut ett
+      kort
+     */
+    
 }
