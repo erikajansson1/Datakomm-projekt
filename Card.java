@@ -3,16 +3,19 @@ import java.util.*;
 public class Card {
     private int rank;
     private String suit;
-    private String name;
 
-    public Card (int rank, String suit, String name) {
+    public Card (int rank, String suit) {
 	this.rank = rank;
 	this.suit = suit;
-	this.name = name;
     }
 
     public String getSuit() {
 	return suit;
+    }
+
+    public String getCard(){
+	String dispCard = "["+ suit + Integer.toString(rank) + "]";
+    return dispCard;
     }
     
 }
