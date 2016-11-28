@@ -2,11 +2,12 @@ import java.rmi.*;
 import java.rmi.server.*;
 import java.rmi.registry.*;
 import java.util.*;
-
+import java.net.InetAddress;
 
 
 public class GameServer {
     public static void main (String[] argv) {
+	System.out.print("\033[2J\033[;H");
 	System.out.println("Welcome to the great Opposom game server!" +
 			   "\n" + 
 			   "How many player slots would you like?");
@@ -39,9 +40,12 @@ public class GameServer {
 
 	try
 	    {
-		Game game1 = new Game(2,1,50);
-		Game game2 = new Game(2,2,500);
+		for (int i = 0; i < no_players; i++) {
+		    Game game = new Game(no_players,i+1,50);
+		    Naming.rebind("rmi://localhost/game"+i+":1099", game);
+		}
 		    
+		
 		/*
 		  ArrayList<Game> gameArray = new ArrayList<Game>();
 		  gameArray.add(game1);
@@ -49,9 +53,12 @@ public class GameServer {
 		  Naming.rebind("rmi://localhost/game2:1099", gameArray);
 		*/
 		    
-		Naming.rebind("rmi://localhost/game1:1099", game1);
-		Naming.rebind("rmi://localhost/game2:1099", game2);
+	
 		System.out.println("Game Server is ready.");
+		InetAddress IP=InetAddress.getLocalHost();
+		System.out.println("The server is now reachable on IP:= "+
+				   IP.getHostAddress() +
+				   " and port 1099");
 		GameClient.main(argv);
 	    }catch (Exception e) {
 	    System.out.println("Game Server failed: " + e);
