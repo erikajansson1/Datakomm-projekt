@@ -42,20 +42,9 @@ public class GameServer {
 
 	try
 	    {
-		for (int i = 0; i < no_players; i++) {
-		    Game game = new Game(no_players,i+1,50);
-		    Naming.rebind("rmi://localhost/game"+i+":1099", game);
-		}
-		    
+		Game game = new Game(no_players,1,50);
+		Naming.rebind("rmi://localhost/theGame:1099", game);
 		
-		/*
-		  ArrayList<Game> gameArray = new ArrayList<Game>();
-		  gameArray.add(game1);
-		  gameArray.add(game2);
-		  Naming.rebind("rmi://localhost/game2:1099", gameArray);
-		*/
-		    
-	
 		System.out.println("Game Server is ready.");
 		InetAddress IP=InetAddress.getLocalHost();
 

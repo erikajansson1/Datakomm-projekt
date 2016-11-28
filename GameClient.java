@@ -17,7 +17,7 @@ public class GameClient {
 
 	try {
 	    // System.setSecurityManager(new SecurityManager());
-	    game = (GameInterface)Naming.lookup("rmi://"+ip+"/game1:"+port);
+	    game = (GameInterface)Naming.lookup("rmi://"+ip+"/theGame:"+port);
 	    int myGameNO = game.getPlayerNO();
 	    System.out.println("Result is :"+ myGameNO);
  	}catch (Exception e) {
