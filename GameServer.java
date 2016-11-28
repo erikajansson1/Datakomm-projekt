@@ -3,6 +3,8 @@ import java.rmi.server.*;
 import java.rmi.registry.*;
 import java.util.*;
 import java.net.InetAddress;
+import java.net.*;
+import java.io.*;
 
 
 public class GameServer {
@@ -56,9 +58,17 @@ public class GameServer {
 	
 		System.out.println("Game Server is ready.");
 		InetAddress IP=InetAddress.getLocalHost();
-		System.out.println("The server is now reachable on IP:= "+
+
+		URL whatismyip = new URL("http://checkip.amazonaws.com");
+		BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
+		String ip = in.readLine(); //you get the IP as a String
+		System.out.println(ip);
+		System.out.println("The server is now reachable on \nLocal IP: "+
 				   IP.getHostAddress() +
-				   " and port 1099");
+				   "\nExternal IP: "+
+				   ip +
+				   "\nBoth on port 1099 \n\n\n");
+		
 		GameClient.main(argv);
 	    }catch (Exception e) {
 	    System.out.println("Game Server failed: " + e);
