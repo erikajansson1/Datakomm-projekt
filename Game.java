@@ -6,10 +6,10 @@ public class Game {
 	//public player[] gamePlayers
 	//public master gameMaster?
 	
-	//Intiate game by giving out cards and select who start first
+	//Initiate game by giving out cards and select who start first
 	public void startGame(){
 		return;
-	}
+	} 
 	
 	//Next player should be able to place a cards
 	//TODO: I don't know if this is needed

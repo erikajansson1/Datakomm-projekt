@@ -10,7 +10,7 @@ public class Deck {
     public Deck () {
     this.amountOfCards = 52;
 	for (int i = 0; i < cardTypes.length; i++) {
-	  for (int cardNumber = 0; cardNumber < 13; cardNumber++){
+	  for (int cardNumber = 1; cardNumber < 13; cardNumber++){
 			this.cardList[(((i+1)*cardNumber)-1)] = new Card(cardNumber, cardTypes[i].toString());
 		}
 	  }       
@@ -19,6 +19,7 @@ public class Deck {
 
     //Get one card from deck, (Do we want to be able to grab more?)
     //Takes the last card in the deck since it upside down
+    //TODO: Grab more card
     public Card getCard() {
     	Card getCard = cardList[amountOfCards];
     	cardList[amountOfCards] = null;

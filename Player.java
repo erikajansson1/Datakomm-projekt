@@ -5,7 +5,9 @@
  * Players from game master.
 */
 public class Player {
+	public String nameOfPlayer;
 	public Deck playerDeck;
+	public int amountOfCardsOnHands;
 	
 	
 }
