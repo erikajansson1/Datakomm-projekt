@@ -1,6 +1,5 @@
 import java.util.*;
 
-
 //Deck class
 public class Deck {
     public Card[] cardList;
@@ -15,18 +14,17 @@ public class Deck {
 			this.cardList[(((i+1)*cardNumber)-1)] = new Card(cardNumber, cardTypes[i].toString());
 		}
 	  }       
-	}
-    
+	}    
 
     //Get one card from deck, (Do we want to be able to grab more?)
     //Takes the last card in the deck since it upside down
-    //TODO: Grab more card
     public Card getCard() {
     	Card getCard = cardList[amountOfCards];
     	cardList[amountOfCards] = null;
     	amountOfCards--;
     	return getCard;
     }
+    
     
     //Mix up the deck so everything is not in order, TODO: Do we need to return?
     public Card[] mixup() {

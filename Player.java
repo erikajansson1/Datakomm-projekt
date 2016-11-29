@@ -1,8 +1,11 @@
-
-
 //Player class that should be given to each client
-/*TODO: I think we need to place this a superclass, where we split
- * Players from game master.
+/*TODO: Needs time Attribute
+ * long tStart = System.currentTimeMillis(); // When times starts
+ * 
+ * 
+ * long tEnd = System.currentTimeMillis(); //When times starts
+ * long tDelta = tEnd - tStart;
+ * double elapsedSeconds = tDelta / 1000.0;
  */
 public class Player {
     public String nameOfPlayer;
@@ -32,9 +35,25 @@ public class Player {
     }
 
     //Take up the game deck from losing 
+    //Make a for loop
     public void getCardFromMiddleDeck(Deck gameDeck){
+    	for (int n = 0; gameDeck.amountOfCards > n;){ 
     	playerDeck.cardList[amountOfCardsOnHands] = gameDeck.getCard();
     	amountOfCardsOnHands++;
+    	}
+    	return;
+    }
+    
+    //Let player check if it possible to hit now
+    public void canPlayerhit(Deck middleDeck){
+    	if (middleDeck.possibleToHit() == true){
+    		//start time
+    		//wait until player hit or someone places a new card(implement in round)
+    		//stop time
+    		//return time it took
+    		return;
+    	}
+    	return;
     }
     
    
@@ -42,13 +61,4 @@ public class Player {
     public void myTurn(){
     	//While loop that waits for it's turn or else it'll check the round again
     }
-
 }
-	    
-
-
-
-	/* for(amountOfCards; amountOfCards > (amountOfCards - 5); amountOfCards--){
-	   middleDeck[amountOfCards].Card.getRank() = 
-	   }
-	*/
