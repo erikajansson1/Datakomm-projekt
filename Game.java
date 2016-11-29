@@ -13,6 +13,7 @@ public class Game {
 	
 	//Next player should be able to place a cards
 	//TODO: I don't know if this is needed
+	
 	public void nextplayer() {
 		return;
 	}
