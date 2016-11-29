@@ -12,6 +12,7 @@ CLASSES = \
 	GameInterface.java \
 	GameServer.java \
 	GameClient.java \
+	Network.java \
 
 TESTC = \
 	AllTest.java \

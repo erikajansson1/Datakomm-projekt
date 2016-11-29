@@ -17,6 +17,8 @@ public class GameClient {
 
 	try {
 	    // System.setSecurityManager(new SecurityManager());
+	    //System.setProperty("java.rmi.server.hostname", "83.255.61.11"
+	    
 	    game = (GameInterface)Naming.lookup("rmi://"+ip+"/theGame:"+port);
 	    int myGameNO = game.getPlayerNO();
 	    System.out.println("Result is :"+ myGameNO);
