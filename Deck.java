@@ -3,9 +3,9 @@ import java.util.*;
 
 //Deck class
 public class Deck {
-    private Card[] cardList;
-    private int amountOfCards;
-    public String[] cardTypes = {"Heart", "Spade", "Club", "Diamond"};
+    public Card[] cardList;
+    public int amountOfCards;
+    private String[] cardTypes = {"Heart", "Spade", "Club", "Diamond"};
 
     //Create deck of 52 cards(a whole deck)
     public Deck () {
@@ -43,4 +43,42 @@ public class Deck {
     return;
     }
    
+    //Check if possible to hit, in case of starts to count time and 
+    //will send back the time it takes for the player to hit.
+    public boolean possibleToHit(){
+    	int n = 0;
+	    int index = amountOfCards--;
+	    int amount = amountOfCards;
+    	if(amountOfCards > 4){
+        	while (cardList[index].getRank() != cardList[index-- - n].getRank() && n != 4){    
+		    n++;
+		    }
+        	if (n == 4){
+        		return false;
+        		}
+        	else {
+        		return true;
+        		}
+        	}
+    	else {
+   	while((cardList[index].getRank() != cardList[index-- - n].getRank() && amount != 0)){
+			amount--;
+			n++;
+		    }
+		    if(amount != 0){
+			return false; 
+		    }
+		    else {
+			return true;
+		    }		    
+	    }
+    }
+
+    
+    
+    
+    
+    
+    
+    
 }

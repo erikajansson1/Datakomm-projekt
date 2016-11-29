@@ -11,78 +11,39 @@ public class Player {
     public int numberOfPlayer;
       
 
-    public Player (numberOfPlayer) {
+    public Player (int numberOfPlayer) {
 	this.numberOfPlayer = numberOfPlayer;
-	this.nameOfPlayer = nameOfPlayer;
-    }
-
-    //Lägga ett kort
-
-    public Card dropCard() {
-	Card cardToDrop = playerDeck[amountOfCardsOnHands];
-	Deck.addCard(cardToDrop);
-	playerDeck[amountOfCardsOnHands--];
-	amountOfCardsOnHands--;
-
-	return cardToDrop;
-    }
-
-    //Slå på högen
-
-    public void hitTheDeck(){
-
-    }
-
-    //Ta upp mitten högens kort
-
-    public void getCardFromMiddleDeck(){
-	playerDeck[amountOfCardsOnHands++] = Deck.getCard();
-	amountOfCardsOnHands++;
-    }
-    //Kolla om det är "min" tur
-
-    public void myTurn(){
-
-    }
-
-    //Kolla om det går att slå, isf börja mät tid, tid = int?????
-
-    public boolean possibleToHit(Deck middleDeck){
-	if(middleDeck.amountOfCards > 4){
-	    int n = 0;
-	    while ((middleDeck[amountOfCards].getRank() != middleDeck[amountOfCards-- - n].getRank() && n != 4){    
-		    n++;
-		}
-
-		if (n == 4){
-		    return false;
-		}
-
-
-		else {
-		    //börja mät tid
-		    return true;
-		}
-		}
-	    else {
-		int amount = amountOfCards;
-		int n = 0;
-		while((middleDeck[amountOfCards].getRank() != middleDeck[amountOfCards-- - n].getRank() && amount != 0){
-			amount--;
-			n++;
-		    }
-
-		    if(amount != 0){
-			return false; 
-		    }
-		    else {
-			//börja mät tid
-			return true;
-		    }
-
-	    }
-		return; 
+	this.playerDeck = new Deck();
 	}
+
+    //Add a card
+    // This should have a list of 0 to 51 which is 52 cards. So we need 
+    // to think about that
+    public Card dropCard(Deck gameDeck){
+		Card cardToDrop = playerDeck.getCard();
+		gameDeck.addCard(cardToDrop);
+		amountOfCardsOnHands--;	
+		return cardToDrop;
+	}
+
+    //Hit the deck
+    public void hitTheDeck(){
+    	//While loops that waits for a input?
+    }
+
+    //Take up the game deck from losing 
+    public void getCardFromMiddleDeck(Deck gameDeck){
+    	playerDeck.cardList[amountOfCardsOnHands] = gameDeck.getCard();
+    	amountOfCardsOnHands++;
+    }
+    
+   
+    //Looks if it's players turn
+    public void myTurn(){
+    	//While loop that waits for it's turn or else it'll check the round again
+    }
+
+}
 	    
 
 

@@ -1,11 +1,6 @@
-import java.util.*;
-
-
-//Knäckt, dam och kung representeras som 11, 12 och 13.
-
 public class Card {
-    private int rank;
-    private String suit;
+    public int rank;
+    public String suit;
 
     public Card (int rank, String suit) {
 	this.rank = rank;
