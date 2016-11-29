@@ -16,6 +16,10 @@ public class Card {
 	return suit;
     }
 
+    public Int getRank(){
+	return rank;
+    }
+
     public String getCard(){
 	String dispCard = "["+ suit + Integer.toString(rank) + "]";
     return dispCard;

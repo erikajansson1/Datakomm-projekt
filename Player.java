@@ -47,8 +47,10 @@ public class Player {
 
     //Kolla om det går att slå, isf börja mät tid, tid = int?????
 
-    public int possibleToHit(){
-	for(int i = 0; i < 4; )
+    public int possibleToHit(Deck middleDeck){
+	for(amountOfCards; amountOfCards > (amountOfCards - 5); amountOfCards--){
+	    middleDeck[amountOfCards].Card.getRank() = 
+	}
 	
 	return time; 
     }
