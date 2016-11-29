@@ -18,11 +18,38 @@ public class Player {
 
     //Lägga ett kort
 
+    public Card dropCard() {
+	Card cardToDrop = playerDeck[amountOfCardsOnHands];
+	Deck.addCard(cardToDrop);
+	playerDeck[amountOfCardsOnHands--];
+	amountOfCardsOnHands--;
+
+	return cardToDrop;
+    }
+
     //Slå på högen
+
+    public void hitTheDeck(){
+
+    }
 
     //Ta upp mitten högens kort
 
+    public void getCardFromMiddleDeck(){
+	playerDeck[amountOfCardsOnHands++] = Deck.getCard();
+	amountOfCardsOnHands++;
+    }
     //Kolla om det är "min" tur
 
-    //Kolla om det går att slå, isf börja mät tid
+    public void myTurn(){
+
+    }
+
+    //Kolla om det går att slå, isf börja mät tid, tid = int?????
+
+    public int possibleToHit(){
+
+	
+	return time; 
+    }
 }
