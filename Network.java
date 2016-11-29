@@ -64,26 +64,28 @@ class Network {
 
 
     
-    public void startRMIserver() {
+    public Registry startRMIserver() {
+	Registry registry = null;
 	try  //special exception handler for registry creation
 	    {
-		//System.setProperty("java.rmi.server.hostname",  "83.255.61.11");
+		System.setProperty("java.rmi.server.hostname","83.255.61.11");
 		System.out.println("RMI server started");
-		System.getProperties().put("java.rmi.server.hostname", exIP);
-		LocateRegistry.createRegistry(1099); 
+		//System.getProperties().put("java.rmi.server.hostname", "rmi://"+exIP);
+		registry = LocateRegistry.createRegistry(1099); 
 		System.out.println("java RMI registry created.");
 	    }
 	catch (RemoteException e)
 	    {
 		//do nothing, error means registry already exists
-		System.out.println("RMI server is already running");
+		System.out.println("java RMI registry already exists.");
+		System.out.println("Or the RMI server is already running");
 	    }
+	return registry;
     }
 
 
     
     public void publishReady() {
-	System.out.println("java RMI registry already exists.");
 	System.out.println("Game Server is ready.");
 	System.out.println("The server is now reachable on \nLocal IP: "+
 			   inIP +

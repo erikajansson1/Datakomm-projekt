@@ -20,11 +20,13 @@ public class GameServer {
 		networkBuild.addAdresses(ipExternal,ipLocal);
 		int noPlayers = networkBuild.askPlayerNo();
 		
-		networkBuild.startRMIserver();
-		networkBuild.publishReady();
-	
+		Registry registry = networkBuild.startRMIserver();
+		System.out.println("Creating Game.");
+
 		Game game = new Game(noPlayers,1,50);
-		Naming.rebind("rmi://"+ipLocal+"/theGame:1099", game);
+		registry.rebind(ipLocal+"/theGame:1099", game);
+		//		Naming.rebind("rmi//"+ipLocal+"/theGame:1099", game);
+		networkBuild.publishReady();
 		
 		GameClient.main(argv);
 	    }catch (Exception e) {
