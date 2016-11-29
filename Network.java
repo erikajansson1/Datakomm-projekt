@@ -18,7 +18,8 @@ class Network {
 	this.inIP = inIP;
     }
 
-      public String extIP() throws Exception {
+    
+    public String extIP() throws Exception {
 	String ipExternal = "Adress lookup failed!";
 	URL whatismyip = new URL("http://checkip.amazonaws.com");
 	BufferedReader in = null;
@@ -48,16 +49,26 @@ class Network {
     }
 
 
+    public void welcomeMSG(String user) {
+	if (user.equals("server")) {
+	    System.out.print("\033[2J\033[;H");
+	    System.out.println("Welcome to the great Opposom game server!");
+	}
+	else if (user.equals("client")) {
+	    System.out.print("\033[2J\033[;H");
+	    System.out.printf("Welcome to the great Opposom game!"+
+			      "\n" + 
+			      "Which host would you lixe to join? \n");
+	}
+	else {
+	    System.out.println("Not server or client?");
+	}
+    }
     
     public int askPlayerNo() {
-	System.out.print("\033[2J\033[;H");
-	System.out.println("Welcome to the great Opposom game server!" +
-			   "\n" + 
-			   "How many player slots would you like?");
-
+	System.out.println("How many player slots would you like?");
 	Scanner userInput = new Scanner(System.in);
 	int noPlayers = userInput.nextInt();
-	
 	System.out.println("Creating space for "+noPlayers+"\n");
 	return noPlayers;
     }
@@ -93,4 +104,42 @@ class Network {
 			   exIP +
 			   "\nBoth on port 1099 \n\n\n");
     }
+
+    public String getServerInIp() {
+	Scanner userInput = new Scanner(System.in);
+	System.out.printf("Local IP: ");
+	return userInput.nextLine();
+    }
+
+    public String getServerExIp() {
+	Scanner userInput = new Scanner(System.in);
+	System.out.printf("External IP: ");
+	return userInput.nextLine();
+    }
+    
+    public String getServerPort() {
+	Scanner userInput = new Scanner(System.in);
+	System.out.printf("Port: ");
+	return userInput.nextLine();
+    }
+
+    public GameInterface clientConnect(String inIp,String exIp,String port) {
+	GameInterface game = null;
+	try {
+	    // System.setSecurityManager(new SecurityManager());
+	    Registry registry = LocateRegistry.getRegistry( exIp, Integer.parseInt(port));
+	    System.out.println("Registry found in "  +exIp+ 
+                               " :" + port + "\n" + registry);
+	    game = (GameInterface) registry.lookup(inIp+"/theGame:"+port);
+ 	}catch (Exception e) {
+	    System.out.println("HelloClient exception: " + e);
+	    e.printStackTrace();
+	    
+	}
+	return game;
+    }
+
+
+
+
 }

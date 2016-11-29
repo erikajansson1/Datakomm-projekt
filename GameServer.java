@@ -13,11 +13,11 @@ public class GameServer {
 	try
 	    {
 		Network networkBuild = new Network();
-		
 		String ipExternal = networkBuild.extIP();
 		String ipLocal = networkBuild.inIP();
 		
 		networkBuild.addAdresses(ipExternal,ipLocal);
+		networkBuild.welcomeMSG("server");
 		int noPlayers = networkBuild.askPlayerNo();
 		
 		Registry registry = networkBuild.startRMIserver();
@@ -25,7 +25,6 @@ public class GameServer {
 
 		Game game = new Game(noPlayers,1,50);
 		registry.rebind(ipLocal+"/theGame:1099", game);
-		//		Naming.rebind("rmi//"+ipLocal+"/theGame:1099", game);
 		networkBuild.publishReady();
 		
 		GameClient.main(argv);
