@@ -6,72 +6,115 @@ import java.net.InetAddress;
 import java.net.*;
 import java.io.*;
 
+/*
+ #1 maybe put this in a seperate function, with argument that determines if hit is possible or not
+*/
+
 public class GameClient {
 
-    	//If it's possible to hit start time 
-	public static long timeToHit(){ 
-	    Scanner userInput = new Scanner(System.in);
-	    long startTime = System.nanoTime();
+    //If it's possible to hit start time 
+    public static long timeToHit(){ 
+	Scanner userInput = new Scanner(System.in);
+	long startTime = System.nanoTime();
 
-	    System.out.println("Ready(r)/Next card(n)/Hit dick(h)?");
-	    long hitTime = System.nanoTime() - startTime);   
+	System.out.println("Ready(r)/Next card(n)/Hit dick(h)?");
+	long hitTime = System.nanoTime() - startTime);   
 
-	    while(hitTime < 300000) { //godtyckligt taget tal här
-		String answer = userInput.nextLine();
-		hitTime = System.nanoTime() - startTime);  
-	    }
+    while(hitTime < 300000) { //godtyckligt taget tal här
+	String answer = userInput.nextLine();
+	hitTime = System.nanoTime() - startTime);  
+}
 
-	    return hitTime;		 
-	} 
+return hitTime;		 
+} 
 
-    public static void main (String[] args) {
-	GameInterface game;
-	Network networkBuild = new Network();
-	networkBuild.welcomeMSG("client");
-	String inIp = networkBuild.getServerInIp();
-	String exIp = networkBuild.getServerExIp();
-	String port = networkBuild.getServerPort();
+public static void main (String[] args) {
+    GameInterface game;
+    Network networkBuild = new Network();
+    networkBuild.welcomeMSG("client");
+    String inIp = networkBuild.getServerInIp();
+    String exIp = networkBuild.getServerExIp();
+    String port = networkBuild.getServerPort();
 
-	game = networkBuild.clientConnect(inIp,exIp,port);
-	//TODO: Skapa spelare inkl smeknamn?
+    game = networkBuild.clientConnect(inIp,exIp,port);
+    //TODO: Skapa spelare inkl smeknamn?
 
-	try {
-	    int myGameNO = game.getPlayerNO();
-	    System.out.println("Result is :"+ myGameNO);   
+    try {
+	int myGameNO = game.getPlayerNO();
+	System.out.println("Result is :"+ myGameNO);   
             
-	    
-	    int oldRound = 1;
-	    int round = 1;
-	    for (int i=0; i<5; i++) { //här ska vi egentligen ha en check att spelet inte är slut
-		oldRound = game.getRound();
-		while (oldRound == round) { //loopa tills det är en ny runda
-		    round = game.getRound();
-		}
-		//TODO: kollar ifall det är spelarens tur
-		//ifall personen fortfarande deltar i spelet eller har vunnit.
-		Scanner userInput = new Scanner(System.in);
-		boolean hit = true; //lol ändra sen
-		if (hit == true) {
-		    game.displayBoard();
-		    long hitTime = timetoHit(); //innehåller tidsgrejer
-		    //Spar tiden i klienten attribut - hitTime. Den nollas efter koll.
-		    //TODO: Change that particular Player's hit-time to this hitTime
 
-		}else {
-		    game.displayBoard();
-		    System.out.println("Ready(r)/Next card(n)/Hit dick(h)?"); //ska ev vara i displayBoard
-		
-	  
-		}
+	//BEGINNING OF GAME
+	game.displayBoard(); //so everyone knows who starts
+	//TODO: Uppdatera att playern är redo
 
-		//TODO: Uppdatera Player till att vara redo för nästa runda 
+	//START VALUES
+	long startTime;
+	long hitTime;
+	String answer = "";
+	int oldRound = 1;
+	int round = 1;
+	Scanner userInput = new Scanner(System.in);
+	boolean hit = false;
 
+	//>>>>STOR LOOP: här ska vi egentligen ha en check att spelet inte är slut
+	for (int i=0; i<5; i++) { 
+
+	    //loop until next round
+	    oldRound = game.getRound();
+	    while (oldRound == round) {
+		round = game.getRound(); //TODO: semaphores needed here
 	    }
-	    //TODO Add ability to passivly look at game after winning.	    
+
+	    //TODO: kollar ifall det är spelarens tur
+	    //ifall personen fortfarande deltar i spelet eller har vunnit.
+
+
+	    //>>>>HIT IS POSSIBLE
+	    hit = true; //TODO: fkn for checking if its hit the dick time 
+	    if (hit == true) {
+		game.displayBoard();
+
+		startTime = System.nanoTime();
+
+		System.out.println("Do you want to hit the dick? (y/n)");  //ska ev vara i displayBoard
+
+		hitTime = System.nanoTime() - startTime;   
+		while(hitTime < 300000) { //godtyckligt taget tal här
+		    answer = userInput.nextLine();
+		    hitTime = System.nanoTime() - startTime;  
+		}
+
+		switch(answer) { //#1
+		case 'y': break; //TODO
+		case 'n': break; //TODO
+		default: System.out.println("What are you trying to do?"); break;
+		}
+		
+		//TODO: Updated player's hitTime-attribute
+
+	    }    
+	    //>>>>HIT IS NOT POSSIBLE
+	    else {
+		game.displayBoard();
+		System.out.println("Do you want to hit the dick? (y/n)");  //ska ev vara i displayBoard
+		//TODO: typ hela den här delen
+	  
+		answer = userInput.nextLine(); //#1
+		switch(answer) {
+		case 'y': break; //TODO
+		case 'n': break; //TODO
+		default: System.out.println("What are you trying to do?"); break;
+		}
+	    }
 	}
-	catch (Exception e) {
-	    System.out.println("Error " + e.getMessage());
-	    e.printStackTrace();
-	}
+	//TODO: Uppdatera Player till att vara redo för nästa runda 
+
     }
+    //TODO Add ability to passivly look at game after winning.	    
+}
+catch (Exception e) {
+    System.out.println("Error " + e.getMessage());
+    e.printStackTrace();
+}
 }
