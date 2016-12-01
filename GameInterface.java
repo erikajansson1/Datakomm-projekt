@@ -1,5 +1,8 @@
 import java.rmi.*;
- 
+
 public interface GameInterface extends Remote {
-    public int add(int a,int b) throws RemoteException;
+    public long timeToHit() throws RemoteException;
+
+    public void displayBoard() throws RemoteException; //ej implementerad
+
 }
