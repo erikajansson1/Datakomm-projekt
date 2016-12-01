@@ -9,9 +9,9 @@ import junit.framework.TestCase;
 public class CardTest extends TestCase {
 
     private void create_Card() {
-	//Tror det som skrivs här körs innan testen nedan
-	//Så man skapar det som behövs för testerna.
-	// Sen kör man testerna med asserts under.
+	//Tror det som skrivs har kors innan testen nedan
+	//Sa man skapar det som behovs for testerna.
+	// Sen kor man testerna med asserts under.
     }
 
     

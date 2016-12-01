@@ -3,46 +3,35 @@ import java.rmi.server.*;
  
 public class Game extends UnicastRemoteObject implements GameInterface {
     private static final long serialVersionUID = 1L;
-    private int playerNO;
-    private int numberOfPlayers;
-    private int controlValue;
     private int round;
- 
-    public Deck gameDeck;
-    public Deck starterDeck;
-    public Player[] gamePlayers; 
+    private Deck gameDeck;
+    private Deck starterDeck;
+    private Player[] gamePlayers; 
 
     public Game (int numberOfPlayers, int playerNO, int controlValue) throws RemoteException {
 	super(1099);
-	this.playerNO = playerNO;
-	this.numberOfPlayers = numberOfPlayers;
-	this.controlValue = controlValue;
-	this.round = 1;
+	this.round = 0;
     }
 
-    public int whoseRound(){
-	//TODO om alla spelar är Redo, increment round by 1
+    public int whoseRound(int currRound) throws RemoteException{
+	//TODO om alla spelar är Redo för (erika) att nästa spelare kan å lägga....sktunge..., increment round by 1
+	//TODO Semaphore vid värde skifte/uppdatering av round.
+	//TODO jömföra så man inte uppdaterar round mer än +1
 	return round;
     }
 
-    public int gamePasser(int playerNO) throws RemoteException {
-	System.out.println(playerNO);
-	return 1000 ;
-    }
-
-    public int getPlayerNO() throws RemoteException {
-	return this.playerNO;
-    }
-	 
-	//Initiate game by giving out cards and select who start first 
+  	//Initiate game by giving out cards and select who start first 
 	//TODO: Who should start first, create  
-	public void startGame(int amountOfPlayers){ 
+	public void startGame(int amountOfPlayers) { 
 		this.gameDeck = new Deck();  
 		for(int n = 1; amountOfPlayers == n; amountOfPlayers-- ){ 
 			gamePlayers[amountOfPlayers-1] = new Player(amountOfPlayers); 
 		} 
 	return; 
-	}  
+	}
+
+    //TODO public void addPlayer (string Alias) {}
+    //funktion. Semaphore vid skapande. Alla clienter påkallar denna vid anslutning för att tilldelas sin "plats". Client klassen får stå för att fråga efter alias.
 	 
 	//Next player should be able to place a cards 
 	//TODO: I don't know if this is needed, maybe this will tell next player to  
@@ -57,7 +46,10 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	} 
  
  
-    //Method to hand out the card from the middle deck to the player who lost 
+    //Method to hand out the card from the middle deck to the player who lost
+    /**
+     * documentation
+     */
 	//TODO: This only gives one card, not whole deck 
 	public void giveWholeDeck(Player loserPlayer){ 
 		Card moveCard = gameDeck.getCard(); 
@@ -82,21 +74,6 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 		return; 
 	} 
 	 
-	//If it's possible to hit start time 
-	public long timeToHit(){ 
-	    Scanner userInput = new Scanner(System.in);
-	    long startTime = System.nanoTime();
-
-	    System.out.println("Ready(r)/Next card(n)/Hit dick(h)?");
-	    long hitTime = System.nanoTime() - startTime);   
-
-	    while(hitTime < 300000) { //godtyckligt taget tal här
-		String answer = userInput.nextLine();
-		hitTime = System.nanoTime() - startTime);  
-	    }
-
-	    return hitTime;		 
-	} 
  
 	//Look what four cards are legit to be hit  
 	public void whatFourCards(){ 
@@ -107,19 +84,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	} 
 	 
 	//Who is the slowest when hitting the deck. Give the GameDeck to the loser 
-	public void whoLostRightHit(){ 
+	public void whoLostRightHit(){
+	    //Jömför tiderna i player objekten och nolla efter att ha kollat.
 		return; 
 	} 
-	 
-    /*Count the amount of times a card have been place in the deck 
-     * This to be able to tell other players you have put out something 
-     * While loop, waies until round updates, that is if someone places a card 
-     * */ 
-	public void round(){ 
-		//So much shit that need to done here OTL 	 
-		//This is important 
-		return; 
-	} 
-
-
 }

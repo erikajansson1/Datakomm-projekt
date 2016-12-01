@@ -22,7 +22,7 @@ public class GameServer {
 		
 		Registry registry = networkBuild.startRMIserver();
 		System.out.println("Creating Game.");
-
+		
 		Game game = new Game(noPlayers,1,50);
 		registry.rebind(ipLocal+"/theGame:1099", game);
 		networkBuild.publishReady();
