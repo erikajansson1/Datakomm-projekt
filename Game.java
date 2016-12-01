@@ -21,10 +21,12 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      */
     public long timeToHit() throws RemoteException { return 3; }; //TODO
 
+
     /** Prints out a view of the board:
      *  whose turn it is, and the latest card
      */
     public String displayBoard() throws RemoteException { return "hej"; };  //TODO
+
 
     /** Set the ready value for a player with alias "alias". 
      */
@@ -33,6 +35,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	if (thisPlayer.getPlayerNumber() == -1) { return; } //if nobody has the given alias
 	thisPlayer.setReadyValue(readyValue);	
     }; //TODO
+
 
     /** Update the hit time for a player with alias "alias"     
      */

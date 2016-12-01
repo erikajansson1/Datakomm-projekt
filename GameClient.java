@@ -14,22 +14,6 @@ import java.io.*;
 
 public class GameClient {
 
-    /*
-    //If it's possible to hit start time 
-    public static long timeToHit(){ 
-	Scanner ans = new Scanner(System.in);
-	long startT = System.nanoTime();
-
-	System.out.println("Ready(r)/Next card(n)/Hit dick(h)?");
-	long hitT = System.nanoTime() - startT;   
-
-	while(hitT< 300000) { //godtyckligt taget tal här
-	    String answer = ans.nextLine();
-	    hitT = System.nanoTime() - startT;  
-	}
-    }*/
- 
-
     public static void main (String[] args) {
 	GameInterface game;
 	Network networkBuild = new Network();
