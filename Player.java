@@ -15,7 +15,7 @@ public class Player {
 <<<<<<< ours
 =======
     //TODO: Add IP, ext and int.
-    //TODO: Ready to play?
+    private boolean readyToPlay;
     //TODO: Won or lost game attribute? ended up at place 2...ex
     //TODO: int hitTime
     
@@ -30,6 +30,23 @@ public class Player {
 	this.playerDeck = new Deck(1);
 >>>>>>> theirs
 	}
+
+    
+    public boolean getReadyValue() {
+	return this.readyToPlay;
+    }
+    
+    public void setReadyValue(boolean ready) {
+	this.readyToPlay = ready;
+    }
+
+    public String getPlayerName() {
+	return this.nameOfPlayer;
+    }
+    
+    public int getPlayerNumber() {
+	return numberOfPlayer;
+    }
 
     //Add a card
     // This should have a list of 0 to 51 which is 52 cards. So we need 
