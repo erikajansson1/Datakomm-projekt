@@ -12,8 +12,19 @@ CLASSES = \
 	TestCardMain.java \
 	Game.java \
 	Player.java \
+<<<<<<< ours
+=======
+	Game.java \
+	GameInterface.java \
+	GameServer.java \
+	GameClient.java \
+	Network.java \
 
-TESTC = 
+TESTC = \
+	AllTest.java \
+	CardTest.java \
+>>>>>>> theirs
+
 
 
 all: $(CLASSES:.java=.class)

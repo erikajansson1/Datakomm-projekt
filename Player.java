@@ -12,11 +12,23 @@ public class Player {
     public Deck playerDeck;
     public int amountOfCardsOnHands = 0;
     public int numberOfPlayer;
+<<<<<<< ours
+=======
+    //TODO: Add IP, ext and int.
+    //TODO: Ready to play?
+    //TODO: Won or lost game attribute? ended up at place 2...ex
+    //TODO: int hitTime
+    
+>>>>>>> theirs
       
 
     public Player (int numberOfPlayer) {
 	this.numberOfPlayer = numberOfPlayer;
+<<<<<<< ours
 	this.playerDeck = new Deck();
+=======
+	this.playerDeck = new Deck(1);
+>>>>>>> theirs
 	}
 
     //Add a card
@@ -29,11 +41,14 @@ public class Player {
 		return cardToDrop;
 	}
 
+<<<<<<< ours
     //Hit the deck
     public void hitTheDeck(){
     	//While loops that waits for a input?
     }
 
+=======
+>>>>>>> theirs
     //Take up the game deck from losing 
     //Make a for loop
     public void getCardFromMiddleDeck(Deck gameDeck){
@@ -42,6 +57,7 @@ public class Player {
     	amountOfCardsOnHands++;
     	}
     	return;
+<<<<<<< ours
     }
     
     //Let player check if it possible to hit now
@@ -62,3 +78,7 @@ public class Player {
     	//While loop that waits for it's turn or else it'll check the round again
     }
 }
+=======
+    }    
+}
+>>>>>>> theirs

@@ -6,6 +6,12 @@ public class Deck {
     public int amountOfCards;
     private String[] cardTypes = {"Heart", "Spade", "Club", "Diamond"};
 
+<<<<<<< ours
+=======
+    public Deck (int skitunge) {
+    }
+
+>>>>>>> theirs
     //Create deck of 52 cards(a whole deck)
     public Deck () {
     this.amountOfCards = 52;
@@ -19,8 +25,13 @@ public class Deck {
     //Get one card from deck, (Do we want to be able to grab more?)
     //Takes the last card in the deck since it upside down
     public Card getCard() {
+<<<<<<< ours
     	Card getCard = cardList[amountOfCards];
     	cardList[amountOfCards] = null;
+=======
+    	Card getCard = cardList[amountOfCards--];
+    	cardList[amountOfCards--] = null;
+>>>>>>> theirs
     	amountOfCards--;
     	return getCard;
     }
