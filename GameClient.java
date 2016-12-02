@@ -23,7 +23,7 @@ public class GameClient {
 	System.out.println("Ready(r)/Next card(n)/Hit dick(h)?");
 	long hitT = System.nanoTime() - startT;   
 
-	while(hitT< 300000) { //godtyckligt taget tal här
+	while(hitT< 300000) { //godtyckligt taget tal har
 	    String answer = ans.nextLine();
 	    hitT = System.nanoTime() - startT;  
 	}
@@ -31,21 +31,23 @@ public class GameClient {
  
 
     public static void main (String[] args) {
+	
+	String objectToGet = "theGame";
 	GameInterface game;
 	Network networkBuild = new Network();
 	networkBuild.welcomeMSG("client");
-	String inIp = networkBuild.getServerInIp();
-	String exIp = networkBuild.getServerExIp();
-	String port = networkBuild.getServerPort();
+	String inIp = networkBuild.askServerInIp();
+	String exIp = networkBuild.askServerExIp();
+	String port = networkBuild.askServerPort();
 
-	game = networkBuild.clientConnect(inIp,exIp,port);
+	game = networkBuild.clientConnect(inIp,exIp,port,objectToGet);
 	//TODO: Skapa spelare inkl smeknamn?
 
 	try {
 
 	    //BEGINNING OF GAME
 	    game.displayBoard(); //so everyone knows who starts
-	    //TODO: Uppdatera att playern är redo
+	    //TODO: Uppdatera att playern ar redo
 
 	    //START VALUES
 	    long startTime;
@@ -57,7 +59,7 @@ public class GameClient {
 	    boolean canHit = false;
 	    boolean myRound = false; 
 
-	    //>>>>STOR LOOP: här ska vi egentligen ha en check att spelet inte är slut
+	    //>>>>STOR LOOP: har ska vi egentligen ha en check att spelet inte ar slut
 	    for (int i=0; i<5; i++) { 
 
 		//loop until next round
@@ -66,7 +68,7 @@ public class GameClient {
 		    round = game.whoseRound(oldRound); //TODO: semaphores needed here
 		}
 
-		//TODO: myRound = kollar ifall det är spelarens tur
+		//TODO: myRound = kollar ifall det ar spelarens tur
 		//ifall personen fortfarande deltar i spelet eller har vunnit.
 
 		//Check if it's possible to hit
@@ -78,7 +80,7 @@ public class GameClient {
 		//Let the player make its move
 		userAction(myRound,canHit);
 	    }
-	    //TODO: Uppdatera Player till att vara redo för nästa runda 
+	    //TODO: Uppdatera Player till att vara redo for nasta runda 
 
 	}
 	catch (Exception e) {
@@ -125,7 +127,7 @@ public class GameClient {
 	    startCounting = System.nanoTime();
 
 	    answerTime = System.nanoTime() - startCounting;   
-	    while(answerTime < 300000) { //godtyckligt taget tal här
+	    while(answerTime < 300000) { //godtyckligt taget tal har
 		answer = userInput.nextLine();
 		answerTime = System.nanoTime() - startCounting;  
 	    }

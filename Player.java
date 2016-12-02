@@ -54,10 +54,6 @@ public class Player {
     //Take up the game deck from losing 
     //Make a for loop
     public void getCardFromMiddleDeck(Deck gameDeck){
-    	for (int n = 0; gameDeck.amountOfCards > n;){ 
-    	playerDeck.cardList[amountOfCardsOnHands] = gameDeck.getCard();
-    	amountOfCardsOnHands++;
-    	}
-    	return;
+	playerDeck.combineDeck(gameDeck.getCardList());
     }    
 }
