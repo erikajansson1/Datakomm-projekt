@@ -1,6 +1,6 @@
 public class Card {
-    public int rank;
-    public String suit;
+    private int rank;
+    private String suit;
 
     public Card (int rank, String suit) {
 	this.rank = rank;
