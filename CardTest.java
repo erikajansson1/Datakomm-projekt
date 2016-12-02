@@ -17,8 +17,21 @@ public class CardTest extends TestCase {
     
     
     @Test
-    public void test_pilla_pa_kort() {
-	assertTrue(true);
+    public void test_getCard() {
+	Card theCard = new Card(7, "D");
+	assertTrue(theCard.getCard().equals("[D7]"));
     }
 
+    @Test
+    public void test_getSuit() {
+	Card theCard2 = new Card(13, "Heart");
+	assertTrue(theCard2.getSuit().equals("Heart"));
+    }
+
+    @Test
+    public void test_getRank() {
+	Card theCard3 = new Card(4,"Spade");
+	assertTrue(theCard3.getRank() == 4);
+	
+    }
 }
