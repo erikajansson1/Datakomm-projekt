@@ -37,7 +37,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     /** Update the hit time for a player with alias "alias"     
      */
     public void updatePlayerTime(String alias, int hitTime) throws RemoteException { 
-	//TODO: matcha alias mot players för att hitta rätt player
+	//TODO: matcha alias mot players for att hitta ratt player
 	//TODO: uppdatera playerns hitTime-attribute	
     }
 
@@ -46,9 +46,9 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * @return The round value 
      */
     public int whoseRound(int currRound) throws RemoteException{
-	//TODO om alla spelar är Redo för (erika) att nästa spelare kan å lägga....sktunge..., increment round by 1
-	//TODO Semaphore vid värde skifte/uppdatering av round.
-	//TODO jömföra så man inte uppdaterar round mer än +1
+	//TODO if all the players are ready to continue, round++
+	//TODO Semaphore to ensure atomical updating
+	//TODO Compare so that you dont update the Round twice
 	return round;
     }
 
@@ -83,7 +83,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	}
 
     //TODO public void addPlayer (string Alias) {}
-    //funktion. Semaphore vid skapande. Alla clienter påkallar denna vid anslutning för att tilldelas sin "plats". Client klassen får stå för att fråga efter alias.
+    
+    //Method. Use semaphores to assign the player he or shes slotnumber in the game and connection to their player object. Client class asks user for "alias" and provides it to this method.
 	 
     /** Next player should be able to place a cards 
      */
@@ -138,7 +139,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	 
 	//Who is the slowest when hitting the deck. Give the GameDeck to the loser 
 	public void whoLostRightHit(){
-	    //Jömför tiderna i player objekten och nolla efter att ha kollat.
+	    //TODO Compare times in the player objects and reset it after determining who lost.
 		return; 
 	} 
 }
