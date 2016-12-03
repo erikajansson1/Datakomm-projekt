@@ -9,8 +9,6 @@ JC = javac
 CLASSES = \
 	Card.java \
 	Deck.java \
-	TestCardMain.java \
-	Game.java \
 	Player.java \
 	Game.java \
 	GameInterface.java \
@@ -23,6 +21,7 @@ CLASSES = \
 TESTC = \
 	AllTest.java \
 	CardTest.java \
+	DeckTest.java \
 
 
 

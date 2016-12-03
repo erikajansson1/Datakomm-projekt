@@ -30,10 +30,10 @@ public class Deck {
 	for (int i = 1; i <= 13; i++) {
 	    this.cardList.add(new Card(i,suit));
 	}
+
     }
 
-    //Get one card from deck, (Do we want to be able to grab more?)
-    //Takes the last card in the deck since it upside down
+    //Get one card from deck
     public Card getCard() {
 	cardList.trimToSize();
 	int indexLastCard = cardList.size()-1;
@@ -43,13 +43,13 @@ public class Deck {
     }
     
     
-    //Mix up the deck so everything is not in order, TODO: Do we need to return?
+    //Mix up the deck so everything is not in order
     public ArrayList<Card> mixup() {
     	Collections.shuffle(this.cardList);
     	return this.cardList;	
     }
     
-    /*Add a card to the deck (This could be useful for the deck you have in the middle)
+    /**Add a card to the deck
      * Do we want to have the circle game deck to be a own deck class?
     */
     public void addCard(Card newCard) {
@@ -57,8 +57,7 @@ public class Deck {
 	return;
     }
    
-    //Check if possible to hit, in case of starts to count time and 
-    //will send back the time it takes for the player to hit.
+    //Check if possible to hit, 
     public boolean possibleToHit(){
     	int n = 0;
 	int index = cardList.size()-1;

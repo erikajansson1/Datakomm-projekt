@@ -179,3 +179,4 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	this.playerAliases = playerAliases;
     }
 }
+

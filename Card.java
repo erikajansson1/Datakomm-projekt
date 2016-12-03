@@ -15,7 +15,7 @@ public class Card {
 	return rank;
     }
 
-    public String getCard(){
+    public String showCard(){
 	String dispCard = "["+ suit + Integer.toString(rank) + "]";
     return dispCard;
     }
