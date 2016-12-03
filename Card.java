@@ -1,4 +1,6 @@
-public class Card {
+
+public class Card implements java.io.Serializable{
+    private static final long serialVersionUID = 1L;
     private int rank;
     private String suit;
 

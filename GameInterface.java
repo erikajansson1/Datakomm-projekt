@@ -1,4 +1,6 @@
 import java.rmi.*;
+import java.rmi.server.*;
+import java.util.*;
 
 public interface GameInterface extends Remote {
 
@@ -27,4 +29,50 @@ public interface GameInterface extends Remote {
      * @return The round value 
      */
     public int whoseRound(int currRound) throws RemoteException;
+
+        /**
+     * a get method for the attribut round
+     * @return returns the round attribut
+     */
+    public int getRound() throws RemoteException;
+
+
+        /**
+     * a get method for the attribut gameDeck
+     * @return returns the gameDeck attribut
+     */
+    public Deck getGameDeck()throws RemoteException;
+
+
+        /**
+     * a get method for the attribut starterDeck
+     * @return returns the starterDeck attribut
+     */
+    public Deck getStarterDeck() throws RemoteException;
+
+    
+    /**
+     * a get method for the attribut starterDeck
+     * @return returns the starterDeck attribut
+     */
+    public ArrayList<Player> getGamePlayers() throws RemoteException;
+
+    
+ /**
+     * a get method for the attribut playerAliases
+     * @return returns the playerAliases attribut
+     */
+    public ArrayList<String> getPlayerAliases() throws RemoteException;
+
+    
+   /**
+     * a update state method for the object game.
+     * @rparam round is the new round value
+     * @rparam gameDeck is the new gameDeck value
+     * @rparam starterDeck is the new starterDeck value
+     * @rparam gamePlayers is the new gamePlayers value
+     * @rparam playerAliases is the new playerAliases value
+     */
+    public void setGameValues (int round,Deck gameDeck,Deck starterDeck,ArrayList<Player> gamePlayers,ArrayList<String> playerAliases) throws RemoteException;
+
 }

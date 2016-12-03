@@ -36,29 +36,30 @@ public class GameClient {
 	String backUpToGet = "theBackUp";
 	Network networkBuild = new Network();
 	networkBuild.welcomeMSG("client");
-	String inIp = networkBuild.askServerInIp();
-	String exIp = networkBuild.askServerExIp();
-	String port = networkBuild.askServerPort();
 
+	String inIp = null;
+	String exIp = null;
+	String port = null;
+	if(args[0].equals("debug")) {
+	     inIp = "192.168.0.101";
+	     exIp = "83.255.61.11";
+	     port = "1099";
+	} else {
+	     inIp = networkBuild.askServerInIp();
+	     exIp = networkBuild.askServerExIp();
+	     port = networkBuild.askServerPort();
+	}
+		
+	GameInterface serverGame = null;	
+	serverGame = networkBuild.getServerObj(serverGame,inIp,exIp,port,gameToGet);
 	
-	
-
-	GameInterface game = null;
-	networkBuild.getServerObj(game,inIp,exIp,port,gameToGet);
-	BackUpInterface backup = null;
-	networkBuild.getServerObj(backup,inIp,exIp,port,backUpToGet);
 	//TODO: Skapa spelare inkl smeknamn?
 	
 	try {
-	    Game localCopyOfGame = new Game(2); //Need to get the right amount of players?
-	    System.out.println("trying to backup");
-	    
-	    backup.getBackUp(localCopyOfGame);
-	    System.out.println("did it :D");
-	    System.out.println(localCopyOfGame.displayBoard());
-
+	    BackUp backup = new BackUp(serverGame);
+	    //backup.update(serverGame);
 	    //BEGINNING OF GAME
-	    System.out.println(game.displayBoard());
+	    
 	    //so everyone knows who starts
 	    //TODO: Uppdatera att playern ar redo
 
@@ -76,9 +77,9 @@ public class GameClient {
 	    for (int i=0; i<5; i++) { 
 
 		//loop until next round
-		oldRound = game.whoseRound(oldRound); //or is it oldR?
+		oldRound = serverGame.whoseRound(oldRound); //or is it oldR?
 		while (oldRound == round) {
-		    round = game.whoseRound(oldRound); //TODO: semaphores needed here
+		    round = serverGame.whoseRound(oldRound); //TODO: semaphores needed here, at client???
 		}
 
 		//TODO: myRound = kollar ifall det ar spelarens tur
@@ -88,7 +89,7 @@ public class GameClient {
 		canHit = true; //TODO: fkn for checking if its hit the dick time 
 		    
 		//Display board
-		System.out.println(game.displayBoard());
+		System.out.println(serverGame.displayBoard());
 		    
 		//Let the player make its move
 		userAction(myRound,canHit);

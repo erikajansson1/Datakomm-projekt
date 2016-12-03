@@ -90,7 +90,6 @@ class Network {
 	System.out.println("How many player slots would you like?");
 	Scanner userInput = new Scanner(System.in);
 	int noPlayers = userInput.nextInt();
-	System.out.println("Creating space for "+noPlayers);
 	return noPlayers;
     }
 
@@ -170,7 +169,7 @@ class Network {
      *@param port is the servers port
      *@param objectToGet is the name of the object to get the reference to
      */    
-    public void getServerObj(GameInterface game, String inIp, String exIp, String port ,String objectToGet)
+    public GameInterface getServerObj(GameInterface game, String inIp, String exIp, String port ,String objectToGet)
     {
        	try {
 	    Registry registry = LocateRegistry.getRegistry( exIp, Integer.parseInt(port));
@@ -181,16 +180,17 @@ class Network {
 	    System.out.println(" exception: " + e);
 	    e.printStackTrace();
 	}
+	return game;
     }
-
+    /*
     /**
      * Method that connects the client to the servers rmi registry and returns a reference to the shared backup object.
      *@param inIp is the servers internal IP
      *@param exIp is the servers external IP
      *@param port is the servers port
      *@param objectToGet is the name of the object to get the reference to
-     */   
-    public void getServerObj(BackUpInterface backUp,String inIp, String exIp, String port, String objectToGet)
+      
+    public BackUpInterface getServerObj(BackUpInterface backUp,String inIp, String exIp, String port, String objectToGet)
     {
 	try {
 	    Registry registry = LocateRegistry.getRegistry( exIp, Integer.parseInt(port));
@@ -201,7 +201,8 @@ class Network {
 	    System.out.println(" exception: " + e);
 	    e.printStackTrace();
 	}
-    }
+	return backUp;
+	}*/
 
 
 }

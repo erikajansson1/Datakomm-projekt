@@ -7,11 +7,12 @@
  * long tDelta = tEnd - tStart;
  * double elapsedSeconds = tDelta / 1000.0;
  */
-public class Player {
-    public String nameOfPlayer;
-    public Deck playerDeck;
-    public int amountOfCardsOnHands = 0;
-    public int numberOfPlayer;
+public class Player implements java.io.Serializable{
+    private static final long serialVersionUID = 1L;
+    private String nameOfPlayer;
+    private Deck playerDeck;
+    private int amountOfCardsOnHands = 0;
+    private int numberOfPlayer;
     //TODO: Add IP, ext and int.
     private boolean readyToPlay;
     //TODO: Won or lost game attribute? ended up at place 2...ex
