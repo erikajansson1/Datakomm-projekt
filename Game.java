@@ -7,8 +7,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     private int round;
     private Deck gameDeck;
     private Deck starterDeck;
-    private Player[] gamePlayers; 
-    //   private ArrayList<String> playerNames;
+    private ArrayList<Player> gamePlayers; 
+    private ArrayList<String> playerAliases;
 
     public Game (int numberOfPlayers, int playerNO, int controlValue) throws RemoteException {
 	super(1099);
@@ -19,12 +19,16 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      *  that is, check whether any of the previous 4 cards
      *  match eachother
      */
-    public long timeToHit() throws RemoteException { return 3; }; //TODO
+    public long timeToHit() throws RemoteException {
+	return 3;
+    }; //TODO
 
     /** Prints out a view of the board:
      *  whose turn it is, and the latest card
      */
-    public String displayBoard() throws RemoteException { return "hej"; };  //TODO
+    public String displayBoard() throws RemoteException {
+	return "hej";
+    };  //TODO
 
     /** Set the ready value for a player with alias "alias". 
      */
@@ -57,12 +61,12 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	@return The found Player object, or an Player object with specific invalid values     
      */
     public Player findPlayer(String alias) throws RemoteException {
-	int len = gamePlayers.length;
+	int len = gamePlayers.size();
 	String name;
 	for(int i=0; i < len; i++) {
-	    name = gamePlayers[i].getPlayerName();
+	    name = gamePlayers.get(i).getPlayerName();
 	    if (name.equals(alias)) {
-		return gamePlayers[i];
+		return gamePlayers.get(i);
 	    }
 	}
 	Player nobody = new Player(-1);
@@ -77,7 +81,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	public void startGame(int amountOfPlayers) { 
 		this.gameDeck = new Deck();  
 		for(int n = 1; amountOfPlayers == n; amountOfPlayers-- ){ 
-			gamePlayers[amountOfPlayers-1] = new Player(amountOfPlayers); 
+		    gamePlayers.add(amountOfPlayers-1, new Player(amountOfPlayers)); 
 		} 
 	return; 
 	}
@@ -141,6 +145,10 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	public void whoLostRightHit(){
 	    //TODO Compare times in the player objects and reset it after determining who lost.
 		return; 
-	} 
+	}
+
+    public Game backUp() {
+	return this;
+    }
 }
 

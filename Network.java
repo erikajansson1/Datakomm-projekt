@@ -152,7 +152,7 @@ class Network {
     }
 
     
-        /**
+    /**
      * method to ask the user which port the server has whom he wishes to join.
      */
     public String askServerPort() {
