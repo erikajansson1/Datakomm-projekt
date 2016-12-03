@@ -6,7 +6,8 @@ public class Deck {
     private ArrayList<String> cardTypes;
 
     //Create empty deck
-    public Deck (int skitunge) {
+    public Deck (int AmountOfCards) {
+	this.cardList = new ArrayList<Card>(AmountOfCards);
     }
 
     //Create deck of 52 cards(a whole deck)
