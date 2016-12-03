@@ -14,19 +14,19 @@ public class PlayerTest extends TestCase {
 	
 	@Test
 	public void test_getPlayerNumber() {
-		Player testPlayer = new Player(2, "77660", "875943", "Dess");
+	    Player testPlayer = new Player(2, "77660", "875943", "Dess", true);
 		assertTrue(testPlayer.getPlayerNumber() == 2);
 		}
 
 	@Test
 	public void test_amountOfCardsOnHands() {
-		Player testPlayer = new Player(2, "77660", "875943", "Dess");
+		Player testPlayer = new Player(2, "77660", "875943", "Dess", true);
 		assertTrue(testPlayer.getPlayerDeck().getAmount() == 0);
 	}
 	
 	@Test
 	public void test_getCardFromMiddleDeck() {
-		Player testPlayer = new Player(2, "77660", "875943", "Dess");
+		Player testPlayer = new Player(2, "77660", "875943", "Dess", true);
 		Deck gameDeck = new Deck();
 		testPlayer.getCardFromMiddleDeck(gameDeck);
 		assertTrue(testPlayer.getPlayerDeck().getAmount() == 52);
@@ -34,7 +34,7 @@ public class PlayerTest extends TestCase {
 	
 	@Test
 	public void test_playNextCard() {
-		Player testPlayer = new Player(2, "77660", "875943", "Dess");
+		Player testPlayer = new Player(2, "77660", "875943", "Dess", true);
 		Deck gameDeck = new Deck();
 		testPlayer.getCardFromMiddleDeck(gameDeck);
 		testPlayer.playNextCard(gameDeck);
@@ -43,7 +43,7 @@ public class PlayerTest extends TestCase {
 	
 	@Test
 	public void test_gameAddCard(){
-		Player testPlayer = new Player(2, "77660", "875943", "Dess");
+		Player testPlayer = new Player(2, "77660", "875943", "Dess", true);
 		Deck gameDeck = new Deck();
 		testPlayer.getCardFromMiddleDeck(gameDeck);
 		testPlayer.playNextCard(gameDeck);
@@ -52,7 +52,7 @@ public class PlayerTest extends TestCase {
 	
 	@Test
 	public void test_takeAndAdd() {
-		Player testPlayer = new Player(2, "77660", "875943", "Dess");
+	    Player testPlayer = new Player(2, "77660", "875943", "Dess", true);
 		Deck gameDeck = new Deck();
 		testPlayer.getCardFromMiddleDeck(gameDeck);
 		testPlayer.playNextCard(gameDeck);
