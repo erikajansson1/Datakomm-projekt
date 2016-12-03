@@ -8,7 +8,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     private Deck gameDeck;
     private Deck starterDeck;
     private ArrayList<Player> gamePlayers; 
-    //   private ArrayList<String> playerNames;
+    private ArrayList<String> playerAliases;
 
     public Game (int numberOfPlayers, int playerNO, int controlValue) throws RemoteException {
 	super(1099);
