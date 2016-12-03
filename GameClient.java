@@ -42,11 +42,12 @@ public class GameClient {
 
 	game = networkBuild.clientConnect(inIp,exIp,port,objectToGet);
 	//TODO: Skapa spelare inkl smeknamn?
-
+	
 	try {
-
+	    Game gameBackUp = game.backUp(); 
 	    //BEGINNING OF GAME
-	    game.displayBoard(); //so everyone knows who starts
+	    System.out.println(game.displayBoard());
+	    //so everyone knows who starts
 	    //TODO: Uppdatera att playern ar redo
 
 	    //START VALUES
@@ -75,7 +76,7 @@ public class GameClient {
 		canHit = true; //TODO: fkn for checking if its hit the dick time 
 		    
 		//Display board
-		game.displayBoard();
+		System.out.println(game.displayBoard());
 		    
 		//Let the player make its move
 		userAction(myRound,canHit);

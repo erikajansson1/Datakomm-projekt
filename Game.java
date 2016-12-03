@@ -19,12 +19,16 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      *  that is, check whether any of the previous 4 cards
      *  match eachother
      */
-    public long timeToHit() throws RemoteException { return 3; }; //TODO
+    public long timeToHit() throws RemoteException {
+	return 3;
+    }; //TODO
 
     /** Prints out a view of the board:
      *  whose turn it is, and the latest card
      */
-    public String displayBoard() throws RemoteException { return "hej"; };  //TODO
+    public String displayBoard() throws RemoteException {
+	return "hej";
+    };  //TODO
 
     /** Set the ready value for a player with alias "alias". 
      */
@@ -141,5 +145,9 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	public void whoLostRightHit(){
 	    //TODO Compare times in the player objects and reset it after determining who lost.
 		return; 
-	} 
+	}
+
+    public Game backUp() {
+	return this;
+    }
 }
