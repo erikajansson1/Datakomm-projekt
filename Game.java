@@ -233,6 +233,12 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     public int addPlayer(String inIp, String exIp, String alias) throws RemoteException {
 	try {
 	this.lock.acquire();
+
+	if(this.askIsGameFull()) {
+	    this.lock.release();	
+	    return -1;
+	}
+	
 	for (int i = 0; i <= (gamePlayers.size()-1); i++) {
 	    if(gamePlayers.get(i).getPlayerName().equals("Empty")) {
 		gamePlayers.add(i,new Player(i, inIp, exIp,alias,true));

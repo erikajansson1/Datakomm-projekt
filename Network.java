@@ -204,19 +204,16 @@ class Network {
      * @return int symbolising the players assigned player number.
      */
     public int joinGame(GameInterface serverGame, String inIp, String exIp) throws RemoteException{
-	if(serverGame.askIsGameFull()) {
-		System.out.println("Sorry this server is full. \n Please try another one.");
-		System.exit(0);
-	}
-
-	int playerNo = -1;
-	while(playerNo == -1) {
+      	int playerNo = -1;
+	if(!serverGame.askIsGameFull()){
 	    playerNo = serverGame.addPlayer(inIp,exIp,this.askAlias());
+	}
 	    if(playerNo == -1)
 		{
-		    System.out.println("Something went wrong. Lets try again");
+		    System.out.println("Sorry this server is full. \n Please try another one.");
+		    System.exit(0);
 		}
-	}
+	
 	System.out.println("You have now joined the game with alias: "+
 				   serverGame.getPlayerAlias(playerNo)+"\n"+
 				   "You are currently playerNo: "+playerNo);
