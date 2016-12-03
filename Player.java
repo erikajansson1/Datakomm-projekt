@@ -8,15 +8,15 @@
  * double elapsedSeconds = tDelta / 1000.0;
  */
 public class Player {
-    public String nameOfPlayer;
-    public Deck playerDeck;
-    public int amountOfCardsOnHands = 0;
-    public int numberOfPlayer;
-    //TODO: Add IP, ext and int.
+    private String nameOfPlayer;
+    private Deck playerDeck;
+    private int amountOfCardsOnHands = 0;
+    private int numberOfPlayer;
+    private String extIP;
+    private String intIP;
     private boolean readyToPlay;
-    //TODO: Won or lost game attribute? ended up at place 2...ex
-    //TODO: int hitTime
-    
+    private String rankWhenFinished;
+    private int hitTime;
       
 
     public Player (int numberOfPlayer) {
@@ -41,9 +41,6 @@ public class Player {
 	return numberOfPlayer;
     }
 
-    //Add a card
-    // This should have a list of 0 to 51 which is 52 cards. So we need 
-    // to think about that
     public Card dropCard(Deck gameDeck){
 		Card cardToDrop = playerDeck.getCard();
 		gameDeck.addCard(cardToDrop);
@@ -51,9 +48,15 @@ public class Player {
 		return cardToDrop;
 	}
 
-    //Take up the game deck from losing 
+    public void playNextCard(Deck gameDeck){
+	Card cardToLay = playerDeck.getCard();
+	gameDeck.addCard(cardToLay);
+
+    }
+    //Take up the game deck when you are the last player to hit the deck
     //Make a for loop
     public void getCardFromMiddleDeck(Deck gameDeck){
+	
     amountOfCardsOnHands = amountOfCardsOnHands + gameDeck.getAmount();
 	playerDeck.combineDeck(gameDeck.getCardList());
     }    
