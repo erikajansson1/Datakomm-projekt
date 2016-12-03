@@ -40,14 +40,14 @@ public class GameClient {
 	String inIp = null;
 	String exIp = null;
 	String port = null;
-	if(args[0].equals("debug")) {
-	     inIp = "192.168.0.101";
-	     exIp = "83.255.61.11";
-	     port = "1099";
+	if(args.length == 0) {
+	    inIp = networkBuild.askServerInIp();
+	    exIp = networkBuild.askServerExIp();
+	    port = networkBuild.askServerPort();
 	} else {
-	     inIp = networkBuild.askServerInIp();
-	     exIp = networkBuild.askServerExIp();
-	     port = networkBuild.askServerPort();
+	    inIp = args[0];
+	    exIp = args[1];
+	    port = args[2];
 	}
 		
 	GameInterface serverGame = null;	

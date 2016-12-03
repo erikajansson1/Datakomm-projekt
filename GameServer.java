@@ -24,8 +24,9 @@ public class GameServer {
 			
 		registry.rebind(ipLocal+"/theGame:1099", game);
 		networkBuild.publishReady();
+		String[] argvClient = new String[]{ipLocal,ipExternal,"1099"};
 		
-		GameClient.main(argv);
+		GameClient.main(argvClient);
 	    }catch (Exception e) {
 	    System.out.println("Game Server failed: " + e);
 
