@@ -32,19 +32,31 @@ public class GameClient {
 
     public static void main (String[] args) {
 	
-	String objectToGet = "theGame";
-	GameInterface game;
+	String gameToGet = "theGame";
+	String backUpToGet = "theBackUp";
 	Network networkBuild = new Network();
 	networkBuild.welcomeMSG("client");
 	String inIp = networkBuild.askServerInIp();
 	String exIp = networkBuild.askServerExIp();
 	String port = networkBuild.askServerPort();
 
-	game = networkBuild.clientConnect(inIp,exIp,port,objectToGet);
+	
+	
+
+	GameInterface game = null;
+	networkBuild.getServerObj(game,inIp,exIp,port,gameToGet);
+	BackUpInterface backup = null;
+	networkBuild.getServerObj(backup,inIp,exIp,port,backUpToGet);
 	//TODO: Skapa spelare inkl smeknamn?
 	
 	try {
-	    Game gameBackUp = game.backUp(); 
+	    Game localCopyOfGame = new Game(2); //Need to get the right amount of players?
+	    System.out.println("trying to backup");
+	    
+	    backup.getBackUp(localCopyOfGame);
+	    System.out.println("did it :D");
+	    System.out.println(localCopyOfGame.displayBoard());
+
 	    //BEGINNING OF GAME
 	    System.out.println(game.displayBoard());
 	    //so everyone knows who starts

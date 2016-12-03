@@ -27,6 +27,4 @@ public interface GameInterface extends Remote {
      * @return The round value 
      */
     public int whoseRound(int currRound) throws RemoteException;
-
-    public Game backUp() throws RemoteException;
 }

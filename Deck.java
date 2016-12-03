@@ -5,6 +5,7 @@ public class Deck {
     private ArrayList<Card> cardList;
     private ArrayList<String> cardTypes;
 
+    //Create empty deck
     public Deck (int skitunge) {
     }
 
@@ -12,16 +13,22 @@ public class Deck {
     public Deck () {
 	this.cardList = new ArrayList<Card>(52);
 	this.cardTypes = new ArrayList<String>(4);
+	this.buildDeck();
+    }
 
-	this.cardTypes.add("Heart");
-	this.cardTypes.add("Spade");
-	this.cardTypes.add("Club");
-	this.cardTypes.add("Diamond");
+
+    public void buildDeck() {
+	this.buildSuit("Heart");
+	this.buildSuit("Spade");
+	this.buildSuit("Club");
+	this.buildSuit("Diamond");
+    }
+
+    
+    public void buildSuit(String suit) {
+	this.cardTypes.add(suit);
 	for (int i = 1; i <= 13; i++) {
-	    cardList.add(i-1,new Card(i,"Heart"));
-	    cardList.add(i+12,new Card(i,"Spade"));
-	    cardList.add(i+25,new Card(i,"Club"));
-	    cardList.add(i+38,new Card(i,"Club"));   
+	    this.cardList.add(new Card(i,suit));
 	}
     }
 

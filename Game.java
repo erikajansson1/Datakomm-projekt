@@ -10,9 +10,13 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     private ArrayList<Player> gamePlayers; 
     private ArrayList<String> playerAliases;
 
-    public Game (int numberOfPlayers, int playerNO, int controlValue) throws RemoteException {
+    public Game (int numberOfPlayers) throws RemoteException {
 	super(1099);
 	this.round = 0;
+	this.gameDeck = new Deck(); //Which should be empty?
+	this.starterDeck = new Deck();
+	this.gamePlayers = new ArrayList<Player>();
+	this.playerAliases = new ArrayList<String>();
     }
 
     /** Checks whether it's time to hit,
@@ -27,7 +31,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      *  whose turn it is, and the latest card
      */
     public String displayBoard() throws RemoteException {
-	return "hej";
+	return "hej"+round;
     };  //TODO
 
     /** Set the ready value for a player with alias "alias". 
@@ -147,7 +151,31 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 		return; 
 	}
 
-    public Game backUp() {
-	return this;
+    public int getRound() {
+	return this.round;
+    }
+
+    public Deck getGameDeck() {
+	return this.gameDeck;
+    }
+
+    public Deck getStarterDeck() {
+	return this.starterDeck;
+    }
+
+    public ArrayList<Player> getGamePlayers() {
+	return this.gamePlayers;
+    }
+
+    public ArrayList<String> getPlayerAliases() {
+	return this.playerAliases;
+    }
+
+    public void setGameValues(int round,Deck gameDeck,Deck starterDeck,ArrayList<Player> gamePlayers,ArrayList<String> playerAliases) {
+	this.round = round;
+	this.gameDeck = gameDeck;
+	this.starterDeck = starterDeck;
+	this.gamePlayers = gamePlayers;
+	this.playerAliases = playerAliases;
     }
 }

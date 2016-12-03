@@ -17,8 +17,14 @@ class BackUp extends UnicastRemoteObject implements BackUpInterface {
     /** 
      * Method to update the stored backup of the game  
      */
-    public void update(Game backedUpGame) throws RemoteException {
-	this.backedUpGame = backedUpGame;
+    public void getBackUp(Game externalGame) throws RemoteException {
+	externalGame.setGameValues(
+				   backedUpGame.getRound(),
+				   backedUpGame.getGameDeck(),
+				   backedUpGame.getStarterDeck(),
+				   backedUpGame.getGamePlayers(),
+				   backedUpGame.getPlayerAliases()
+				   );
     }
     
 }
