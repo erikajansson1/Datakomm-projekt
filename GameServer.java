@@ -30,6 +30,7 @@ public class GameServer {
 	    System.out.println("Game Server failed: " + e);
 
 	}
+	return;
     }
 }
 

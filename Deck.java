@@ -105,7 +105,9 @@ public class Deck implements java.io.Serializable{
 	this.cardList.addAll(toAdd);
     }
     
-    
+    /**
+     * Emptys the current deck of all cards.
+     */
     public void cleanDeck() {
 	this.cardList.clear();
     }

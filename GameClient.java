@@ -31,7 +31,7 @@ public class GameClient {
  
 
     public static void main (String[] args) {
-	
+	int playerNo = -1;
 	String gameToGet = "theGame";
 	String backUpToGet = "theBackUp";
 	Network networkBuild = new Network();
@@ -52,12 +52,11 @@ public class GameClient {
 		
 	GameInterface serverGame = null;	
 	serverGame = networkBuild.getServerObj(serverGame,inIp,exIp,port,gameToGet);
-	
-	//TODO: Skapa spelare inkl smeknamn?
 	try {
-	    if(serverGame.addPlayer(inIp,exIp,networkBuild.askAlias())) {
+	    playerNo = networkBuild.joinGame(serverGame,inIp,exIp);
+	    System.out.println(playerNo);
 
-	    }
+	    
 	    BackUp backup = new BackUp(serverGame);
 	    //backup.update(serverGame);
 	    //BEGINNING OF GAME

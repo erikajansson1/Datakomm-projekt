@@ -11,7 +11,6 @@ public class Player implements java.io.Serializable{
     private static final long serialVersionUID = 1L;
     private String nameOfPlayer;
     private Deck playerDeck;
-    private int amountOfCardsOnHands = 0;
     private int numberOfPlayer;
     private String inIp;
     private String exIp;
@@ -20,13 +19,16 @@ public class Player implements java.io.Serializable{
     private int hitTime;
       
 
-    public Player (int numberOfPlayer, String inIp, String exIp, String alias) {
+    public Player (int numberOfPlayer, String inIp, String exIp, String alias,boolean ready) {
 	this.numberOfPlayer = numberOfPlayer;
 	this.playerDeck = new Deck(1);
 	this.inIp = inIp;
 	this.exIp = exIp;
 	this.nameOfPlayer = alias;
-	}
+	this.readyToPlay = ready;
+	this.rankWhenFinished = "";
+	this.hitTime = -1;
+    }
 
     
     public boolean getReadyValue() {
@@ -52,10 +54,10 @@ public class Player implements java.io.Serializable{
     public void playNextCard(Deck gameDeck){
 	Card cardToLay = playerDeck.getCard();
 	gameDeck.addCard(cardToLay);
-
+    }
     //Take up the game deck from losing 
-    public void getCardFromMiddleDeck(Deck gameDeck){
+	public void getCardFromMiddleDeck(Deck gameDeck){
 	playerDeck.combineDeck(gameDeck.getCardList());
 	gameDeck.cleanDeck();
-    }    
+    }
 }

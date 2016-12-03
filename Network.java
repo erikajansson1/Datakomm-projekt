@@ -173,8 +173,9 @@ class Network {
     {
        	try {
 	    Registry registry = LocateRegistry.getRegistry( exIp, Integer.parseInt(port));
-	    System.out.println("Registry found in "  +exIp+ 
+	    /*System.out.println("Registry found in "  +exIp+ 
                                " :" + port + "\n" + registry);
+	    */
 	    game = (GameInterface) registry.lookup(inIp+"/"+objectToGet+":"+port);		
 	}catch (Exception e) {
 	    System.out.println(" exception: " + e);
@@ -183,33 +184,67 @@ class Network {
 	return game;
     }
 
+
+    /**
+     * A method that asks the client what alias he or she wants to use.
+     * @return a string containing the users wished alias.
+     */
     public String askAlias() {
 	Scanner userInput = new Scanner(System.in);
 	System.out.printf("What alias would you like: ");
 	return userInput.nextLine();
     }
-    
-    /*
+
     /**
-     * Method that connects the client to the servers rmi registry and returns a reference to the shared backup object.
-     *@param inIp is the servers internal IP
-     *@param exIp is the servers external IP
-     *@param port is the servers port
-     *@param objectToGet is the name of the object to get the reference to
-      
-    public BackUpInterface getServerObj(BackUpInterface backUp,String inIp, String exIp, String port, String objectToGet)
-    {
-	try {
-	    Registry registry = LocateRegistry.getRegistry( exIp, Integer.parseInt(port));
-	    System.out.println("Registry found in "  +exIp+ 
-                               " :" + port + "\n" + registry);
-	    backUp = (BackUpInterface) registry.lookup(inIp+"/"+objectToGet+":"+port);		
-	}catch (Exception e) {
-	    System.out.println(" exception: " + e);
-	    e.printStackTrace();
+     * Method for the client to join a game he or she is connected to.
+     * Also checks if the game is full or not before trying to join.
+     * @param serverGame is the game to join.
+     * @param inIp is the clients inIp.
+     * @param exIp is the clients exIp.
+     * @return int symbolising the players assigned player number.
+     */
+    public int joinGame(GameInterface serverGame, String inIp, String exIp) throws RemoteException{
+	if(serverGame.askIsGameFull()) {
+		System.out.println("Sorry this server is full. \n Please try another one.");
+		System.exit(0);
 	}
-	return backUp;
-	}*/
 
-
+	int playerNo = -1;
+	while(playerNo == -1) {
+	    playerNo = serverGame.addPlayer(inIp,exIp,this.askAlias());
+	    if(playerNo == -1)
+		{
+		    System.out.println("Something went wrong. Lets try again");
+		}
+	}
+	System.out.println("You have now joined the game with alias: "+
+				   serverGame.getPlayerAlias(playerNo)+"\n"+
+				   "You are currently playerNo: "+playerNo);
+	return playerNo;
+    }
 }
+    
+/*
+  /**
+  * Method that connects the client to the servers rmi registry and returns a reference to the shared backup object.
+  *@param inIp is the servers internal IP
+  *@param exIp is the servers external IP
+  *@param port is the servers port
+  *@param objectToGet is the name of the object to get the reference to
+      
+  public BackUpInterface getServerObj(BackUpInterface backUp,String inIp, String exIp, String port, String objectToGet)
+  {
+  try {
+  Registry registry = LocateRegistry.getRegistry( exIp, Integer.parseInt(port));
+  System.out.println("Registry found in "  +exIp+ 
+  " :" + port + "\n" + registry);
+  backUp = (BackUpInterface) registry.lookup(inIp+"/"+objectToGet+":"+port);		
+  }catch (Exception e) {
+  System.out.println(" exception: " + e);
+  e.printStackTrace();
+  }
+  return backUp;
+  }*/
+
+
+

@@ -13,8 +13,7 @@ class BackUp{
 	this.backedUpGame = new Game (serverGame.getRound(),
 				      serverGame.getGameDeck(),
 				      serverGame.getStarterDeck(),
-				      serverGame.getGamePlayers(),
-				      serverGame.getPlayerAliases()
+				      serverGame.getGamePlayers()
 				      );
     }
     
@@ -26,9 +25,8 @@ class BackUp{
 				   serverGame.getRound(),
 				   serverGame.getGameDeck(),
 				   serverGame.getStarterDeck(),
-				   serverGame.getGamePlayers(),
-				   serverGame.getPlayerAliases()
-				   );
+				   serverGame.getGamePlayers()
+					    );
     }
 
     public Game getBackUp() {

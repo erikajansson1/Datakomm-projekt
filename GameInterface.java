@@ -30,21 +30,21 @@ public interface GameInterface extends Remote {
      */
     public int whoseRound(int currRound) throws RemoteException;
 
-        /**
+    /**
      * a get method for the attribut round
      * @return returns the round attribut
      */
     public int getRound() throws RemoteException;
 
 
-        /**
+    /**
      * a get method for the attribut gameDeck
      * @return returns the gameDeck attribut
      */
     public Deck getGameDeck()throws RemoteException;
 
 
-        /**
+    /**
      * a get method for the attribut starterDeck
      * @return returns the starterDeck attribut
      */
@@ -56,16 +56,8 @@ public interface GameInterface extends Remote {
      * @return returns the starterDeck attribut
      */
     public ArrayList<Player> getGamePlayers() throws RemoteException;
-
-    
- /**
-     * a get method for the attribut playerAliases
-     * @return returns the playerAliases attribut
-     */
-    public ArrayList<String> getPlayerAliases() throws RemoteException;
-
-    
-   /**
+       
+    /**
      * a update state method for the object game.
      * @rparam round is the new round value
      * @rparam gameDeck is the new gameDeck value
@@ -73,7 +65,32 @@ public interface GameInterface extends Remote {
      * @rparam gamePlayers is the new gamePlayers value
      * @rparam playerAliases is the new playerAliases value
      */
-    public void setGameValues (int round,Deck gameDeck,Deck starterDeck,ArrayList<Player> gamePlayers,ArrayList<String> playerAliases) throws RemoteException;
+    public void setGameValues (int round,Deck gameDeck,Deck starterDeck,ArrayList<Player> gamePlayers) throws RemoteException;
 
-    public boolean addPlayer(String inIp, String exIp, String alias) throws RemoteException;
+
+    /**
+     * method that adds a player requesting a slot to a existing game. 
+     * Player is placed at the first available slot in the Arraylist.
+     * @param inIp is the players internal IP.
+     * @param exIp is the players external IP.
+     * @param alias is the players alias.
+     * @return an int indication the players assigned number.
+     */
+    public int addPlayer(String inIp, String exIp, String alias) throws RemoteException;
+
+    
+    /**
+     * a method to retrive a players alias in the game.
+     * Will fail if the playerNo is not in the bounds of the game.
+     * @param playerNo is the number of the player whos alias is to be fetched.
+     * @return the players alias.
+     */
+    public String getPlayerAlias(int playerNo) throws RemoteException;
+
+    
+    /**
+     * checks if the game is full.
+     * @return a bollean indicating if full or not. True if full.
+     */
+    public boolean askIsGameFull() throws RemoteException;
 }
