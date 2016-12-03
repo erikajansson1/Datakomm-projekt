@@ -19,7 +19,7 @@ public class PlayerTest extends TestCase {
 		}
 
 	@Test
-	public void test_emptyDeck() {
+	public void test_amountOfCardsOnHands() {
 		Player testPlayer = new Player(5);
 		assertTrue(testPlayer.amountOfCardsOnHands == 0);
 	}
@@ -41,6 +41,23 @@ public class PlayerTest extends TestCase {
 		assertTrue(testPlayer.amountOfCardsOnHands == 51);
 	}
 	
+	@Test
+	public void test_gameAddCard(){
+		Player testPlayer = new Player(5);
+		Deck gameDeck = new Deck();
+		testPlayer.getCardFromMiddleDeck(gameDeck);
+		testPlayer.dropCard(gameDeck);
+		assertTrue(gameDeck.getAmount() == 1);
+	}
 	
+	@Test
+	public void test_tackeAndAdd() {
+		Player testPlayer = new Player(5);
+		Deck gameDeck = new Deck();
+		testPlayer.getCardFromMiddleDeck(gameDeck);
+		testPlayer.dropCard(gameDeck);
+		testPlayer.getCardFromMiddleDeck(gameDeck);
+		assertTrue(testPlayer.amountOfCardsOnHands == 52);
+	}
 	
 }
