@@ -25,8 +25,6 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	this.gamePlayers = new ArrayList<Player>(numberOfPlayers);
 	}
 
-   
-    
     /** Checks whether it's time to hit,
      *  that is, check whether any of the previous 4 cards
      *  match eachother

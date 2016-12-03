@@ -27,7 +27,7 @@ public class GameTest extends TestCase {
 		try{
 		Game testGame = new Game(2);
 		long timeItTook = testGame.timeToHit();
-		assertTrue(timeItTook == 3);
+		assertTrue(timeItTook == 3); // TODO: This shouldn't be return 3.
 		}
 		catch (RemoteException e) {
 			 System.out.println("Error " + e.getMessage());
