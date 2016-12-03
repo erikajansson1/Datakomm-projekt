@@ -22,7 +22,7 @@ class BackUp{
      * Method to update the stored backup of the game  
      */
     public void update(GameInterface serverGame) throws RemoteException {
-	this.backedUpGame.setGameValues(
+	    this.backedUpGame.setGameValues(
 				   serverGame.getRound(),
 				   serverGame.getGameDeck(),
 				   serverGame.getStarterDeck(),

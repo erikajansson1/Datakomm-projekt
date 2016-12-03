@@ -53,7 +53,6 @@ public class Player implements java.io.Serializable{
 	}
 
     //Take up the game deck from losing 
-    //Make a for loop
     public void getCardFromMiddleDeck(Deck gameDeck){
 	playerDeck.combineDeck(gameDeck.getCardList());
     }    

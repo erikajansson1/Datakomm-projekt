@@ -92,7 +92,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	for(int n = 1; amountOfPlayers == n; amountOfPlayers-- ){ 
 	    gamePlayers.add(amountOfPlayers-1, new Player(amountOfPlayers)); 
 	} 
-	return; 
+
     }
 
     //TODO public void addPlayer (string Alias) {}
@@ -104,12 +104,12 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     //TODO: I don't know if this is needed, maybe this will tell next player to  
     //add its card 
     public void nextplayer() { 
-	return; 
+	
     } 
 	 
     //Inform player who lost and resign it from game 
     public void looseGame(){ // Should have decided player that lost 
-	return; 
+	
     } 
  
  
@@ -119,9 +119,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      */
     //TODO: This only gives one card, not whole deck 
     public void giveWholeDeck(Player loserPlayer){ 
-	Card moveCard = gameDeck.getCard(); 
-	loserPlayer.playerDeck.addCard(moveCard); 
-	return; 
+	loserPlayer.getCardFromMiddleDeck(this.gameDeck);
     } 
 	 
 	 
@@ -129,7 +127,6 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     public void handleWrongHit(){ 
 	//Look at the player that send the wrong signal, tell it it did bad 
 	//Give the whole deck to it 
-	return; 
     } 
 		 
 	 
@@ -138,7 +135,6 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     public void handleRightHit(){ 
 	//wait for all to hit, then tell the last one it lost 
 	//give the whole deck to it 
-	return; 
     } 
 	 
  
@@ -147,7 +143,6 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	if (gameDeck.possibleToHit() == true) { 
 	    return; 
 	} 
-	return; 
     } 
 	 
     //Who is the slowest when hitting the deck. Give the GameDeck to the loser 
