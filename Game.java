@@ -10,11 +10,10 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     private Deck gameDeck;
     private Deck starterDeck;
     private ArrayList<Player> gamePlayers; 
-    private ArrayList<String> playerAliases;
-
-    public Game (int round,Deck gameDeck,Deck starterDeck,ArrayList<Player> gamePlayers,ArrayList<String> playerAliases) throws RemoteException {
+ 
+    public Game (int round,Deck gameDeck,Deck starterDeck,ArrayList<Player> gamePlayers) throws RemoteException {
 	this.lock = new Semaphore(1);
-	setGameValues (round,gameDeck,starterDeck,gamePlayers,playerAliases);
+	setGameValues (round,gameDeck,starterDeck,gamePlayers);
     }
 
     public Game (int numberOfPlayers) throws RemoteException {
@@ -24,15 +23,20 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	this.gameDeck = new Deck(0); //Which should be empty?
 	this.starterDeck = new Deck();
 	this.gamePlayers = new ArrayList<Player>(numberOfPlayers);
-	this.playerAliases = new ArrayList<String>(numberOfPlayers);
-    }
+	}
 
+   
+    
     /** Checks whether it's time to hit,
      *  that is, check whether any of the previous 4 cards
      *  match eachother
      */
     public long timeToHit() throws RemoteException {
-    	//	PossibleToHist function should be used here
+    	if (gameDeck.possibleToHit()){
+    		//start Time and wait for player to realize and hit
+    		// start Time - end time. We have all this somewhere else.. Elsa?
+    		return 3;
+    	}
 	return 3;
     }; //TODO
 
@@ -99,8 +103,19 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	    gamePlayers.add(amountOfPlayers-1, new Player(amountOfPlayers)); 
 	} 
 
-	}*/
+	}
+	
+	*/
 	 
+   /**
+    * Tells the amount of players in the game
+    */
+    public int getAmountOfPlayers(){
+    	int amountPlayers = this.gamePlayers.size();
+    	return amountPlayers;
+    }
+   
+    
     /** Next player should be able to place a cards 
      */
     //TODO: I don't know if this is needed, maybe this will tell next player to  
@@ -189,13 +204,6 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     }
 
     
-    /**
-     * a get method for the attribut playerAliases
-     * @return returns the playerAliases attribut
-     */
-    public ArrayList<String> getPlayerAliases() throws RemoteException{
-	return this.playerAliases;
-    }
 
     
     /**
@@ -204,14 +212,12 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * @rparam gameDeck is the new gameDeck value
      * @rparam starterDeck is the new starterDeck value
      * @rparam gamePlayers is the new gamePlayers value
-     * @rparam playerAliases is the new playerAliases value
      */
-    public void setGameValues (int round,Deck gameDeck,Deck starterDeck,ArrayList<Player> gamePlayers,ArrayList<String> playerAliases) throws RemoteException {
+    public void setGameValues (int round,Deck gameDeck,Deck starterDeck,ArrayList<Player> gamePlayers) throws RemoteException {
 	this.round = round;
 	this.gameDeck = gameDeck;
 	this.starterDeck = starterDeck;
 	this.gamePlayers = gamePlayers;
-	this.playerAliases = playerAliases;
     }
 
     public boolean addPlayer(String inIp, String exIp, String alias) throws RemoteException {
