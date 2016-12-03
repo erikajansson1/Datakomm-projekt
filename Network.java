@@ -90,7 +90,6 @@ class Network {
 	System.out.println("How many player slots would you like?");
 	Scanner userInput = new Scanner(System.in);
 	int noPlayers = userInput.nextInt();
-	System.out.println("Creating space for "+noPlayers+"\n");
 	return noPlayers;
     }
 
@@ -162,30 +161,55 @@ class Network {
     }
 
 
+   
     /**
-     * Method that connects the client to the servers rmi registry and returns a reference to the shared object.
+     * Method that connects the client to the servers rmi registry and returns a reference to the shared game object.
      *@param inIp is the servers internal IP
      *@param exIp is the servers external IP
      *@param port is the servers port
      *@param objectToGet is the name of the object to get the reference to
      */    
-    public GameInterface clientConnect( String inIp, String exIp, String port, String objectToGet) {
-	GameInterface game = null;
-	try {
-	    // System.setSecurityManager(new SecurityManager());
+    public GameInterface getServerObj(GameInterface game, String inIp, String exIp, String port ,String objectToGet)
+    {
+       	try {
 	    Registry registry = LocateRegistry.getRegistry( exIp, Integer.parseInt(port));
 	    System.out.println("Registry found in "  +exIp+ 
                                " :" + port + "\n" + registry);
-	    game = (GameInterface) registry.lookup(inIp+"/"+objectToGet+":"+port);
- 	}catch (Exception e) {
-	    System.out.println("HelloClient exception: " + e);
+	    game = (GameInterface) registry.lookup(inIp+"/"+objectToGet+":"+port);		
+	}catch (Exception e) {
+	    System.out.println(" exception: " + e);
 	    e.printStackTrace();
-	    
 	}
 	return game;
     }
 
-
+    public String askAlias() {
+	Scanner userInput = new Scanner(System.in);
+	System.out.printf("What alias would you like: ");
+	return userInput.nextLine();
+    }
+    
+    /*
+    /**
+     * Method that connects the client to the servers rmi registry and returns a reference to the shared backup object.
+     *@param inIp is the servers internal IP
+     *@param exIp is the servers external IP
+     *@param port is the servers port
+     *@param objectToGet is the name of the object to get the reference to
+      
+    public BackUpInterface getServerObj(BackUpInterface backUp,String inIp, String exIp, String port, String objectToGet)
+    {
+	try {
+	    Registry registry = LocateRegistry.getRegistry( exIp, Integer.parseInt(port));
+	    System.out.println("Registry found in "  +exIp+ 
+                               " :" + port + "\n" + registry);
+	    backUp = (BackUpInterface) registry.lookup(inIp+"/"+objectToGet+":"+port);		
+	}catch (Exception e) {
+	    System.out.println(" exception: " + e);
+	    e.printStackTrace();
+	}
+	return backUp;
+	}*/
 
 
 }

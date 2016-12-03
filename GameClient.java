@@ -32,21 +32,36 @@ public class GameClient {
 
     public static void main (String[] args) {
 	
-	String objectToGet = "theGame";
-	GameInterface game;
+	String gameToGet = "theGame";
+	String backUpToGet = "theBackUp";
 	Network networkBuild = new Network();
 	networkBuild.welcomeMSG("client");
-	String inIp = networkBuild.askServerInIp();
-	String exIp = networkBuild.askServerExIp();
-	String port = networkBuild.askServerPort();
 
-	game = networkBuild.clientConnect(inIp,exIp,port,objectToGet);
-	//TODO: Skapa spelare inkl smeknamn?
+	String inIp = null;
+	String exIp = null;
+	String port = null;
+	if(args[0].equals("debug")) {
+	     inIp = "192.168.0.101";
+	     exIp = "83.255.61.11";
+	     port = "1099";
+	} else {
+	     inIp = networkBuild.askServerInIp();
+	     exIp = networkBuild.askServerExIp();
+	     port = networkBuild.askServerPort();
+	}
+		
+	GameInterface serverGame = null;	
+	serverGame = networkBuild.getServerObj(serverGame,inIp,exIp,port,gameToGet);
 	
+	//TODO: Skapa spelare inkl smeknamn?
 	try {
-	    Game gameBackUp = game.backUp(); 
+	    if(serverGame.addPlayer(inIp,exIp,networkBuild.askAlias())) {
+
+	    }
+	    BackUp backup = new BackUp(serverGame);
+	    //backup.update(serverGame);
 	    //BEGINNING OF GAME
-	    System.out.println(game.displayBoard());
+	    
 	    //so everyone knows who starts
 	    //TODO: Uppdatera att playern ar redo
 
@@ -64,9 +79,9 @@ public class GameClient {
 	    for (int i=0; i<5; i++) { 
 
 		//loop until next round
-		oldRound = game.whoseRound(oldRound); //or is it oldR?
+		oldRound = serverGame.whoseRound(oldRound); //or is it oldR?
 		while (oldRound == round) {
-		    round = game.whoseRound(oldRound); //TODO: semaphores needed here
+		    round = serverGame.whoseRound(oldRound); //TODO: semaphores needed here, at client???
 		}
 
 		//TODO: myRound = kollar ifall det ar spelarens tur
@@ -76,7 +91,7 @@ public class GameClient {
 		canHit = true; //TODO: fkn for checking if its hit the dick time 
 		    
 		//Display board
-		System.out.println(game.displayBoard());
+		System.out.println(serverGame.displayBoard());
 		    
 		//Let the player make its move
 		userAction(myRound,canHit);

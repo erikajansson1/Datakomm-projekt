@@ -1,7 +1,8 @@
 import java.util.*;
 
 //Deck class
-public class Deck {
+public class Deck implements java.io.Serializable{
+    private static final long serialVersionUID = 1L;
     private ArrayList<Card> cardList;
     private ArrayList<String> cardTypes;
 

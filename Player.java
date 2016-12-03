@@ -7,20 +7,25 @@
  * long tDelta = tEnd - tStart;
  * double elapsedSeconds = tDelta / 1000.0;
  */
-public class Player {
+public class Player implements java.io.Serializable{
+    private static final long serialVersionUID = 1L;
     private String nameOfPlayer;
     private Deck playerDeck;
+    private int amountOfCardsOnHands = 0;
     private int numberOfPlayer;
-    private String extIP;
-    private String intIP;
+    private String inIp;
+    private String exIp;
     private boolean readyToPlay;
     private String rankWhenFinished;
     private int hitTime;
       
 
-    public Player (int numberOfPlayer) {
+    public Player (int numberOfPlayer, String inIp, String exIp, String alias) {
 	this.numberOfPlayer = numberOfPlayer;
 	this.playerDeck = new Deck(1);
+	this.inIp = inIp;
+	this.exIp = exIp;
+	this.nameOfPlayer = alias;
 	}
 
     
@@ -48,9 +53,7 @@ public class Player {
 	Card cardToLay = playerDeck.getCard();
 	gameDeck.addCard(cardToLay);
 
-    }
-    //Take up the game deck when you are the last player to hit the deck
-    //Make a for loop
+    //Take up the game deck from losing 
     public void getCardFromMiddleDeck(Deck gameDeck){
 	playerDeck.combineDeck(gameDeck.getCardList());
 	gameDeck.cleanDeck();

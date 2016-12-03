@@ -3,22 +3,35 @@ import java.rmi.server.*;
 import java.util.*;
  
 
-class BackUp extends UnicastRemoteObject implements BackUpInterface {
-    private static final long serialVersionUID = 1L;
+class BackUp{
     private Game backedUpGame;
 
     /**
      * Contstructor for the backup class
      */
-    public BackUp (Game backedUpGame) throws RemoteException{
-	this.backedUpGame = backedUpGame;
+    public BackUp (GameInterface serverGame) throws RemoteException{
+	this.backedUpGame = new Game (serverGame.getRound(),
+				      serverGame.getGameDeck(),
+				      serverGame.getStarterDeck(),
+				      serverGame.getGamePlayers(),
+				      serverGame.getPlayerAliases()
+				      );
     }
-
+    
     /** 
      * Method to update the stored backup of the game  
      */
-    public void update(Game backedUpGame) throws RemoteException {
-	this.backedUpGame = backedUpGame;
+    public void update(GameInterface serverGame) throws RemoteException {
+	    this.backedUpGame.setGameValues(
+				   serverGame.getRound(),
+				   serverGame.getGameDeck(),
+				   serverGame.getStarterDeck(),
+				   serverGame.getGamePlayers(),
+				   serverGame.getPlayerAliases()
+				   );
     }
-    
+
+    public Game getBackUp() {
+	return this.backedUpGame;
+    }
 }
