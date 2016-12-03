@@ -22,6 +22,8 @@ TESTC = \
 	AllTest.java \
 	CardTest.java \
 	DeckTest.java \
+	PlayerTest.java \
+	GameTest.java \
 
 
 

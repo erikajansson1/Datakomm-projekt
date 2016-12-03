@@ -20,6 +20,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      *  match eachother
      */
     public long timeToHit() throws RemoteException {
+    	//	PossibleToHist function should be used here
 	return 3;
     }; //TODO
 
