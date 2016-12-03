@@ -55,6 +55,7 @@ public class Player implements java.io.Serializable{
 	Card cardToLay = playerDeck.getCard();
 	gameDeck.addCard(cardToLay);
     }
+
     //Take up the game deck from losing 
 	public void getCardFromMiddleDeck(Deck gameDeck){
 	playerDeck.combineDeck(gameDeck.getCardList());

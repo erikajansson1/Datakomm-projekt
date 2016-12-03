@@ -10,7 +10,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     private Deck gameDeck;
     private Deck starterDeck;
     private ArrayList<Player> gamePlayers; 
-    
+ 
     public Game (int round,Deck gameDeck,Deck starterDeck,ArrayList<Player> gamePlayers) throws RemoteException {
 	this.lock = new Semaphore(1);
 	setGameValues (round,gameDeck,starterDeck,gamePlayers);
@@ -104,10 +104,20 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 
 	} 
 
-	}*/
+	}
+	
+	*/
 	 
-    /** 
-     * Next player should be able to place a cards 
+   /**
+    * Tells the amount of players in the game
+    */
+    public int getAmountOfPlayers(){
+    	int amountPlayers = this.gamePlayers.size();
+    	return amountPlayers;
+    }
+   
+    
+    /** Next player should be able to place a cards 
      */
     //TODO: I don't know if this is needed, maybe this will tell next player to  
     //add its card 
@@ -193,6 +203,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     public ArrayList<Player> getGamePlayers() throws RemoteException{
 	return this.gamePlayers;
     }
+
+    
 
     
     /**
