@@ -75,4 +75,5 @@ public interface GameInterface extends Remote {
      */
     public void setGameValues (int round,Deck gameDeck,Deck starterDeck,ArrayList<Player> gamePlayers,ArrayList<String> playerAliases) throws RemoteException;
 
+    public boolean addPlayer(String inIp, String exIp, String alias) throws RemoteException;
 }

@@ -54,8 +54,10 @@ public class GameClient {
 	serverGame = networkBuild.getServerObj(serverGame,inIp,exIp,port,gameToGet);
 	
 	//TODO: Skapa spelare inkl smeknamn?
-	
 	try {
+	    if(serverGame.addPlayer(inIp,exIp,networkBuild.askAlias())) {
+
+	    }
 	    BackUp backup = new BackUp(serverGame);
 	    //backup.update(serverGame);
 	    //BEGINNING OF GAME

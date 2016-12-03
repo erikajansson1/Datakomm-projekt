@@ -182,6 +182,13 @@ class Network {
 	}
 	return game;
     }
+
+    public String askAlias() {
+	Scanner userInput = new Scanner(System.in);
+	System.out.printf("What alias would you like: ");
+	return userInput.nextLine();
+    }
+    
     /*
     /**
      * Method that connects the client to the servers rmi registry and returns a reference to the shared backup object.

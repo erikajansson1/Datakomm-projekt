@@ -13,16 +13,20 @@ public class Player implements java.io.Serializable{
     private Deck playerDeck;
     private int amountOfCardsOnHands = 0;
     private int numberOfPlayer;
-    //TODO: Add IP, ext and int.
+    private String inIp;
+    private String exIp;
     private boolean readyToPlay;
     //TODO: Won or lost game attribute? ended up at place 2...ex
     //TODO: int hitTime
     
       
 
-    public Player (int numberOfPlayer) {
+    public Player (int numberOfPlayer, String inIp, String exIp, String alias) {
 	this.numberOfPlayer = numberOfPlayer;
 	this.playerDeck = new Deck(1);
+	this.inIp = inIp;
+	this.exIp = exIp;
+	this.nameOfPlayer = alias;
 	}
 
     

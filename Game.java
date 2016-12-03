@@ -1,9 +1,11 @@
 import java.rmi.*;
 import java.rmi.server.*;
 import java.util.*;
+import java.util.concurrent.Semaphore;
  
 public class Game extends UnicastRemoteObject implements GameInterface {
     private static final long serialVersionUID = 1L;
+    private final Semaphore lock;
     private int round;
     private Deck gameDeck;
     private Deck starterDeck;
@@ -11,16 +13,18 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     private ArrayList<String> playerAliases;
 
     public Game (int round,Deck gameDeck,Deck starterDeck,ArrayList<Player> gamePlayers,ArrayList<String> playerAliases) throws RemoteException {
+	this.lock = new Semaphore(1);
 	setGameValues (round,gameDeck,starterDeck,gamePlayers,playerAliases);
     }
 
     public Game (int numberOfPlayers) throws RemoteException {
 	super(1099);
+	this.lock = new Semaphore(1);
 	this.round = 0;
-	this.gameDeck = new Deck(); //Which should be empty?
+	this.gameDeck = new Deck(0); //Which should be empty?
 	this.starterDeck = new Deck();
-	this.gamePlayers = new ArrayList<Player>();
-	this.playerAliases = new ArrayList<String>();
+	this.gamePlayers = new ArrayList<Player>(numberOfPlayers);
+	this.playerAliases = new ArrayList<String>(numberOfPlayers);
     }
 
     /** Checks whether it's time to hit,
@@ -78,7 +82,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 		return gamePlayers.get(i);
 	    }
 	}
-	Player nobody = new Player(-1);
+	Player nobody = new Player(-1,"","","");
 	return nobody;
     }
 
@@ -87,17 +91,14 @@ public class Game extends UnicastRemoteObject implements GameInterface {
        Initiate game by giving out cards and select who start first 
     */
     //TODO: Who should start first, create  
-    public void startGame(int amountOfPlayers) { 
+
+    /*  public void startGame(int amountOfPlayers) { 
 	this.gameDeck = new Deck();  
 	for(int n = 1; amountOfPlayers == n; amountOfPlayers-- ){ 
 	    gamePlayers.add(amountOfPlayers-1, new Player(amountOfPlayers)); 
 	} 
 
-    }
-
-    //TODO public void addPlayer (string Alias) {}
-    
-    //Method. Use semaphores to assign the player he or shes slotnumber in the game and connection to their player object. Client class asks user for "alias" and provides it to this method.
+	}*/
 	 
     /** Next player should be able to place a cards 
      */
@@ -210,6 +211,24 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	this.starterDeck = starterDeck;
 	this.gamePlayers = gamePlayers;
 	this.playerAliases = playerAliases;
+    }
+
+    public boolean addPlayer(String inIp, String exIp, String alias) throws RemoteException {
+	try {
+	this.lock.acquire();
+	for (int i = 0; i < (gamePlayers.size()-1); i++) {
+	    if(gamePlayers.get(i) == null) {
+		gamePlayers.add(i,new Player(i, inIp, exIp,alias));
+		this.lock.release();
+		return true;
+	    }
+	}
+	this.lock.release();
+	return false;
+	} catch( Exception e) {
+	    e.printStackTrace();
+	}
+	return false;
     }
 }
 
