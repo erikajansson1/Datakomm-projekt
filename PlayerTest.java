@@ -21,7 +21,7 @@ public class PlayerTest extends TestCase {
 	@Test
 	public void test_amountOfCardsOnHands() {
 		Player testPlayer = new Player(5);
-		assertTrue(testPlayer.amountOfCardsOnHands == 0);
+		assertTrue(testPlayer.getPlayerDeck().getAmount() == 0);
 	}
 	
 	@Test
@@ -29,7 +29,7 @@ public class PlayerTest extends TestCase {
 		Player testPlayer = new Player(5);
 		Deck gameDeck = new Deck();
 		testPlayer.getCardFromMiddleDeck(gameDeck);
-		assertTrue(testPlayer.amountOfCardsOnHands == 52);
+		assertTrue(testPlayer.getPlayerDeck().getAmount() == 52);
 	}
 	
 	@Test
@@ -37,8 +37,8 @@ public class PlayerTest extends TestCase {
 		Player testPlayer = new Player(5);
 		Deck gameDeck = new Deck();
 		testPlayer.getCardFromMiddleDeck(gameDeck);
-		testPlayer.dropCard(gameDeck);
-		assertTrue(testPlayer.amountOfCardsOnHands == 51);
+		testPlayer.playNextCard(gameDeck);
+		assertTrue(testPlayer.getPlayerDeck().getAmount() == 51);
 	}
 	
 	@Test
@@ -46,7 +46,7 @@ public class PlayerTest extends TestCase {
 		Player testPlayer = new Player(5);
 		Deck gameDeck = new Deck();
 		testPlayer.getCardFromMiddleDeck(gameDeck);
-		testPlayer.dropCard(gameDeck);
+		testPlayer.playNextCard(gameDeck);
 		assertTrue(gameDeck.getAmount() == 1);
 	}
 	
@@ -55,9 +55,9 @@ public class PlayerTest extends TestCase {
 		Player testPlayer = new Player(5);
 		Deck gameDeck = new Deck();
 		testPlayer.getCardFromMiddleDeck(gameDeck);
-		testPlayer.dropCard(gameDeck);
+		testPlayer.playNextCard(gameDeck);
 		testPlayer.getCardFromMiddleDeck(gameDeck);
-		assertTrue(testPlayer.amountOfCardsOnHands == 52);
+		assertTrue(testPlayer.getPlayerDeck().getAmount() == 52);
 	}
 	
 }

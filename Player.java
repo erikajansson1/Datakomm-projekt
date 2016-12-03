@@ -10,7 +10,6 @@
 public class Player {
     private String nameOfPlayer;
     private Deck playerDeck;
-    private int amountOfCardsOnHands = 0;
     private int numberOfPlayer;
     private String extIP;
     private String intIP;
@@ -41,13 +40,10 @@ public class Player {
 	return numberOfPlayer;
     }
 
-    public Card dropCard(Deck gameDeck){
-		Card cardToDrop = playerDeck.getCard();
-		gameDeck.addCard(cardToDrop);
-		amountOfCardsOnHands--;	
-		return cardToDrop;
-	}
-
+    public Deck getPlayerDeck() {
+	return this.playerDeck;
+    }
+    
     public void playNextCard(Deck gameDeck){
 	Card cardToLay = playerDeck.getCard();
 	gameDeck.addCard(cardToLay);
@@ -56,8 +52,7 @@ public class Player {
     //Take up the game deck when you are the last player to hit the deck
     //Make a for loop
     public void getCardFromMiddleDeck(Deck gameDeck){
-	
-    amountOfCardsOnHands = amountOfCardsOnHands + gameDeck.getAmount();
 	playerDeck.combineDeck(gameDeck.getCardList());
+	gameDeck.cleanDeck();
     }    
 }

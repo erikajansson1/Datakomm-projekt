@@ -105,6 +105,8 @@ public class Deck {
     }
     
     
-    
+    public void cleanDeck() {
+	this.cardList.clear();
+    }
     
 }
