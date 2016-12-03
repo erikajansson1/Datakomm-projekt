@@ -17,6 +17,8 @@ CLASSES = \
 	GameServer.java \
 	GameClient.java \
 	Network.java \
+	BackUp.java \
+	BackUpInterface.java \
 
 TESTC = \
 	AllTest.java \

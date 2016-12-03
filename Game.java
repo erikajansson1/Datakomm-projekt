@@ -7,7 +7,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     private int round;
     private Deck gameDeck;
     private Deck starterDeck;
-    private Player[] gamePlayers; 
+    private ArrayList<Player> gamePlayers; 
     //   private ArrayList<String> playerNames;
 
     public Game (int numberOfPlayers, int playerNO, int controlValue) throws RemoteException {
@@ -61,12 +61,12 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	@return The found Player object, or an Player object with specific invalid values     
      */
     public Player findPlayer(String alias) throws RemoteException {
-	int len = gamePlayers.length;
+	int len = gamePlayers.size();
 	String name;
 	for(int i=0; i < len; i++) {
-	    name = gamePlayers[i].getPlayerName();
+	    name = gamePlayers.get(i).getPlayerName();
 	    if (name.equals(alias)) {
-		return gamePlayers[i];
+		return gamePlayers.get(i);
 	    }
 	}
 	Player nobody = new Player(-1);
@@ -81,7 +81,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	public void startGame(int amountOfPlayers) { 
 		this.gameDeck = new Deck();  
 		for(int n = 1; amountOfPlayers == n; amountOfPlayers-- ){ 
-			gamePlayers[amountOfPlayers-1] = new Player(amountOfPlayers); 
+		    gamePlayers.add(amountOfPlayers-1, new Player(amountOfPlayers)); 
 		} 
 	return; 
 	}
