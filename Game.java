@@ -60,9 +60,9 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 		players += "NOT READY\n";
 		    }	
 	}
-	String whosTurn = "Turn: ";
+	String whosTurn = "\n\nTurn: "+ gamePlayers.get(this.whoseTurn()).getPlayerName();
 
-	    return players;
+	    return players +""+ whosTurn;
     }
 
     
@@ -115,7 +115,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * @return an int which is the players index.
      */
     public int whoseTurn() throws RemoteException{
-	return 1;
+       return this.round % gamePlayers.size();
     }
 
     /** 
