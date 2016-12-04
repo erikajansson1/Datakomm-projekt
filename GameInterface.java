@@ -18,18 +18,26 @@ public interface GameInterface extends Remote {
 
     /** Set the ready value for a player with alias "alias". 
      */
-    public void setReadyValue(String alias, boolean readyValue) throws RemoteException; 
+    public void setReadyValue(int playerNo, boolean readyValue) throws RemoteException; 
 
     /** Update the hit time for a player with alias "alias"     
      */
-    public void updatePlayerTime(String alias, int hitTime) throws RemoteException; //ej implementerad
-    
+    public void updatePlayerTime(int playerNo, int hitTime) throws RemoteException; //ej implementerad
+
     /** Checks whose turn it is, and if it's time for a new turn. If so, it updates accordingly. 
      * @param currRound Taken to ensure that only one such update is done every round.
      * @return The round value 
      */
-    public int whoseRound(int currRound) throws RemoteException;
+    public int updateRound(int currRound) throws RemoteException;
 
+    
+    /**
+     * Checks whose turn it is and returns the index of the player.
+     * @return an int which is the players index.
+     */
+    public int whoseTurn() throws RemoteException;
+
+	
     /**
      * a get method for the attribut round
      * @return returns the round attribut
@@ -93,4 +101,9 @@ public interface GameInterface extends Remote {
      * @return a bollean indicating if full or not. True if full.
      */
     public boolean askIsGameFull() throws RemoteException;
+
+
+    public boolean waitingForPlayers() throws RemoteException;
+    
 }
+

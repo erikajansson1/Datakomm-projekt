@@ -1,12 +1,4 @@
-//Player class that should be given to each client
-/*TODO: Needs time Attribute
- * long tStart = System.currentTimeMillis(); // When times starts
- * 
- * 
- * long tEnd = System.currentTimeMillis(); //When times starts
- * long tDelta = tEnd - tStart;
- * double elapsedSeconds = tDelta / 1000.0;
- */
+
 public class Player implements java.io.Serializable{
     private static final long serialVersionUID = 1L;
     private String nameOfPlayer;
@@ -30,35 +22,58 @@ public class Player implements java.io.Serializable{
 	this.hitTime = -1;
     }
 
-    
+    /** Get this Player's ready value
+     */
     public boolean getReadyValue() {
 	return this.readyToPlay;
     }
     
+    /** Set this Player's ready value-attribute to given parameter ready
+    * @param ready value
+    */
     public void setReadyValue(boolean ready) {
 	this.readyToPlay = ready;
     }
 
+    /** Get this Player's name (alias)
+     */
     public String getPlayerName() {
 	return this.nameOfPlayer;
     }
     
+    /** Get this Player's player number
+     */
     public int getPlayerNumber() {
 	return numberOfPlayer;
     }
 
+    /** Get this Player's deck
+     */
     public Deck getPlayerDeck() {
 	return this.playerDeck;
     }
     
+
+   /** Set this player's hitTime-attribute to given parameter time
+    * @param time
+    */
+    public void setPlayerTime(int time) {
+	this.hitTime = time;
+    }
+
+    /** TODO
+     */
     public void playNextCard(Deck gameDeck){
 	Card cardToLay = playerDeck.getCard();
 	gameDeck.addCard(cardToLay);
     }
 
-    //Take up the game deck from losing 
-	public void getCardFromMiddleDeck(Deck gameDeck){
+    /** Pick up the game deck  
+     */
+    public void getCardFromMiddleDeck(Deck gameDeck){
 	playerDeck.combineDeck(gameDeck.getCardList());
 	gameDeck.cleanDeck();
     }
+
+ 
 }

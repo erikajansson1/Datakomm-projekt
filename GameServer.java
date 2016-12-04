@@ -16,16 +16,19 @@ public class GameServer {
 		System.out.println("Creating a game for "+noPlayers+".");
 
 		Game game = new Game(noPlayers);
-		String ipExternal = networkBuild.extIP();
-		String ipLocal = networkBuild.inIP();
-		networkBuild.addAdresses(ipExternal,ipLocal);
-		networkBuild.welcomeMSG("server");
+		String port = "1099";
+		networkBuild.buildNetwork();
+		networkBuild.welcomeMSG("server",0);
 		Registry registry = networkBuild.startRMIserver();
 			
-		registry.rebind(ipLocal+"/theGame:1099", game);
+		registry.rebind(networkBuild.getInIp()+"/theGame:"+port, game);
 		networkBuild.publishReady();
+		String[] argvClient = new String[]{
+		    networkBuild.getInIp(),
+		    networkBuild.getExIp(),
+		    port};
 		
-		GameClient.main(argv);
+		GameClient.main(argvClient);
 	    }catch (Exception e) {
 	    System.out.println("Game Server failed: " + e);
 

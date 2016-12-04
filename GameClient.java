@@ -14,55 +14,42 @@ import java.io.*;
 
 public class GameClient {
 
-    /*
-    //If it's possible to hit start time 
-    public static long timeToHit(){ 
-	Scanner ans = new Scanner(System.in);
-	long startT = System.nanoTime();
-
-	System.out.println("Ready(r)/Next card(n)/Hit dick(h)?");
-	long hitT = System.nanoTime() - startT;   
-
-	while(hitT< 300000) { //godtyckligt taget tal har
-	    String answer = ans.nextLine();
-	    hitT = System.nanoTime() - startT;  
-	}
-    }*/
- 
-
     public static void main (String[] args) {
 	int playerNo = -1;
 	String gameToGet = "theGame";
 	String backUpToGet = "theBackUp";
 	Network networkBuild = new Network();
-	networkBuild.welcomeMSG("client");
+	networkBuild.welcomeMSG("client",args.length);
 
-	String inIp = null;
-	String exIp = null;
-	String port = null;
-	if(args[0].equals("debug")) {
-	     inIp = "192.168.0.101";
-	     exIp = "83.255.61.11";
-	     port = "1099";
+	String serverInIp = null;
+	String serverExIp = null;
+	String serverPort = null;
+	if(args.length == 0) {
+	    serverInIp = networkBuild.askServerInIp();
+	    serverExIp = networkBuild.askServerExIp();
+	    serverPort = networkBuild.askServerPort();
 	} else {
-	     inIp = networkBuild.askServerInIp();
-	     exIp = networkBuild.askServerExIp();
-	     port = networkBuild.askServerPort();
+	    serverInIp = args[0];
+	    serverExIp = args[1];
+	    serverPort = args[2];
 	}
 		
-	GameInterface serverGame = null;	
-	serverGame = networkBuild.getServerObj(serverGame,inIp,exIp,port,gameToGet);
+	GameInterface serverGame = networkBuild.getServerObj(serverInIp,
+							     serverExIp,
+							     serverPort,
+							     gameToGet);
 	try {
-	    playerNo = networkBuild.joinGame(serverGame,inIp,exIp);
-	    System.out.println(playerNo);
-
-	    
+	    networkBuild.buildNetwork(serverGame);
+	    playerNo = networkBuild.joinGame();
 	    BackUp backup = new BackUp(serverGame);
+	    networkBuild.waitingUntilGameCanStart();
+	    
 	    //backup.update(serverGame);
 	    //BEGINNING OF GAME
 	    
-	    //so everyone knows who starts
-	    //TODO: Uppdatera att playern ar redo
+	    //so everyone knows who starts <- crap what does this mean
+
+	    serverGame.setReadyValue(playerNo, true);
 
 	    //START VALUES
 	    long startTime;
@@ -78,14 +65,19 @@ public class GameClient {
 	    for (int i=0; i<5; i++) { 
 
 		//loop until next round
-		oldRound = serverGame.whoseRound(oldRound); //or is it oldR?
+		oldRound = serverGame.updateRound(oldRound); //or is it oldR?
 		while (oldRound == round) {
-		    round = serverGame.whoseRound(oldRound); //TODO: semaphores needed here, at client???
+		    //serverGame.updateRound(oldRound); //TODO: semaphores needed here, at client???
+		    //Doesnt return round nr.
 		}
 
-		//TODO: myRound = kollar ifall det ar spelarens tur
-		//ifall personen fortfarande deltar i spelet eller har vunnit.
+		//Kolla ifall det ar spelarens tur
+		if (serverGame.whoseTurn() == playerNo) { myRound = true; }
+		else { myRound = false; }
 
+		
+
+		
 		//Check if it's possible to hit
 		canHit = true; //TODO: fkn for checking if its hit the dick time 
 		    
@@ -94,9 +86,14 @@ public class GameClient {
 		    
 		//Let the player make its move
 		userAction(myRound,canHit);
-	    }
-	    //TODO: Uppdatera Player till att vara redo for nasta runda 
+		
+		//ifall personen fortfarande deltar i spelet eller har vunnit.
+		
+		//TODO: Uppdatera Player till att vara redo for nasta runda 
 
+
+	    }
+	    
 	}
 	catch (Exception e) {
 	    System.out.println("Error " + e.getMessage());

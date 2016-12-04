@@ -39,42 +39,80 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	return 3;
     }; //TODO
 
-    /** 
-     * Prints out a view of the board:
+
+    /** Prints out a view of the board:
      *  whose turn it is, and the latest card
      */
     public String displayBoard() throws RemoteException {
-	return "hej"+round;
-    };  //TODO
+	String players = "";
+	for (int i = 0; i < this.gamePlayers.size(); i++) {
+	    if(!(i == 0)) players += "\n";
 
-    /** 
-     * Set the ready value for a player with alias "alias". 
-     */
-    public void setReadyValue(String alias, boolean readyValue) throws RemoteException {
-	Player thisPlayer = this.findPlayer(alias);
-	if (thisPlayer.getPlayerNumber() == -1) { return; } //if nobody has the given alias
-	thisPlayer.setReadyValue(readyValue);	
-    }; //TODO
+	    players += ""+gamePlayers.get(i).getPlayerName();
+	    players += "\nStatus: ";
+	    
+	    if(gamePlayers.get(i).getReadyValue()){
+		players += "READY\n";
+		    } else {
+		players += "NOT READY\n";
+		    }	
+	}
+	String whosTurn = "Turn: ";
 
-    /** 
-     * Update the hit time for a player with alias "alias"     
-     */
-    public void updatePlayerTime(String alias, int hitTime) throws RemoteException { 
-	//TODO: matcha alias mot players for att hitta ratt player
-	//TODO: uppdatera playerns hitTime-attribute	
+	    return players;
     }
 
+    
+    /** 
+     * Set the ready value for a player 
+     * @param playerNo The player's number ID
+     * @param readyValue The new ready value
+     */
+    public void setReadyValue(int playerNo, boolean readyValue) throws RemoteException {
+	/*Player thisPlayer = this.findPlayer(alias);
+	  if (thisPlayer.getPlayerNumber() == -1) { return; } //if nobody has the given alias*/
+	Player thisPlayer = gamePlayers.get(playerNo);
+	thisPlayer.setReadyValue(readyValue);
+    }; 
+
+    /** 
+     * Update the hit time for a player
+     * @param playerNo The player's number ID
+     * @param hitTime The new hit time
+     */
+    public void updatePlayerTime(int playerNo, int hitTime) throws RemoteException { 
+	/*Player thisGuy = findPlayer(alias);
+	String name = thisGuy.getPlayerName();
+	if (name.equals("")) { return; }
+	else {
+	    setPlayerTime(hitTime);
+	    return;
+	    }*/
+	Player thisGuy = gamePlayers.get(playerNo);
+	thisGuy.setPlayerTime(hitTime);
+    }
+
+    
     /** 
      * Checks whose turn it is, and if it's time for a new turn. If so, it updates accordingly. 
      * @param currRound Taken to ensure that only one such update is done every round.
      * @return The round value 
      */
-    public int whoseRound(int currRound) throws RemoteException{
-	this.round++;
+    public int updateRound(int currRound) throws RemoteException{
 	//TODO if all the players are ready to continue, round++
 	//TODO Semaphore to ensure atomical updating
 	//TODO Compare so that you dont update the Round twice
+	this.round++;
 	return round;
+    }
+
+
+    /**
+     * Checks whose turn it is and returns the index of the player.
+     * @return an int which is the players index.
+     */
+    public int whoseTurn() throws RemoteException{
+	return 1;
     }
 
     /** 
@@ -106,11 +144,11 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 
 	}
 	
-	*/
-	 
-   /**
-    * Tells the amount of players in the game
     */
+	 
+    /**
+     * Tells the amount of players in the game
+     */
     public int getAmountOfPlayers(){
     	int amountPlayers = this.gamePlayers.size();
     	return amountPlayers;
@@ -170,8 +208,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     }
 
     /**
-     * a get method for the attribut round
-     * @return returns the round attribut
+     * A get method for the attribut round.
+     * @return returns the round attribut.
      */
     public int getRound() throws RemoteException{
 	return this.round;
@@ -179,8 +217,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 
     
     /**
-     * a get method for the attribut gameDeck
-     * @return returns the gameDeck attribut
+     * A get method for the attribut gameDeck.
+     * @return returns the gameDeck attribut.
      */
     public Deck getGameDeck()throws RemoteException {
 	return this.gameDeck;
@@ -188,8 +226,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     
 
     /**
-     * a get method for the attribut starterDeck
-     * @return returns the starterDeck attribut
+     * A get method for the attribut starterDeck.
+     * @return returns the starterDeck attribut.
      */
     public Deck getStarterDeck() throws RemoteException{
 	return this.starterDeck;
@@ -197,8 +235,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 
     
     /**
-     * a get method for the attribut gamePlayers
-     * @return returns the gamePlayers attribut
+     * A get method for the attribut gamePlayers.
+     * @return returns the gamePlayers attribut.
      */
     public ArrayList<Player> getGamePlayers() throws RemoteException{
 	return this.gamePlayers;
@@ -208,11 +246,11 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 
     
     /**
-     * a update state method for the object game.
-     * @param round is the new round value
-     * @param gameDeck is the new gameDeck value
-     * @param starterDeck is the new starterDeck value
-     * @param gamePlayers is the new gamePlayers value
+     * A update state method for the object game.
+     * @param round is the new round value.
+     * @param gameDeck is the new gameDeck value.
+     * @param starterDeck is the new starterDeck value.
+     * @param gamePlayers is the new gamePlayers value.
      */
     public void setGameValues (int round,Deck gameDeck,Deck starterDeck,ArrayList<Player> gamePlayers) throws RemoteException {
 	this.round = round;
@@ -225,6 +263,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     /**
      * method that adds a player requesting a slot to a existing game. 
      * Player is placed at the first available slot in the Arraylist.
+     * Slots are inhabited by "Empty" players intially. 
+     * Theese are removed when asigning player to slot
      * @param inIp is the players internal IP.
      * @param exIp is the players external IP.
      * @param alias is the players alias.
@@ -233,13 +273,19 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     public int addPlayer(String inIp, String exIp, String alias) throws RemoteException {
 	try {
 	this.lock.acquire();
-	for (int i = 0; i <= (gamePlayers.size()-1); i++) {
-	    if(gamePlayers.get(i).getPlayerName().equals("Empty")) {
-		gamePlayers.add(i,new Player(i, inIp, exIp,alias,true));
-		this.lock.release();
-		return i+1;
-	    }
+
+	if(this.askIsGameFull()) {
+	    this.lock.release();	
+	    return -1;
 	}
+	
+	    for (int i = 0; i <= (gamePlayers.size()-1); i++) {
+		if(gamePlayers.get(i).getPlayerName().equals("Empty")) {
+		    gamePlayers.set(i,new Player(i, inIp, exIp,alias,true));
+		    this.lock.release();
+		    return i+1;
+		}
+	    }
 	} catch( Exception e) {
 	    e.printStackTrace();
 	}
@@ -249,7 +295,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 
 
     /**
-     * a method to retrive a players alias in the game.
+     * A method to retrive a players alias in the game.
      * Will fail if the playerNo is not in the bounds of the game.
      * @param playerNo is the number of the player whos alias is to be fetched.
      * @return the players alias.
@@ -270,5 +316,21 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	return false;
     }
 
+
+    /**
+     * Checks every players ready status and returns a boolean saying if all are ready.
+     * @return returns true if all players are ready.
+     */
+    public boolean waitingForPlayers() throws RemoteException{
+	for (int i = 0; i < gamePlayers.size(); i++) {
+	    if(gamePlayers.get(i).getReadyValue() == false) return false;	    
+	}
+	return true;
+    }
+
+
+
+
+    
 }
 
