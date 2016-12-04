@@ -271,9 +271,19 @@ class Network {
     public void waitingUntilGameCanStart() throws RemoteException {
 	try {
 	    while (!serverGame.waitingForPlayers()) {
-		System.out.print("\033[2J\033[;H");
-		System.out.printf(serverGame.displayBoard());
-		Thread.sleep(2000);
+		for (int i = 0; i < 3; i++) {
+		    String count = "";
+		    switch(i) {
+		    case 1:count = "."; break;
+		    case 2:count = ".."; break;
+		    default:;
+		    };
+		System.out.printf("\033[2J\033[;H");
+		System.out.println(serverGame.displayBoard());
+		System.out.printf("Waiting for players"+count);
+		Thread.sleep(500);				  
+		}
+
 	    }
 	} catch (InterruptedException e) {
 	    e.printStackTrace();

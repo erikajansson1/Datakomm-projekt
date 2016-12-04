@@ -28,8 +28,16 @@ public interface GameInterface extends Remote {
      * @param currRound Taken to ensure that only one such update is done every round.
      * @return The round value 
      */
-    public int whoseRound(int currRound) throws RemoteException;
+    public int updateRound(int currRound) throws RemoteException;
 
+    
+    /**
+     * Checks whose turn it is and returns the index of the player.
+     * @return an int which is the players index.
+     */
+    public int whoseTurn() throws RemoteException;
+
+	
     /**
      * a get method for the attribut round
      * @return returns the round attribut
@@ -96,5 +104,6 @@ public interface GameInterface extends Remote {
 
 
     public boolean waitingForPlayers() throws RemoteException;
+    
 }
 

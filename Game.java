@@ -44,9 +44,25 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      *  whose turn it is, and the latest card
      */
     public String displayBoard() throws RemoteException {
-	return "hej"+round;
-    };  //TODO
+	String players = "";
+	for (int i = 0; i < this.gamePlayers.size(); i++) {
+	    if(!(i == 0)) players += "\n";
 
+	    players += ""+gamePlayers.get(i).getPlayerName();
+	    players += "\nStatus: ";
+	    
+	    if(gamePlayers.get(i).getReadyValue()){
+		players += "READY\n";
+		    } else {
+		players += "NOT READY\n";
+		    }	
+	}
+	String whosTurn = "Turn: ";
+
+	    return players;
+    }
+
+    
     /** 
      * Set the ready value for a player with alias "alias". 
      */
@@ -64,17 +80,27 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	//TODO: uppdatera playerns hitTime-attribute	
     }
 
+    
     /** 
      * Checks whose turn it is, and if it's time for a new turn. If so, it updates accordingly. 
      * @param currRound Taken to ensure that only one such update is done every round.
      * @return The round value 
      */
-    public int whoseRound(int currRound) throws RemoteException{
-	this.round++;
+    public int updateRound(int currRound) throws RemoteException{
 	//TODO if all the players are ready to continue, round++
 	//TODO Semaphore to ensure atomical updating
 	//TODO Compare so that you dont update the Round twice
+	this.round++;
 	return round;
+    }
+
+
+    /**
+     * Checks whose turn it is and returns the index of the player.
+     * @return an int which is the players index.
+     */
+    public int whoseTurn() throws RemoteException{
+	return 1;
     }
 
     /** 
@@ -106,11 +132,11 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 
 	}
 	
-	*/
-	 
-   /**
-    * Tells the amount of players in the game
     */
+	 
+    /**
+     * Tells the amount of players in the game
+     */
     public int getAmountOfPlayers(){
     	int amountPlayers = this.gamePlayers.size();
     	return amountPlayers;
@@ -234,20 +260,20 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      */
     public int addPlayer(String inIp, String exIp, String alias) throws RemoteException {
 	try {
-	this.lock.acquire();
+	    this.lock.acquire();
 
-	if(this.askIsGameFull()) {
-	    this.lock.release();	
-	    return -1;
-	}
-	
-	for (int i = 0; i <= (gamePlayers.size()-1); i++) {
-	    if(gamePlayers.get(i).getPlayerName().equals("Empty")) {
-		gamePlayers.set(i,new Player(i, inIp, exIp,alias,true));
-		this.lock.release();
-		return i+1;
+	    if(this.askIsGameFull()) {
+		this.lock.release();	
+		return -1;
 	    }
-	}
+	
+	    for (int i = 0; i <= (gamePlayers.size()-1); i++) {
+		if(gamePlayers.get(i).getPlayerName().equals("Empty")) {
+		    gamePlayers.set(i,new Player(i, inIp, exIp,alias,true));
+		    this.lock.release();
+		    return i+1;
+		}
+	    }
 	} catch( Exception e) {
 	    e.printStackTrace();
 	}
@@ -284,7 +310,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * @return returns true if all players are ready.
      */
     public boolean waitingForPlayers() throws RemoteException{
-	for (int i = 0; i <= (gamePlayers.size()-1); i++) {
+	for (int i = 0; i < gamePlayers.size(); i++) {
 	    if(gamePlayers.get(i).getReadyValue() == false) return false;	    
 	}
 	return true;
