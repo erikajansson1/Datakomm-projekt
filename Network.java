@@ -257,10 +257,10 @@ class Network {
 		System.out.println("Sorry this server is full. \n Please try another one.");
 		System.exit(0);
 	    }
-	
+	int playerNoShow = playerNo+1;
 	System.out.println("You have now joined the game with alias: "+
 			   serverGame.getPlayerAlias(playerNo)+"\n"+
-			   "You are currently playerNo: "+playerNo+1);
+			   "You are currently playerNo: "+playerNoShow);
 	return playerNo;
     }
 

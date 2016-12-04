@@ -282,7 +282,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	    return -1;
 	}
 	
-	    for (int i = 0; i <= (gamePlayers.size()-1); i++) {
+	    for (int i = 0; i < gamePlayers.size(); i++) {
 		if(gamePlayers.get(i).getPlayerName().equals("Empty")) {
 		    gamePlayers.set(i,new Player(i, inIp, exIp,alias,true));
 		    this.lock.release();
