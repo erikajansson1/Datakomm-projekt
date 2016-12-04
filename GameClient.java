@@ -44,6 +44,7 @@ public class GameClient {
 	    BackUp backup = new BackUp(serverGame);
 	    networkBuild.waitingUntilGameCanStart();
 	    
+	    System.out.println("rad 47 i Client");
 	    //backup.update(serverGame);
 	    //BEGINNING OF GAME
 	    
@@ -65,12 +66,12 @@ public class GameClient {
 	    for (int i=0; i<5; i++) { 
 
 		//loop until next round
-		System.out.println("test");
+		System.out.println("rad 69 i Client");
 
 		oldRound = serverGame.updateRound(oldRound); //or is it oldR?
 		while (oldRound == round) {
-		    //serverGame.updateRound(oldRound); //TODO: semaphores needed here, at client???
-		    //Doesnt return round nr.
+		    serverGame.updateRound(oldRound);//Doesnt return round nr. 
+		    round = serverGame.getRound();
 		}
 		//Reset player's ready value
 		serverGame.setReadyValue(playerNo, false);
@@ -81,7 +82,7 @@ public class GameClient {
 		else { myRound = false; }
 		
 		//Check if it's possible to hit
-		canHit = true; //TODO: fkn for checking if its hit the dick time 
+		canHit = serverGame.timeToHit(); //TODO: fkn for checking if its hit the dick time 
 		    
 		//Display board
 		System.out.println(serverGame.displayBoard());
@@ -91,7 +92,7 @@ public class GameClient {
 		
 		//TODO: kolla ifall personen fortfarande deltar i spelet eller har vunnit.
 		
-		//TODO: Uppdatera Player till att vara redo for nasta runda 
+		//Uppdatera Player till att vara redo for nasta runda 
 		serverGame.setReadyValue(playerNo, true);
 
 
