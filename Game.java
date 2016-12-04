@@ -39,8 +39,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	return 3;
     }; //TODO
 
-    /** 
-     * Prints out a view of the board:
+
+    /** Prints out a view of the board:
      *  whose turn it is, and the latest card
      */
     public String displayBoard() throws RemoteException {
@@ -64,20 +64,32 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 
     
     /** 
-     * Set the ready value for a player with alias "alias". 
+     * Set the ready value for a player 
+     * @param playerNo The player's number ID
+     * @param readyValue The new ready value
      */
-    public void setReadyValue(String alias, boolean readyValue) throws RemoteException {
-	Player thisPlayer = this.findPlayer(alias);
-	if (thisPlayer.getPlayerNumber() == -1) { return; } //if nobody has the given alias
-	thisPlayer.setReadyValue(readyValue);	
-    }; //TODO
+    public void setReadyValue(int playerNo, boolean readyValue) throws RemoteException {
+	/*Player thisPlayer = this.findPlayer(alias);
+	  if (thisPlayer.getPlayerNumber() == -1) { return; } //if nobody has the given alias*/
+	Player thisPlayer = gamePlayers.get(playerNo);
+	thisPlayer.setReadyValue(readyValue);
+    }; 
 
     /** 
-     * Update the hit time for a player with alias "alias"     
+     * Update the hit time for a player
+     * @param playerNo The player's number ID
+     * @param hitTime The new hit time
      */
-    public void updatePlayerTime(String alias, int hitTime) throws RemoteException { 
-	//TODO: matcha alias mot players for att hitta ratt player
-	//TODO: uppdatera playerns hitTime-attribute	
+    public void updatePlayerTime(in playerNo, int hitTime) throws RemoteException { 
+	/*Player thisGuy = findPlayer(alias);
+	String name = thisGuy.getPlayerName();
+	if (name.equals("")) { return; }
+	else {
+	    setPlayerTime(hitTime);
+	    return;
+	    }*/
+	Player thisGuy = gamePlayers.get(playerNo);
+	thisGuy.setPlayerTime(hitTime);
     }
 
     
@@ -260,12 +272,12 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      */
     public int addPlayer(String inIp, String exIp, String alias) throws RemoteException {
 	try {
-	    this.lock.acquire();
+	this.lock.acquire();
 
-	    if(this.askIsGameFull()) {
-		this.lock.release();	
-		return -1;
-	    }
+	if(this.askIsGameFull()) {
+	    this.lock.release();	
+	    return -1;
+	}
 	
 	    for (int i = 0; i <= (gamePlayers.size()-1); i++) {
 		if(gamePlayers.get(i).getPlayerName().equals("Empty")) {
@@ -274,6 +286,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 		    return i+1;
 		}
 	    }
+	}
 	} catch( Exception e) {
 	    e.printStackTrace();
 	}
