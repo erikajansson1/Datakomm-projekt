@@ -31,13 +31,15 @@ public class GameClient {
 	} else {
 	    serverInIp = args[0];
 	    serverExIp = args[1];
-	    serverPort = args[2];
+	    serverPortx = args[2];
 	}
 		
 	GameInterface serverGame = networkBuild.getServerObj(serverInIp,
 							     serverExIp,
 							     serverPort,
 							     gameToGet);
+	String alias = serverGame.getPlayerAlias(playerNo);
+
 	try {
 	    networkBuild.buildNetwork(serverGame);
 	    playerNo = networkBuild.joinGame();
@@ -47,8 +49,9 @@ public class GameClient {
 	    //backup.update(serverGame);
 	    //BEGINNING OF GAME
 	    
-	    //so everyone knows who starts
-	    //TODO: Uppdatera att playern ar redo
+	    //so everyone knows who starts <- crap what does this mean
+
+	    setReadyValue(alias, true);
 
 	    //START VALUES
 	    long startTime;
@@ -69,9 +72,13 @@ public class GameClient {
 		    round = serverGame.whoseRound(oldRound); //TODO: semaphores needed here, at client???
 		}
 
-		//TODO: myRound = kollar ifall det ar spelarens tur
-		//ifall personen fortfarande deltar i spelet eller har vunnit.
+		//Kolla ifall det ar spelarens tur
+		if (round.equals(playerNo)) { myRound = true; }
+		else { myRound = false; }
 
+		
+
+		
 		//Check if it's possible to hit
 		canHit = true; //TODO: fkn for checking if its hit the dick time 
 		    
@@ -80,9 +87,14 @@ public class GameClient {
 		    
 		//Let the player make its move
 		userAction(myRound,canHit);
-	    }
-	    //TODO: Uppdatera Player till att vara redo for nasta runda 
+		
+		//ifall personen fortfarande deltar i spelet eller har vunnit.
+		
+		//TODO: Uppdatera Player till att vara redo for nasta runda 
 
+
+	    }
+	    
 	}
 	catch (Exception e) {
 	    System.out.println("Error " + e.getMessage());
