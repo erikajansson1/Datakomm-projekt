@@ -9,29 +9,31 @@ import java.io.*;
 
 public class GameServer {
     public static void main (String[] argv) {
-
 	try
 	    {
 		Network networkBuild = new Network();
-		String ipExternal = networkBuild.extIP();
-		String ipLocal = networkBuild.inIP();
-		
-		networkBuild.addAdresses(ipExternal,ipLocal);
-		networkBuild.welcomeMSG("server");
 		int noPlayers = networkBuild.askPlayerNo();
-		
+		System.out.println("Creating a game for "+noPlayers+".");
+
+		Game game = new Game(noPlayers);
+		String port = "1099";
+		networkBuild.buildNetwork();
+		networkBuild.welcomeMSG("server",0);
 		Registry registry = networkBuild.startRMIserver();
-		System.out.println("Creating Game.");
-		
-		Game game = new Game(noPlayers,1,50);
-		registry.rebind(ipLocal+"/theGame:1099", game);
+			
+		registry.rebind(networkBuild.getInIp()+"/theGame:"+port, game);
 		networkBuild.publishReady();
+		String[] argvClient = new String[]{
+		    networkBuild.getInIp(),
+		    networkBuild.getExIp(),
+		    port};
 		
-		GameClient.main(argv);
+		GameClient.main(argvClient);
 	    }catch (Exception e) {
 	    System.out.println("Game Server failed: " + e);
 
 	}
+	return;
     }
 }
 

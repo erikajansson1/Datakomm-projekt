@@ -14,38 +14,42 @@ import java.io.*;
 
 public class GameClient {
 
-    /*
-    //If it's possible to hit start time 
-    public static long timeToHit(){ 
-	Scanner ans = new Scanner(System.in);
-	long startT = System.nanoTime();
-
-	System.out.println("Ready(r)/Next card(n)/Hit dick(h)?");
-	long hitT = System.nanoTime() - startT;   
-
-	while(hitT< 300000) { //godtyckligt taget tal här
-	    String answer = ans.nextLine();
-	    hitT = System.nanoTime() - startT;  
-	}
-    }*/
- 
-
     public static void main (String[] args) {
-	GameInterface game;
+	int playerNo = -1;
+	String gameToGet = "theGame";
+	String backUpToGet = "theBackUp";
 	Network networkBuild = new Network();
-	networkBuild.welcomeMSG("client");
-	String inIp = networkBuild.getServerInIp();
-	String exIp = networkBuild.getServerExIp();
-	String port = networkBuild.getServerPort();
+	networkBuild.welcomeMSG("client",args.length);
 
-	game = networkBuild.clientConnect(inIp,exIp,port);
-	//TODO: Skapa spelare inkl smeknamn?
-
+	String serverInIp = null;
+	String serverExIp = null;
+	String serverPort = null;
+	if(args.length == 0) {
+	    serverInIp = networkBuild.askServerInIp();
+	    serverExIp = networkBuild.askServerExIp();
+	    serverPort = networkBuild.askServerPort();
+	} else {
+	    serverInIp = args[0];
+	    serverExIp = args[1];
+	    serverPort = args[2];
+	}
+		
+	GameInterface serverGame = networkBuild.getServerObj(serverInIp,
+							     serverExIp,
+							     serverPort,
+							     gameToGet);
 	try {
-
+	    networkBuild.buildNetwork(serverGame);
+	    playerNo = networkBuild.joinGame();
+	    BackUp backup = new BackUp(serverGame);
+	    networkBuild.waitingUntilGameCanStart();
+	    
+	    //backup.update(serverGame);
 	    //BEGINNING OF GAME
-	    game.displayBoard(); //so everyone knows who starts
-	    //TODO: Uppdatera att playern är redo
+	    
+	    //so everyone knows who starts <- crap what does this mean
+
+	    serverGame.setReadyValue(playerNo, true);
 
 	    //START VALUES
 	    long startTime;
@@ -57,29 +61,42 @@ public class GameClient {
 	    boolean canHit = false;
 	    boolean myRound = false; 
 
-	    //>>>>STOR LOOP: här ska vi egentligen ha en check att spelet inte är slut
+	    //>>>>STOR LOOP: har ska vi egentligen ha en check att spelet inte ar slut
 	    for (int i=0; i<5; i++) { 
 
 		//loop until next round
-		oldRound = game.whoseRound(oldRound); //or is it oldR?
+		System.out.println("test");
+
+		oldRound = serverGame.updateRound(oldRound); //or is it oldR?
 		while (oldRound == round) {
-		    round = game.whoseRound(oldRound); //TODO: semaphores needed here
+		    //serverGame.updateRound(oldRound); //TODO: semaphores needed here, at client???
+		    //Doesnt return round nr.
 		}
+		//Reset player's ready value
+		serverGame.setReadyValue(playerNo, false);
 
-		//TODO: myRound = kollar ifall det är spelarens tur
-		//ifall personen fortfarande deltar i spelet eller har vunnit.
 
+		//Kolla ifall det ar spelarens tur
+		if (serverGame.whoseTurn() == playerNo) { myRound = true; }
+		else { myRound = false; }
+		
 		//Check if it's possible to hit
 		canHit = true; //TODO: fkn for checking if its hit the dick time 
 		    
 		//Display board
-		game.displayBoard();
+		System.out.println(serverGame.displayBoard());
 		    
 		//Let the player make its move
 		userAction(myRound,canHit);
-	    }
-	    //TODO: Uppdatera Player till att vara redo för nästa runda 
+		
+		//TODO: kolla ifall personen fortfarande deltar i spelet eller har vunnit.
+		
+		//TODO: Uppdatera Player till att vara redo for nasta runda 
+		serverGame.setReadyValue(playerNo, true);
 
+
+	    }
+	    
 	}
 	catch (Exception e) {
 	    System.out.println("Error " + e.getMessage());
@@ -125,7 +142,7 @@ public class GameClient {
 	    startCounting = System.nanoTime();
 
 	    answerTime = System.nanoTime() - startCounting;   
-	    while(answerTime < 300000) { //godtyckligt taget tal här
+	    while(answerTime < 300000) { //godtyckligt taget tal har
 		answer = userInput.nextLine();
 		answerTime = System.nanoTime() - startCounting;  
 	    }

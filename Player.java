@@ -1,101 +1,79 @@
-//Player class that should be given to each client
-/*TODO: Needs time Attribute
- * long tStart = System.currentTimeMillis(); // When times starts
- * 
- * 
- * long tEnd = System.currentTimeMillis(); //When times starts
- * long tDelta = tEnd - tStart;
- * double elapsedSeconds = tDelta / 1000.0;
- */
-public class Player {
-    public String nameOfPlayer;
-    public Deck playerDeck;
-    public int amountOfCardsOnHands = 0;
-    public int numberOfPlayer;
-<<<<<<< ours
-=======
-    //TODO: Add IP, ext and int.
+
+public class Player implements java.io.Serializable{
+    private static final long serialVersionUID = 1L;
+    private String nameOfPlayer;
+    private Deck playerDeck;
+    private int numberOfPlayer;
+    private String inIp;
+    private String exIp;
     private boolean readyToPlay;
-    //TODO: Won or lost game attribute? ended up at place 2...ex
-    //TODO: int hitTime
-    
->>>>>>> theirs
+    private String rankWhenFinished;
+    private int hitTime;
       
 
-    public Player (int numberOfPlayer) {
+    public Player (int numberOfPlayer, String inIp, String exIp, String alias,boolean ready) {
 	this.numberOfPlayer = numberOfPlayer;
-<<<<<<< ours
-	this.playerDeck = new Deck();
-=======
 	this.playerDeck = new Deck(1);
->>>>>>> theirs
-	}
+	this.inIp = inIp;
+	this.exIp = exIp;
+	this.nameOfPlayer = alias;
+	this.readyToPlay = ready;
+	this.rankWhenFinished = "";
+	this.hitTime = -1;
+    }
 
-    
+    /** Get this Player's ready value
+     */
     public boolean getReadyValue() {
 	return this.readyToPlay;
     }
     
+    /** Set this Player's ready value-attribute to given parameter ready
+    * @param ready value
+    */
     public void setReadyValue(boolean ready) {
 	this.readyToPlay = ready;
     }
 
+    /** Get this Player's name (alias)
+     */
     public String getPlayerName() {
 	return this.nameOfPlayer;
     }
     
+    /** Get this Player's player number
+     */
     public int getPlayerNumber() {
 	return numberOfPlayer;
     }
 
-    //Add a card
-    // This should have a list of 0 to 51 which is 52 cards. So we need 
-    // to think about that
-    public Card dropCard(Deck gameDeck){
-		Card cardToDrop = playerDeck.getCard();
-		gameDeck.addCard(cardToDrop);
-		amountOfCardsOnHands--;	
-		return cardToDrop;
-	}
+    /** Get this Player's deck
+     */
+    public Deck getPlayerDeck() {
+	return this.playerDeck;
+    }
+    
 
-<<<<<<< ours
-    //Hit the deck
-    public void hitTheDeck(){
-    	//While loops that waits for a input?
+   /** Set this player's hitTime-attribute to given parameter time
+    * @param time
+    */
+    public void setPlayerTime(int time) {
+	this.hitTime = time;
     }
 
-=======
->>>>>>> theirs
-    //Take up the game deck from losing 
-    //Make a for loop
+    /** TODO
+     */
+    public void playNextCard(Deck gameDeck){
+	Card cardToLay = playerDeck.getCard();
+	gameDeck.addCard(cardToLay);
+    }
+
+    /** Pick up the game deck  
+     */
     public void getCardFromMiddleDeck(Deck gameDeck){
-    	for (int n = 0; gameDeck.amountOfCards > n;){ 
-    	playerDeck.cardList[amountOfCardsOnHands] = gameDeck.getCard();
-    	amountOfCardsOnHands++;
-    	}
-    	return;
-<<<<<<< ours
+	playerDeck.combineDeck(gameDeck.getCardList());
+	gameDeck.cleanDeck();
     }
-    
-    //Let player check if it possible to hit now
-    public void canPlayerhit(Deck middleDeck){
-    	if (middleDeck.possibleToHit() == true){
-    		//start time
-    		//wait until player hit or someone places a new card(implement in round)
-    		//stop time
-    		//return time it took
-    		return;
-    	}
-    	return;
-    }
-    
-   
-    //Looks if it's players turn
-    public void myTurn(){
-    	//While loop that waits for it's turn or else it'll check the round again
-    }
+
+ 
 }
-=======
-    }    
-}
->>>>>>> theirs
