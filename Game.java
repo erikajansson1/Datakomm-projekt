@@ -104,15 +104,17 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	    
 	    //If all the players are ready to continue, round++
 	    int allReady = gamePlayers.size();
-	    int readyPlayer = 0;
+	    int readyPlayers = 0;
+	    Player currPlayer;
 	    for (int i = 0; i < gamePlayers.size(); i++) {
-		boolean playerIsReady = gamePlayers.get(i).getReadyValue;
+		currPlayer = gamePlayers.get(i);
+		boolean playerIsReady = currPlayer.getReadyValue();
 		if (playerIsReady) {
 		    readyPlayers++;
 		}
-		if (readyPlayers = allReady) {	//Since this function is used in a loop, this will eventually be true for one player
+		if (readyPlayers == allReady) {	//Since this function is used in a loop, this will eventually be true for one player
 		    this.round++;
-		    this.lock release();
+		    this.lock.release();
 		    return this.round;
 		}
 	    }
