@@ -80,7 +80,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * @param playerNo The player's number ID
      * @param hitTime The new hit time
      */
-    public void updatePlayerTime(in playerNo, int hitTime) throws RemoteException { 
+    public void updatePlayerTime(int playerNo, int hitTime) throws RemoteException { 
 	/*Player thisGuy = findPlayer(alias);
 	String name = thisGuy.getPlayerName();
 	if (name.equals("")) { return; }
@@ -286,7 +286,6 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 		    return i+1;
 		}
 	    }
-	}
 	} catch( Exception e) {
 	    e.printStackTrace();
 	}

@@ -18,12 +18,12 @@ public interface GameInterface extends Remote {
 
     /** Set the ready value for a player with alias "alias". 
      */
-    public void setReadyValue(String alias, boolean readyValue) throws RemoteException; 
+    public void setReadyValue(int playerNo, boolean readyValue) throws RemoteException; 
 
     /** Update the hit time for a player with alias "alias"     
      */
-    public void updatePlayerTime(String alias, int hitTime) throws RemoteException; //ej implementerad
-    
+    public void updatePlayerTime(int playerNo, int hitTime) throws RemoteException; //ej implementerad
+
     /** Checks whose turn it is, and if it's time for a new turn. If so, it updates accordingly. 
      * @param currRound Taken to ensure that only one such update is done every round.
      * @return The round value 

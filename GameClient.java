@@ -31,15 +31,13 @@ public class GameClient {
 	} else {
 	    serverInIp = args[0];
 	    serverExIp = args[1];
-	    serverPortx = args[2];
+	    serverPort = args[2];
 	}
 		
 	GameInterface serverGame = networkBuild.getServerObj(serverInIp,
 							     serverExIp,
 							     serverPort,
 							     gameToGet);
-	String alias = serverGame.getPlayerAlias(playerNo);
-
 	try {
 	    networkBuild.buildNetwork(serverGame);
 	    playerNo = networkBuild.joinGame();
@@ -51,7 +49,7 @@ public class GameClient {
 	    
 	    //so everyone knows who starts <- crap what does this mean
 
-	    setReadyValue(alias, true);
+	    serverGame.setReadyValue(playerNo, true);
 
 	    //START VALUES
 	    long startTime;
@@ -67,13 +65,14 @@ public class GameClient {
 	    for (int i=0; i<5; i++) { 
 
 		//loop until next round
-		oldRound = serverGame.whoseRound(oldRound); //or is it oldR?
+		oldRound = serverGame.updateRound(oldRound); //or is it oldR?
 		while (oldRound == round) {
-		    round = serverGame.whoseRound(oldRound); //TODO: semaphores needed here, at client???
+		    //serverGame.updateRound(oldRound); //TODO: semaphores needed here, at client???
+		    //Doesnt return round nr.
 		}
 
 		//Kolla ifall det ar spelarens tur
-		if (round.equals(playerNo)) { myRound = true; }
+		if (serverGame.whoseTurn() == playerNo) { myRound = true; }
 		else { myRound = false; }
 
 		
