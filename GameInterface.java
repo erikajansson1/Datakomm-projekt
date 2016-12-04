@@ -16,11 +16,11 @@ public interface GameInterface extends Remote {
      */
     public String displayBoard() throws RemoteException; //ej implementerad
 
-    /** Set the ready value for a player with alias "alias". 
+    /** Set the ready value for a player
      */
     public void setReadyValue(int playerNo, boolean readyValue) throws RemoteException; 
 
-    /** Update the hit time for a player with alias "alias"     
+    /** Update the hit time for a player     
      */
     public void updatePlayerTime(int playerNo, int hitTime) throws RemoteException; //ej implementerad
 
@@ -44,6 +44,11 @@ public interface GameInterface extends Remote {
      */
     public int getRound() throws RemoteException;
 
+
+    /** Initiate a game
+     * @param amountOfPlayer The amount of players in the game
+     */
+    public void startGame(int amountOfPlayers) throws RemoteException;
 
     /**
      * a get method for the attribut gameDeck
