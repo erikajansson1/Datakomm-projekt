@@ -61,8 +61,9 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 		    }	
 	}
 	String whosTurn = "\n\nTurn: "+ gamePlayers.get(this.whoseTurn()).getPlayerName();
+	String currCard = "\nLatest Card: "+this.gameDeck.showTopCard();
 
-	    return players +""+ whosTurn;
+	    return ""+ players + whosTurn + currCard;
     }
 
     
@@ -110,7 +111,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     }
 
     /** 
-     * OBS. EVENTUELLT DÖD KOD. 
+     * OBS. EVENTUELLT DoD KOD. 
      * Finds the Player object in an array whose name matches the given parameter
      * @param alias 
      * @return The found Player object, or an Player object with specific invalid values     

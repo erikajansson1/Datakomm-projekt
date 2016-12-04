@@ -35,6 +35,19 @@ public class Deck implements java.io.Serializable{
 
     }
 
+    /**
+     * Method to show the top card in the deck.
+     * @return returns a string describing top card.
+     */
+    public String showTopCard() {
+	if(cardList.size() == 0) {
+	    Card emptyCard = new Card (0,"EMPTY");
+	    return emptyCard.showCard();
+	}
+	return this.cardList.get(cardList.size()-1).showCard();
+    }
+
+    
     //Get one card from deck
     public Card getCard() {
 	cardList.trimToSize();
