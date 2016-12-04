@@ -65,6 +65,8 @@ public class GameClient {
 	    for (int i=0; i<5; i++) { 
 
 		//loop until next round
+		System.out.println("test");
+
 		oldRound = serverGame.updateRound(oldRound); //or is it oldR?
 		while (oldRound == round) {
 		    //serverGame.updateRound(oldRound); //TODO: semaphores needed here, at client???

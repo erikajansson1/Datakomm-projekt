@@ -35,7 +35,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      *  match eachother
      */
     public boolean timeToHit() throws RemoteException {
-    	if (possibleToHit()){
+    	if (gameDeck.possibleToHit()){
     		//Start time? not sure
     		return true;
     	}
@@ -286,7 +286,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 		if(gamePlayers.get(i).getPlayerName().equals("Empty")) {
 		    gamePlayers.set(i,new Player(i, inIp, exIp,alias,true));
 		    this.lock.release();
-		    return i+1;
+		    return i;
 		}
 	    }
 	} catch( Exception e) {
@@ -304,7 +304,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * @return the players alias.
      */
     public String getPlayerAlias(int playerNo) throws RemoteException {
-	return this.gamePlayers.get(playerNo-1).getPlayerName();
+	return this.gamePlayers.get(playerNo).getPlayerName();
     }
 
 

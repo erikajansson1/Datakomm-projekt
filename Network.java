@@ -260,7 +260,7 @@ class Network {
 	
 	System.out.println("You have now joined the game with alias: "+
 			   serverGame.getPlayerAlias(playerNo)+"\n"+
-			   "You are currently playerNo: "+playerNo);
+			   "You are currently playerNo: "+playerNo+1);
 	return playerNo;
     }
 
