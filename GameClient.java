@@ -72,13 +72,13 @@ public class GameClient {
 		    //serverGame.updateRound(oldRound); //TODO: semaphores needed here, at client???
 		    //Doesnt return round nr.
 		}
+		//Reset player's ready value
+		serverGame.setReadyValue(playerNo, false);
+
 
 		//Kolla ifall det ar spelarens tur
 		if (serverGame.whoseTurn() == playerNo) { myRound = true; }
 		else { myRound = false; }
-
-		
-
 		
 		//Check if it's possible to hit
 		canHit = true; //TODO: fkn for checking if its hit the dick time 
@@ -89,9 +89,10 @@ public class GameClient {
 		//Let the player make its move
 		userAction(myRound,canHit);
 		
-		//ifall personen fortfarande deltar i spelet eller har vunnit.
+		//TODO: kolla ifall personen fortfarande deltar i spelet eller har vunnit.
 		
 		//TODO: Uppdatera Player till att vara redo for nasta runda 
+		serverGame.setReadyValue(playerNo, true);
 
 
 	    }

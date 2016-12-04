@@ -72,8 +72,6 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * @param readyValue The new ready value
      */
     public void setReadyValue(int playerNo, boolean readyValue) throws RemoteException {
-	/*Player thisPlayer = this.findPlayer(alias);
-	  if (thisPlayer.getPlayerNumber() == -1) { return; } //if nobody has the given alias*/
 	Player thisPlayer = gamePlayers.get(playerNo);
 	thisPlayer.setReadyValue(readyValue);
     }; 
@@ -84,13 +82,6 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * @param hitTime The new hit time
      */
     public void updatePlayerTime(int playerNo, int hitTime) throws RemoteException { 
-	/*Player thisGuy = findPlayer(alias);
-	String name = thisGuy.getPlayerName();
-	if (name.equals("")) { return; }
-	else {
-	    setPlayerTime(hitTime);
-	    return;
-	    }*/
 	Player thisGuy = gamePlayers.get(playerNo);
 	thisGuy.setPlayerTime(hitTime);
     }
@@ -119,6 +110,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     }
 
     /** 
+     * OBS. EVENTUELLT DÖD KOD. 
      * Finds the Player object in an array whose name matches the given parameter
      * @param alias 
      * @return The found Player object, or an Player object with specific invalid values     
@@ -141,13 +133,10 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * Initiate game by giving out cards and select who start first 
      */
     //TODO: Who should start first, create  ---the server starts the game (playerNo = 1)
-    /*  public void startGame(int amountOfPlayers) { 
-
-	} 
-
-	}
+     public void startGame(int amountOfPlayers) throws RemoteException { 
+     }
 	
-    */
+    
 	 
     /**
      * Tells the amount of players in the game
