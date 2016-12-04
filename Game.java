@@ -2,7 +2,7 @@ import java.rmi.*;
 import java.rmi.server.*;
 import java.util.*;
 import java.util.concurrent.Semaphore;
- 
+
 public class Game extends UnicastRemoteObject implements GameInterface {
     private static final long serialVersionUID = 1L;
     private final Semaphore lock;
@@ -20,7 +20,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	super(1099);
 	this.lock = new Semaphore(1);
 	this.round = 0;
-	this.gameDeck = new Deck(0); //Which should be empty?
+	this.gameDeck = new Deck(0); 
 	this.starterDeck = new Deck();
 	this.gamePlayers = new ArrayList<Player>(numberOfPlayers);
 	for (int i = 0; i < numberOfPlayers; i++) {
@@ -36,11 +36,10 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      */
     public boolean timeToHit() throws RemoteException {
     	if (gameDeck.possibleToHit()){
-    		//Start time? not sure
     		return true;
     	}
  	return false;
-    }; //TODO
+    };
 
 
     /** Prints out a view of the board:
