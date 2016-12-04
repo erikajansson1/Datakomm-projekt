@@ -26,7 +26,6 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	for (int i = 0; i < numberOfPlayers; i++) {
 	    gamePlayers.add(i,new Player(i,"","","Empty",false));
 	}
-	
     }
 
     /** 
@@ -94,11 +93,38 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * @return The round value 
      */
     public int updateRound(int currRound) throws RemoteException{
-	//TODO if all the players are ready to continue, round++
-	//TODO Semaphore to ensure atomical updating
-	//TODO Compare so that you dont update the Round twice
-	this.round++;
-	return round;
+	try {
+	    this.lock.acquire();
+
+	    //Compare so that you dont update the Round twice
+	    if (this.round == currRound+1) {
+		this.lock.release();
+		return this.round;
+	    }
+	    
+	    //If all the players are ready to continue, round++
+	    int allReady = gamePlayers.size();
+	    int readyPlayers = 0;
+	    Player currPlayer;
+	    for (int i = 0; i < gamePlayers.size(); i++) {
+		currPlayer = gamePlayers.get(i);
+		boolean playerIsReady = currPlayer.getReadyValue();
+		if (playerIsReady) {
+		    readyPlayers++;
+		}
+		if (readyPlayers == allReady) {	//Since this function is used in a loop, this will eventually be true for one player
+		    this.round++;
+		    this.lock.release();
+		    return this.round;
+		}
+	    }
+
+	} catch( Exception e) {
+	    e.printStackTrace();
+	}
+	this.lock.release();
+
+	return this.round;
     }
 
 
