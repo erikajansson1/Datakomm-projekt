@@ -171,8 +171,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     }
 
     /**
-     * a get method for the attribut round
-     * @return returns the round attribut
+     * A get method for the attribut round.
+     * @return returns the round attribut.
      */
     public int getRound() throws RemoteException{
 	return this.round;
@@ -180,8 +180,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 
     
     /**
-     * a get method for the attribut gameDeck
-     * @return returns the gameDeck attribut
+     * A get method for the attribut gameDeck.
+     * @return returns the gameDeck attribut.
      */
     public Deck getGameDeck()throws RemoteException {
 	return this.gameDeck;
@@ -189,8 +189,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     
 
     /**
-     * a get method for the attribut starterDeck
-     * @return returns the starterDeck attribut
+     * A get method for the attribut starterDeck.
+     * @return returns the starterDeck attribut.
      */
     public Deck getStarterDeck() throws RemoteException{
 	return this.starterDeck;
@@ -198,8 +198,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 
     
     /**
-     * a get method for the attribut gamePlayers
-     * @return returns the gamePlayers attribut
+     * A get method for the attribut gamePlayers.
+     * @return returns the gamePlayers attribut.
      */
     public ArrayList<Player> getGamePlayers() throws RemoteException{
 	return this.gamePlayers;
@@ -209,11 +209,11 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 
     
     /**
-     * a update state method for the object game.
-     * @param round is the new round value
-     * @param gameDeck is the new gameDeck value
-     * @param starterDeck is the new starterDeck value
-     * @param gamePlayers is the new gamePlayers value
+     * A update state method for the object game.
+     * @param round is the new round value.
+     * @param gameDeck is the new gameDeck value.
+     * @param starterDeck is the new starterDeck value.
+     * @param gamePlayers is the new gamePlayers value.
      */
     public void setGameValues (int round,Deck gameDeck,Deck starterDeck,ArrayList<Player> gamePlayers) throws RemoteException {
 	this.round = round;
@@ -226,6 +226,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     /**
      * method that adds a player requesting a slot to a existing game. 
      * Player is placed at the first available slot in the Arraylist.
+     * Slots are inhabited by "Empty" players intially. 
+     * Theese are removed when asigning player to slot
      * @param inIp is the players internal IP.
      * @param exIp is the players external IP.
      * @param alias is the players alias.
@@ -242,7 +244,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	
 	for (int i = 0; i <= (gamePlayers.size()-1); i++) {
 	    if(gamePlayers.get(i).getPlayerName().equals("Empty")) {
-		gamePlayers.add(i,new Player(i, inIp, exIp,alias,true));
+		gamePlayers.set(i,new Player(i, inIp, exIp,alias,true));
 		this.lock.release();
 		return i+1;
 	    }
@@ -256,7 +258,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 
 
     /**
-     * a method to retrive a players alias in the game.
+     * A method to retrive a players alias in the game.
      * Will fail if the playerNo is not in the bounds of the game.
      * @param playerNo is the number of the player whos alias is to be fetched.
      * @return the players alias.
@@ -277,5 +279,21 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	return false;
     }
 
+
+    /**
+     * Checks every players ready status and returns a boolean saying if all are ready.
+     * @return returns true if all players are ready.
+     */
+    public boolean waitingForPlayers() throws RemoteException{
+	for (int i = 0; i <= (gamePlayers.size()-1); i++) {
+	    if(gamePlayers.get(i).getReadyValue() == false) return false;	    
+	}
+	return true;
+    }
+
+
+
+
+    
 }
 

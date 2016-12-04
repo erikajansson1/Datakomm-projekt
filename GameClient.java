@@ -19,29 +19,31 @@ public class GameClient {
 	String gameToGet = "theGame";
 	String backUpToGet = "theBackUp";
 	Network networkBuild = new Network();
-	networkBuild.welcomeMSG("client");
+	networkBuild.welcomeMSG("client",args.length);
 
-	String inIp = null;
-	String exIp = null;
-	String port = null;
+	String serverInIp = null;
+	String serverExIp = null;
+	String serverPort = null;
 	if(args.length == 0) {
-	    inIp = networkBuild.askServerInIp();
-	    exIp = networkBuild.askServerExIp();
-	    port = networkBuild.askServerPort();
+	    serverInIp = networkBuild.askServerInIp();
+	    serverExIp = networkBuild.askServerExIp();
+	    serverPort = networkBuild.askServerPort();
 	} else {
-	    inIp = args[0];
-	    exIp = args[1];
-	    port = args[2];
+	    serverInIp = args[0];
+	    serverExIp = args[1];
+	    serverPort = args[2];
 	}
 		
-	GameInterface serverGame = null;	
-	serverGame = networkBuild.getServerObj(serverGame,inIp,exIp,port,gameToGet);
+	GameInterface serverGame = networkBuild.getServerObj(serverInIp,
+							     serverExIp,
+							     serverPort,
+							     gameToGet);
 	try {
-	    playerNo = networkBuild.joinGame(serverGame,inIp,exIp);
-	    System.out.println(playerNo);
-
-	    
+	    networkBuild.buildNetwork(serverGame);
+	    playerNo = networkBuild.joinGame();
 	    BackUp backup = new BackUp(serverGame);
+	    networkBuild.waitingUntilGameCanStart();
+	    
 	    //backup.update(serverGame);
 	    //BEGINNING OF GAME
 	    
