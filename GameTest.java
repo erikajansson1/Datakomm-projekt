@@ -22,12 +22,10 @@ public class GameTest extends TestCase {
 	
 	@Test
 	public void test_timeToHit() {	
-		//Count time 
-		//Unsure how to test with time
 		try{
 		Game testGame = new Game(2);
-		long timeItTook = testGame.timeToHit();
-		assertTrue(timeItTook == 3); // TODO: This shouldn't be return 3.
+		boolean isItTrue = testGame.timeToHit();
+		assertFalse(isItTrue);
 		}
 		catch (RemoteException e) {
 			 System.out.println("Error " + e.getMessage());
@@ -38,9 +36,15 @@ public class GameTest extends TestCase {
 	
 	@Test
 	public void test_displayBoard() {
-		
-		
-		assertTrue(true);
+		try {
+			Game testGame = new Game(2);
+			String testDisplay = testGame.displayBoard(); 
+			assertTrue(testDisplay == " ");		
+		} 	
+		catch (RemoteException e) {
+			 System.out.println("Error " + e.getMessage());
+			 e.printStackTrace();
+		}
 	}
 
 	@Test

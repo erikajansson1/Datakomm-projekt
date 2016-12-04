@@ -8,7 +8,7 @@ public interface GameInterface extends Remote {
      *  that is, check whether any of the previous 4 cards
      *  match eachother
      */
-    public long timeToHit() throws RemoteException;
+    public boolean timeToHit() throws RemoteException;
 
     
     /** Prints out a view of the board:
