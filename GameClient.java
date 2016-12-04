@@ -56,7 +56,7 @@ public class GameClient {
 	    long startTime;
 	    long hitTime;
 	    String answer = "";
-	    int oldRound = 1;
+	    int oldRound = 0;
 	    int round = 1;
 	    Scanner userInput = new Scanner(System.in);
 	    boolean canHit = false;
@@ -68,7 +68,7 @@ public class GameClient {
 		//loop until next round
 		System.out.println("rad 69 i Client");
 
-		oldRound = serverGame.updateRound(oldRound); //or is it oldR?
+		round = serverGame.updateRound(oldRound); 
 		while (oldRound == round) {
 		    serverGame.updateRound(oldRound);//Doesnt return round nr. 
 		    round = serverGame.getRound();
@@ -94,8 +94,6 @@ public class GameClient {
 		
 		//Uppdatera Player till att vara redo for nasta runda 
 		serverGame.setReadyValue(playerNo, true);
-
-
 	    }
 	    
 	}
