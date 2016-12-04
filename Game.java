@@ -34,9 +34,12 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      *  that is, check whether any of the previous 4 cards
      *  match eachother
      */
-    public long timeToHit() throws RemoteException {
-    	//	PossibleToHist function should be used here
-	return 3;
+    public boolean timeToHit() throws RemoteException {
+    	if (possibleToHit()){
+    		//Start time? not sure
+    		return true;
+    	}
+ 	return false;
     }; //TODO
 
     /** 
