@@ -93,4 +93,8 @@ public interface GameInterface extends Remote {
      * @return a bollean indicating if full or not. True if full.
      */
     public boolean askIsGameFull() throws RemoteException;
+
+
+    public boolean waitingForPlayers() throws RemoteException;
 }
+
