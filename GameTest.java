@@ -39,8 +39,7 @@ public class GameTest extends TestCase {
 		try {
 			Game testGame = new Game(2);
 			String testDisplay = testGame.displayBoard(); 
-			assertTrue(testDisplay == " ");
-			
+			assertTrue(testDisplay == " ");		
 		} 	
 		catch (RemoteException e) {
 			 System.out.println("Error " + e.getMessage());
