@@ -221,7 +221,7 @@ class Network {
 	    /*System.out.println("Registry found in "  +exIp+ 
 	      " :" + port + "\n" + registry);
 	    */
-	    serverGame = (GameInterface) registry.lookup(inIp+"/"+objectToGet+":"+port);		
+	    serverGame = (GameInterface) Naming.lookup(inIp+"/"+objectToGet+":"+port);		
 	}catch (Exception e) {
 	    System.out.println(" exception: " + e);
 	    e.printStackTrace();
