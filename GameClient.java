@@ -15,21 +15,38 @@ import java.io.*;
 public class GameClient {
 
     public static void main (String[] args) {
-	GameInterface game;
+	int playerNo = -1;
+	String gameToGet = "theGame";
+	String backUpToGet = "theBackUp";
 	Network networkBuild = new Network();
 	networkBuild.welcomeMSG("client");
-	String inIp = networkBuild.getServerInIp();
-	String exIp = networkBuild.getServerExIp();
-	String port = networkBuild.getServerPort();
 
-	game = networkBuild.clientConnect(inIp,exIp,port);
-	//TODO: Skapa spelare inkl smeknamn?
-
+	String inIp = null;
+	String exIp = null;
+	String port = null;
+	if(args.length == 0) {
+	    inIp = networkBuild.askServerInIp();
+	    exIp = networkBuild.askServerExIp();
+	    port = networkBuild.askServerPort();
+	} else {
+	    inIp = args[0];
+	    exIp = args[1];
+	    port = args[2];
+	}
+		
+	GameInterface serverGame = null;	
+	serverGame = networkBuild.getServerObj(serverGame,inIp,exIp,port,gameToGet);
 	try {
+	    playerNo = networkBuild.joinGame(serverGame,inIp,exIp);
+	    System.out.println(playerNo);
 
+	    
+	    BackUp backup = new BackUp(serverGame);
+	    //backup.update(serverGame);
 	    //BEGINNING OF GAME
-	    game.displayBoard(); //so everyone knows who starts
-	    //TODO: Uppdatera att playern är redo
+	    
+	    //so everyone knows who starts
+	    //TODO: Uppdatera att playern ar redo
 
 	    //START VALUES
 	    long startTime;
@@ -41,28 +58,28 @@ public class GameClient {
 	    boolean canHit = false;
 	    boolean myRound = false; 
 
-	    //>>>>STOR LOOP: här ska vi egentligen ha en check att spelet inte är slut
+	    //>>>>STOR LOOP: har ska vi egentligen ha en check att spelet inte ar slut
 	    for (int i=0; i<5; i++) { 
 
 		//loop until next round
-		oldRound = game.whoseRound(oldRound); //or is it oldR?
+		oldRound = serverGame.whoseRound(oldRound); //or is it oldR?
 		while (oldRound == round) {
-		    round = game.whoseRound(oldRound); //TODO: semaphores needed here
+		    round = serverGame.whoseRound(oldRound); //TODO: semaphores needed here, at client???
 		}
 
-		//TODO: myRound = kollar ifall det är spelarens tur
+		//TODO: myRound = kollar ifall det ar spelarens tur
 		//ifall personen fortfarande deltar i spelet eller har vunnit.
 
 		//Check if it's possible to hit
 		canHit = true; //TODO: fkn for checking if its hit the dick time 
 		    
 		//Display board
-		game.displayBoard();
+		System.out.println(serverGame.displayBoard());
 		    
 		//Let the player make its move
 		userAction(myRound,canHit);
 	    }
-	    //TODO: Uppdatera Player till att vara redo för nästa runda 
+	    //TODO: Uppdatera Player till att vara redo for nasta runda 
 
 	}
 	catch (Exception e) {
@@ -109,7 +126,7 @@ public class GameClient {
 	    startCounting = System.nanoTime();
 
 	    answerTime = System.nanoTime() - startCounting;   
-	    while(answerTime < 300000) { //godtyckligt taget tal här
+	    while(answerTime < 300000) { //godtyckligt taget tal har
 		answer = userInput.nextLine();
 		answerTime = System.nanoTime() - startCounting;  
 	    }

@@ -6,19 +6,32 @@ import java.net.InetAddress;
 import java.net.*;
 import java.io.*;
 
-class Network {
 
+/**
+ * Class for building a network connection
+ */
+class Network {
     private String exIP;
     private String inIP;
     
+    /**
+     * Constructor for the class Network.
+     */
     public Network () {}
 
+    /**
+     * Method to add the objects IP-adresses
+     * @param exIP is the users external IP
+     * @param inIP is the users internal IP
+     */
     public void addAdresses(String exIP, String inIP) {
 	this.exIP = exIP;
 	this.inIP = inIP;
     }
 
-    
+    /**
+     * Method that looksup the users external IP.
+     */
     public String extIP() throws Exception {
 	String ipExternal = "Adress lookup failed!";
 	URL whatismyip = new URL("http://checkip.amazonaws.com");
@@ -35,7 +48,9 @@ class Network {
     }
 
 
-    
+    /**
+     * Method that looksup the users internal IP.
+     */
     public String inIP() {
 	String ipLocal = "Failed to get a adress";
 	try {
@@ -48,7 +63,10 @@ class Network {
 	return ipLocal;
     }
 
-
+    /**
+     * Method to print out the welcome message for the user.
+     * @param user should intended the type of message to print. Currently only "server"/"client" is accepted.
+     */
     public void welcomeMSG(String user) {
 	if (user.equals("server")) {
 	    System.out.print("\033[2J\033[;H");
@@ -64,17 +82,21 @@ class Network {
 	    System.out.println("Not server or client?");
 	}
     }
-    
+
+    /**
+     * Method to get how many players the server intends to host a game for.
+     */
     public int askPlayerNo() {
 	System.out.println("How many player slots would you like?");
 	Scanner userInput = new Scanner(System.in);
 	int noPlayers = userInput.nextInt();
-	System.out.println("Creating space for "+noPlayers+"\n");
 	return noPlayers;
     }
 
 
-    
+    /**
+     * Method to start a RMI server on port 1099
+     */
     public Registry startRMIserver() {
 	Registry registry = null;
 	try  //special exception handler for registry creation
@@ -94,8 +116,11 @@ class Network {
 	return registry;
     }
 
-
     
+    /**
+     * Print statement declaring that the servers is ready and can be reached on the adresses the servers currently has.
+     *
+     */
     public void publishReady() {
 	System.out.println("Game Server is ready.");
 	System.out.println("The server is now reachable on \nLocal IP: "+
@@ -105,41 +130,118 @@ class Network {
 			   "\nBoth on port 1099 \n\n\n");
     }
 
-    public String getServerInIp() {
+    
+    /**
+     * method to ask the user which internal IP port the server has whom he wishes to join.
+     */
+    public String askServerInIp() {
 	Scanner userInput = new Scanner(System.in);
 	System.out.printf("Local IP: ");
 	return userInput.nextLine();
     }
 
-    public String getServerExIp() {
+    
+    /**
+     * method to ask the user which external IP port the server has whom he wishes to join.
+     */
+    public String askServerExIp() {
 	Scanner userInput = new Scanner(System.in);
 	System.out.printf("External IP: ");
 	return userInput.nextLine();
     }
+
     
-    public String getServerPort() {
+    /**
+     * method to ask the user which port the server has whom he wishes to join.
+     */
+    public String askServerPort() {
 	Scanner userInput = new Scanner(System.in);
 	System.out.printf("Port: ");
 	return userInput.nextLine();
     }
 
-    public GameInterface clientConnect(String inIp,String exIp,String port) {
-	GameInterface game = null;
-	try {
-	    // System.setSecurityManager(new SecurityManager());
+
+   
+    /**
+     * Method that connects the client to the servers rmi registry and returns a reference to the shared game object.
+     *@param inIp is the servers internal IP
+     *@param exIp is the servers external IP
+     *@param port is the servers port
+     *@param objectToGet is the name of the object to get the reference to
+     */    
+    public GameInterface getServerObj(GameInterface game, String inIp, String exIp, String port ,String objectToGet)
+    {
+       	try {
 	    Registry registry = LocateRegistry.getRegistry( exIp, Integer.parseInt(port));
-	    System.out.println("Registry found in "  +exIp+ 
+	    /*System.out.println("Registry found in "  +exIp+ 
                                " :" + port + "\n" + registry);
-	    game = (GameInterface) registry.lookup(inIp+"/theGame:"+port);
- 	}catch (Exception e) {
-	    System.out.println("HelloClient exception: " + e);
+	    */
+	    game = (GameInterface) registry.lookup(inIp+"/"+objectToGet+":"+port);		
+	}catch (Exception e) {
+	    System.out.println(" exception: " + e);
 	    e.printStackTrace();
-	    
 	}
 	return game;
     }
 
 
+    /**
+     * A method that asks the client what alias he or she wants to use.
+     * @return a string containing the users wished alias.
+     */
+    public String askAlias() {
+	Scanner userInput = new Scanner(System.in);
+	System.out.printf("What alias would you like: ");
+	return userInput.nextLine();
+    }
 
-
+    /**
+     * Method for the client to join a game he or she is connected to.
+     * Also checks if the game is full or not before trying to join.
+     * @param serverGame is the game to join.
+     * @param inIp is the clients inIp.
+     * @param exIp is the clients exIp.
+     * @return int symbolising the players assigned player number.
+     */
+    public int joinGame(GameInterface serverGame, String inIp, String exIp) throws RemoteException{
+      	int playerNo = -1;
+	if(!serverGame.askIsGameFull()){
+	    playerNo = serverGame.addPlayer(inIp,exIp,this.askAlias());
+	}
+	    if(playerNo == -1)
+		{
+		    System.out.println("Sorry this server is full. \n Please try another one.");
+		    System.exit(0);
+		}
+	
+	System.out.println("You have now joined the game with alias: "+
+				   serverGame.getPlayerAlias(playerNo)+"\n"+
+				   "You are currently playerNo: "+playerNo);
+	return playerNo;
+    }
 }
+    
+/*
+  /**
+  * Method that connects the client to the servers rmi registry and returns a reference to the shared backup object.
+  *@param inIp is the servers internal IP
+  *@param exIp is the servers external IP
+  *@param port is the servers port
+  *@param objectToGet is the name of the object to get the reference to
+      
+  public BackUpInterface getServerObj(BackUpInterface backUp,String inIp, String exIp, String port, String objectToGet)
+  {
+  try {
+  Registry registry = LocateRegistry.getRegistry( exIp, Integer.parseInt(port));
+  System.out.println("Registry found in "  +exIp+ 
+  " :" + port + "\n" + registry);
+  backUp = (BackUpInterface) registry.lookup(inIp+"/"+objectToGet+":"+port);		
+  }catch (Exception e) {
+  System.out.println(" exception: " + e);
+  e.printStackTrace();
+  }
+  return backUp;
+  }*/
+
+
+

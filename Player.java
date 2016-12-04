@@ -7,22 +7,28 @@
  * long tDelta = tEnd - tStart;
  * double elapsedSeconds = tDelta / 1000.0;
  */
-public class Player {
-    public String nameOfPlayer;
-    public Deck playerDeck;
-    public int amountOfCardsOnHands = 0;
-    public int numberOfPlayer;
-    //TODO: Add IP, ext and int.
+public class Player implements java.io.Serializable{
+    private static final long serialVersionUID = 1L;
+    private String nameOfPlayer;
+    private Deck playerDeck;
+    private int numberOfPlayer;
+    private String inIp;
+    private String exIp;
     private boolean readyToPlay;
-    //TODO: Won or lost game attribute? ended up at place 2...ex
-    //TODO: int hitTime
-    
+    private String rankWhenFinished;
+    private int hitTime;
       
 
-    public Player (int numberOfPlayer) {
+    public Player (int numberOfPlayer, String inIp, String exIp, String alias,boolean ready) {
 	this.numberOfPlayer = numberOfPlayer;
 	this.playerDeck = new Deck(1);
-	}
+	this.inIp = inIp;
+	this.exIp = exIp;
+	this.nameOfPlayer = alias;
+	this.readyToPlay = ready;
+	this.rankWhenFinished = "";
+	this.hitTime = -1;
+    }
 
     
     public boolean getReadyValue() {
@@ -41,23 +47,18 @@ public class Player {
 	return numberOfPlayer;
     }
 
-    //Add a card
-    // This should have a list of 0 to 51 which is 52 cards. So we need 
-    // to think about that
-    public Card dropCard(Deck gameDeck){
-		Card cardToDrop = playerDeck.getCard();
-		gameDeck.addCard(cardToDrop);
-		amountOfCardsOnHands--;	
-		return cardToDrop;
-	}
+    public Deck getPlayerDeck() {
+	return this.playerDeck;
+    }
+    
+    public void playNextCard(Deck gameDeck){
+	Card cardToLay = playerDeck.getCard();
+	gameDeck.addCard(cardToLay);
+    }
 
     //Take up the game deck from losing 
-    //Make a for loop
-    public void getCardFromMiddleDeck(Deck gameDeck){
-    	for (int n = 0; gameDeck.amountOfCards > n;){ 
-    	playerDeck.cardList[amountOfCardsOnHands] = gameDeck.getCard();
-    	amountOfCardsOnHands++;
-    	}
-    	return;
-    }    
+	public void getCardFromMiddleDeck(Deck gameDeck){
+	playerDeck.combineDeck(gameDeck.getCardList());
+	gameDeck.cleanDeck();
+    }
 }
