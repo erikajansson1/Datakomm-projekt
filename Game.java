@@ -20,7 +20,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	super(1099);
 	this.lock = new Semaphore(1);
 	this.round = 0;
-	this.gameDeck = new Deck(0); //Which should be empty?
+	this.gameDeck = new Deck(0); 
 	this.starterDeck = new Deck();
 	this.gamePlayers = new ArrayList<Player>(numberOfPlayers);
 	for (int i = 0; i < numberOfPlayers; i++) {
@@ -35,11 +35,10 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      */
     public boolean timeToHit() throws RemoteException {
     	if (gameDeck.possibleToHit()){
-    		//Start time? not sure
     		return true;
     	}
  	return false;
-    }; //TODO
+    };
 
 
     /** Prints out a view of the board:
@@ -161,6 +160,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      */
     //TODO: Who should start first, create  ---the server starts the game (playerNo = 1)
      public void startGame(int amountOfPlayers) throws RemoteException { 
+	 //Dela ut kort 
      }
 	
     
@@ -173,18 +173,14 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     	return amountPlayers;
     }
    
-    
-    /** Next player should be able to place a cards 
+     
+    /** Get the rank of player #playerNo 
+	@param playerNo the player's no id
      */
-    //TODO: I don't know if this is needed, maybe this will tell next player to  
-    //add its card 
-    public void nextplayer() { 
-	
-    } 
-	 
-    //Inform player who lost and resign it from game 
-    public void looseGame(){ // Should have decided player that lost 
-	
+    public int myRank(int playerNo) throws RemoteException{
+	Player dessTheGlorious = this.gamePlayers.get(playerNo);
+	int rank = dessTheGlorious.getPlayerRank();
+	return rank;	
     } 
  
  
@@ -198,6 +194,27 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     } 
 	 
 	 
+    /** Check who lost the whole game
+     * @return player number id of the loser
+     */
+    public int checkLoser() throws RemoteException {
+	int loserID = -1;
+	int loserRank = -1;
+	int len = gamePlayers.size();
+	Player currPlayer;
+	for(int i=0; i<len; i++) {
+	    currPlayer = gamePlayers.get(i);
+	    currID = currPlayer.getPlayerNumber();
+	    currRank = currPlayer.getPlayerRank();
+	    if (currRank >= loserRank) { loserID = currID; }
+	}
+
+	return loserID;	
+    }
+
+
+    //TODOOOOOOO Kolla alla dessa funktioner
+
     //Handle if someone hits at wrong time 
     public void handleWrongHit(){ 
 	//Look at the player that send the wrong signal, tell it it did bad 
@@ -212,14 +229,6 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	//give the whole deck to it 
     } 
 	 
- 
-    //Look what four cards are legit to be hit  
-    public void whatFourCards(){ 
-	if (gameDeck.possibleToHit() == true) { 
-	    return; 
-	} 
-    } 
-	 
     //Who is the slowest when hitting the deck. Give the GameDeck to the loser 
     public void whoLostRightHit(){
 	//TODO Compare times in the player objects and reset it after determining who lost.
@@ -230,7 +239,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * A get method for the attribut round.
      * @return returns the round attribut.
      */
-    public int getRound() throws RemoteException{
+    public int getRound() throws RemoteException {
 	return this.round;
     }
 
