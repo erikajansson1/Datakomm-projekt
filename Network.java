@@ -144,6 +144,7 @@ class Network {
 		System.out.println("RMI server started");
 		//System.getProperties().put("java.rmi.server.hostname", "rmi://"+exIP);
 		registry = LocateRegistry.createRegistry(1099); 
+		System.setProperty("java.rmi.server.hostname", "//"+this.exIP);
 		System.out.println("java RMI registry created.");
 	    }
 	catch (RemoteException e)
@@ -217,9 +218,9 @@ class Network {
 	GameInterface serverGame = null;
        	try {
 	    Registry registry = LocateRegistry.getRegistry( exIp, Integer.parseInt(port));
-	    /*	    System.out.println("Registry found in "+
+	    	    System.out.println("Registry found in "+
 			       exIp + ":" + port + "\n" + registry);
-	    */
+	    
 	    //	    serverGame = (GameInterface) Naming.lookup(inIp+"/"+objectToGet+":"+port);
 	    serverGame = (GameInterface) Naming.lookup("//"+inIp+":"+port+"/"+objectToGet);
 	}catch (Exception e) {

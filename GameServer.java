@@ -16,23 +16,20 @@ public class GameServer {
 		System.out.println("Creating a game for "+noPlayers+".");
 
 		Game game = new Game(noPlayers);
-		String port = "1099";
+		String RMIPort = "1099";
+		String objPort = "1100";
 		networkBuild.buildNetwork();
 		networkBuild.welcomeMSG("server",0);
-
-
-
-		
-		
 	
 		Registry registry = networkBuild.startRMIserver();			
 		//Naming.rebind(networkBuild.getInIp()+"/theGame:"+port, game);
-		Naming.rebind("//"+networkBuild.getInIp()+":"+port+"/theGame", game);
+		//		UnicastRemoteObject.exportObject(game, 1100);
+		Naming.rebind("//"+networkBuild.getInIp()+":"+RMIPort+"/theGame", game);
 		networkBuild.publishReady();
 		String[] argvClient = new String[]{
 		    networkBuild.getInIp(),
 		    networkBuild.getExIp(),
-		    port};
+		    objPort};
 		
 		GameClient.main(argvClient);
 	    }catch (Exception e) {

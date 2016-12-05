@@ -18,7 +18,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     }
 
     public Game (int numberOfPlayers) throws RemoteException {
-	super(1099);
+	super(1100);
 	this.lock = new Semaphore(1);
 	this.round = 0;
 	this.gameDeck = new Deck(0); 

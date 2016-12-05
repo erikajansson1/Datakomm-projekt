@@ -23,20 +23,20 @@ public class GameClient {
 
 	String serverInIp = null;
 	String serverExIp = null;
-	String serverPort = null;
+	String serverObjPort = null;
 	if(args.length == 0) {
 	    serverInIp = networkBuild.askServerInIp();
 	    serverExIp = networkBuild.askServerExIp();
-	    serverPort = networkBuild.askServerPort();
+	    serverObjPort = networkBuild.askServerPort();
 	} else {
 	    serverInIp = args[0];
 	    serverExIp = args[1];
-	    serverPort = args[2];
+	    serverObjPort = args[2];
 	}
-		
+
 	GameInterface serverGame = networkBuild.getServerObj(serverInIp,
 							     serverExIp,
-							     serverPort,
+							     "1099",
 							     gameToGet);
 	System.out.println("rad 41 i Client");
 	try {
