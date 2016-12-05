@@ -199,6 +199,9 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * @return player number id of the loser
      */
     public int checkLoser() throws RemoteException {
+	int currID = 0; //Didnt exist so added so compilation could be done.
+	int currRank = 0; //Didnt exist so added so compilation could be done.
+
 	int loserID = -1;
 	int loserRank = -1;
 	int len = gamePlayers.size();
