@@ -38,6 +38,7 @@ public class GameClient {
 							     serverExIp,
 							     serverPort,
 							     gameToGet);
+	System.out.println("rad 41 i Client");
 	try {
 	    networkBuild.buildNetwork(serverGame);
 	    playerNo = networkBuild.joinGame();

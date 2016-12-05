@@ -19,9 +19,15 @@ public class GameServer {
 		String port = "1099";
 		networkBuild.buildNetwork();
 		networkBuild.welcomeMSG("server",0);
-		Registry registry = networkBuild.startRMIserver();
-			
-		registry.rebind(networkBuild.getInIp()+"/theGame:"+port, game);
+
+
+
+		
+		
+	
+		Registry registry = networkBuild.startRMIserver();			
+		//Naming.rebind(networkBuild.getInIp()+"/theGame:"+port, game);
+		Naming.rebind("//"+networkBuild.getInIp()+":"+port+"/theGame", game);
 		networkBuild.publishReady();
 		String[] argvClient = new String[]{
 		    networkBuild.getInIp(),

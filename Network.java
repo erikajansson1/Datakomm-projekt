@@ -216,11 +216,12 @@ class Network {
     {
 	GameInterface serverGame = null;
        	try {
-	    //Registry registry = LocateRegistry.getRegistry( exIp, Integer.parseInt(port));
-	    /*System.out.println("Registry found in "  +exIp+ 
-	      " :" + port + "\n" + registry);
+	    Registry registry = LocateRegistry.getRegistry( exIp, Integer.parseInt(port));
+	    /*	    System.out.println("Registry found in "+
+			       exIp + ":" + port + "\n" + registry);
 	    */
-	    serverGame = (GameInterface) Naming.lookup(inIp+"/"+objectToGet+":"+port);		
+	    //	    serverGame = (GameInterface) Naming.lookup(inIp+"/"+objectToGet+":"+port);
+	    serverGame = (GameInterface) Naming.lookup("//"+inIp+":"+port+"/"+objectToGet);
 	}catch (Exception e) {
 	    System.out.println(" exception: " + e);
 	    e.printStackTrace();
@@ -259,7 +260,8 @@ class Network {
 	int playerNoShow = playerNo+1;
 	System.out.println("You have now joined the game with alias: "+
 			   serverGame.getPlayerAlias(playerNo)+"\n"+
-			   "You are currently playerNo: "+playerNoShow);
+			   "You are currently playerNo: "+
+			   playerNoShow);
 	return playerNo;
     }
 

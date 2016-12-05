@@ -12,6 +12,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     private ArrayList<Player> gamePlayers; 
  
     public Game (int round,Deck gameDeck,Deck starterDeck,ArrayList<Player> gamePlayers) throws RemoteException {
+	//super(1099);
 	this.lock = new Semaphore(1);
 	setGameValues (round,gameDeck,starterDeck,gamePlayers);
     }
