@@ -7,7 +7,7 @@ public class Player implements java.io.Serializable{
     private String inIp;
     private String exIp;
     private boolean readyToPlay;
-    private String rankWhenFinished;
+    private int rankWhenFinished;
     private int hitTime;
       
 
@@ -18,7 +18,7 @@ public class Player implements java.io.Serializable{
 	this.exIp = exIp;
 	this.nameOfPlayer = alias;
 	this.readyToPlay = ready;
-	this.rankWhenFinished = "";
+	this.rankWhenFinished = -1;
 	this.hitTime = -1;
     }
 
@@ -44,7 +44,13 @@ public class Player implements java.io.Serializable{
     /** Get this Player's player number
      */
     public int getPlayerNumber() {
-	return numberOfPlayer;
+	return this.numberOfPlayer;
+    }
+
+    /** Get the final rank of the players     
+     */
+    public int getPlayerRank() {
+	return this.rankWhenFinished;
     }
 
     /** Get this Player's deck

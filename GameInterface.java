@@ -107,8 +107,13 @@ public interface GameInterface extends Remote {
      */
     public boolean askIsGameFull() throws RemoteException;
 
-
+    //TODO documentation
     public boolean waitingForPlayers() throws RemoteException;
+
+    /** Check who lost the whole game
+     * @return player number id of the loser
+     */
+    public int checkLoser() throws RemoteException;
     
 }
 
