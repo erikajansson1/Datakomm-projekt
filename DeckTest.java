@@ -39,7 +39,9 @@ public class DeckTest extends TestCase {
 	theDeck4.addCard(theCard);
 	theDeck4.addCard(theCard2);
 	theDeck4.addCard(theCard3);
-	if(theDeck4.getCardList().get(0).showCard().equals("[Heart7]") && theDeck4.getCardList().get(1).showCard().equals("[Spade8]") && theDeck4.getCardList().get(2).showCard().equals("[Diamond9]")) {
+	if(theDeck4.getCardList().get(0).showCard().equals("[Heart7]") &&
+	   theDeck4.getCardList().get(1).showCard().equals("[Spade8]") &&
+	   theDeck4.getCardList().get(2).showCard().equals("[Diamond9]")) {
 	    knas = true;
 	}
 	else {
@@ -88,7 +90,12 @@ public class DeckTest extends TestCase {
 	theDeck9.addCard(theCard2);
 	theDeck9.addCard(theCard3);
 	theDeck8.combineDeck(theDeck9.getCardList());
-	if (theDeck8.getCardList().get(0).showCard().equals("[Club6]") && theDeck8.getCardList().get(3).showCard().equals("[Club6]") && theDeck8.getCardList().get(1).showCard().equals("[Spade8]") && theDeck8.getCardList().get(4).showCard().equals("[Spade8]") && theDeck8.getCardList().get(2).showCard().equals("[Heart1]") && theDeck8.getCardList().get(5).showCard().equals("[Heart1]")){
+	if (theDeck8.getCardList().get(0).showCard().equals("[Club6]") &&
+	    theDeck8.getCardList().get(3).showCard().equals("[Club6]") &&
+	    theDeck8.getCardList().get(1).showCard().equals("[Spade8]") &&
+	    theDeck8.getCardList().get(4).showCard().equals("[Spade8]") &&
+	    theDeck8.getCardList().get(2).showCard().equals("[Heart1]") &&
+	    theDeck8.getCardList().get(5).showCard().equals("[Heart1]")){
 	    knas = true;
 	}
 	else {
