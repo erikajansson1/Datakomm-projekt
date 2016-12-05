@@ -82,7 +82,7 @@ public class GameClient {
 		else { myRound = false; }
 		
 		//Check if it's possible to hit
-		canHit = serverGame.timeToHit(); //TODO: fkn for checking if its hit the dick time 
+		//canHit = serverGame.timeToHit(); //TODO: fkn for checking if its hit the dick time 
 		    
 		//Display board
 		System.out.println(serverGame.displayBoard());
