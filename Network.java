@@ -30,7 +30,6 @@ class Network {
     public void buildNetwork() throws Exception {
 	this.exIP = this.extIP();
 	this.inIP = this.inIP();
-	this.serverGame = serverGame;
     }
 
     /**
@@ -217,7 +216,7 @@ class Network {
     {
 	GameInterface serverGame = null;
        	try {
-	    Registry registry = LocateRegistry.getRegistry( exIp, Integer.parseInt(port));
+	    //Registry registry = LocateRegistry.getRegistry( exIp, Integer.parseInt(port));
 	    /*System.out.println("Registry found in "  +exIp+ 
 	      " :" + port + "\n" + registry);
 	    */
