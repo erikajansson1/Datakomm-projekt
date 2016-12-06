@@ -225,10 +225,10 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     /** Gives all the losing player all the thrown cards
      * @param Number ID of the player
      */
-    public int loserTakesItAll(int playerNo) throws RemoteException {
+    public void loserTakesItAll(int playerNo) throws RemoteException {
 	Player loser = this.gamePlayers.get(playerNo);
-	
-    
+	Deck loserDeck = loser.getPlayerDeck();
+	moveDeck(this.gameDeck, loserDeck);    
     }
 
     //TODOOOOOOO Kolla alla dessa funktioner
