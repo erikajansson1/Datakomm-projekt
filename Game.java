@@ -254,7 +254,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	    }
 	}
 	if (tryingTime <= maxAnswerTime) {
-	    //TODO lay card
+	    trying.playNextCard(this.gameDeck);	    
 	}
 	
     }

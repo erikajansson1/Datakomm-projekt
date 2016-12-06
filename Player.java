@@ -40,7 +40,13 @@ public class Player implements java.io.Serializable{
     public String getPlayerName() {
 	return this.nameOfPlayer;
     }
-    
+
+    /** Set this Player's name (alias)
+     */
+       public void setPlayerName(String alias) {
+	 this.nameOfPlayer = alias;
+    }
+
     /** Get this Player's player number
      */
     public int getPlayerNumber() {
@@ -51,6 +57,12 @@ public class Player implements java.io.Serializable{
      */
     public int getPlayerRank() {
 	return this.rankWhenFinished;
+    }
+
+    /** Set the final rank of the players     
+     */
+    public void setPlayerRank(int rank) {
+	 this.rankWhenFinished = rank;
     }
 
     /** Get this Player's deck
