@@ -214,7 +214,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      */
     private void moveDeck(Deck from, Deck to) {
 	Card curr;
-	int to_len;
+	int to_len = to.getDeckSize();
 	for (int i=0; i<to_len; i++) {
 	    curr = from.getCard();
 	    to.addCard(curr);

@@ -34,6 +34,10 @@ public class Deck implements java.io.Serializable{
 	}
 
     }
+    
+    public int getDeckSize() {
+	return this.cardList.size();
+    }
 
     /**
      * Method to show the top card in the deck.
@@ -56,6 +60,8 @@ public class Deck implements java.io.Serializable{
 	cardList.remove(indexLastCard);
     	return getCard;
     }
+    
+
     
     
     //Mix up the deck so everything is not in order
