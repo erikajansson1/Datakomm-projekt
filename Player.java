@@ -28,12 +28,6 @@ public class Player implements java.io.Serializable{
 	return this.readyToPlay;
     }
 
-    /**Get this Player's Deck
-     */
-    public Deck getPlayerDeck() {
-	return this.playerDeck;
-    }
-    
     /** Set this Player's ready value-attribute to given parameter ready
     * @param ready value
     */

@@ -216,8 +216,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	Card curr;
 	int to_len;
 	for (int i=0; i<to_len; i++) {
-	    curr = to.getCard();
-	    addCard(curr);
+	    curr = from.getCard();
+	    to.addCard(curr);
 	}
     }
 
