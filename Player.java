@@ -8,7 +8,7 @@ public class Player implements java.io.Serializable{
     private String exIp;
     private boolean readyToPlay;
     private int rankWhenFinished;
-    private int hitTime;
+    private long hitTime;
       
 
     public Player (int numberOfPlayer, String inIp, String exIp, String alias,boolean ready) {

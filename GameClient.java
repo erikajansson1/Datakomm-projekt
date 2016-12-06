@@ -13,8 +13,7 @@ import java.io.*;
 */
 
 public class GameClient {
-
-    public static void main (String[] args) {
+     public static void main (String[] args) {
 	int playerNo = -1;
 	String gameToGet = "theGame";
 	String backUpToGet = "theBackUp";
@@ -37,7 +36,7 @@ public class GameClient {
 	    //serverObjPort = args[3];
 	}
 
-	GameInterface serverGame = networkBuild.getServerObj(serverInIp,
+	 GameInterface serverGame= networkBuild.getServerObj(serverInIp,
 							     serverExIp,
 							     serverRMIPort,
 							     gameToGet);
@@ -92,7 +91,7 @@ public class GameClient {
 		System.out.println(serverGame.displayBoard());
 		    
 		//Let the player make its move
-		userAction(serverGame, playerNo,canHit,myrRound);
+		userAction(serverGame, playerNo,canHit,myRound);
 		
 		//TODO: kolla ifall personen fortfarande deltar i spelet eller har vunnit.
 		
@@ -118,7 +117,7 @@ public class GameClient {
       2a. Hit is possible
       2b. Hit is not possible      
     */
-    public static void userAction(GameInterFace game, int playerNo, boolean canHit, boolean myRound){
+    public static void userAction(GameInterface game, int playerNo, boolean canHit, boolean myRound) throws RemoteException {
 	Scanner userInput = new Scanner(System.in);
 	String answer = "";
 	long answerTime;

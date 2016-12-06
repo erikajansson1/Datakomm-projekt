@@ -22,7 +22,7 @@ public interface GameInterface extends Remote {
 
     /** Update the hit time for a player     
      */
-    public void updatePlayerTime(int playerNo, int hitTime) throws RemoteException; //ej implementerad
+    public void updatePlayerTime(int playerNo, long hitTime) throws RemoteException; //ej implementerad
 
     /** Checks whose turn it is, and if it's time for a new turn. If so, it updates accordingly. 
      * @param currRound Taken to ensure that only one such update is done every round.
