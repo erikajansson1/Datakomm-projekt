@@ -137,7 +137,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     }
 
     /** 
-     * OBS. EVENTUELLT DoD KOD. 
+     * OBS EVENTUELLT DEAD CODE. 
      * Finds the Player object in an array whose name matches the given parameter
      * @param alias 
      * @return The found Player object, or an Player object with specific invalid values     
@@ -161,6 +161,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      */
     //TODO: Who should start first, create  ---the server starts the game (playerNo = 1)
      public void startGame(int amountOfPlayers) throws RemoteException { 
+	 //Shuffle cards
+	 
 	 //Dela ut kort 
      }
 	
@@ -182,20 +184,9 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	Player dessTheGlorious = this.gamePlayers.get(playerNo);
 	int rank = dessTheGlorious.getPlayerRank();
 	return rank;	
-    } 
- 
- 
-    //Method to hand out the card from the middle deck to the player who lost
-    /**
-     * documentation
-     */
-    //TODO: This only gives one card, not whole deck 
-    public void giveWholeDeck(Player loserPlayer){ 
-	loserPlayer.getCardFromMiddleDeck(this.gameDeck);
-    } 
+    } 	 
 	 
-	 
-    /** Check who lost the whole game
+    /** Check who lost the whole(!) game
      * @return player number id of the loser
      */
     public int checkLoser() throws RemoteException {
@@ -216,6 +207,29 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	return loserID;	
     }
 
+    /** Move all cards from one deck to another
+     * @param from Deck to take cards from
+     * @param to Deck to add cards to
+     * @comments This function is private simply because there's no reason for it to be public
+     */
+    private void moveDeck(Deck from, Deck to) {
+	Card curr;
+	int to_len;
+	for (int i=0; i<to_len; i++) {
+	    curr = to.getCard();
+	    addCard(curr);
+	}
+    }
+
+    
+    /** Gives all the losing player all the thrown cards
+     * @param Number ID of the player
+     */
+    public int loserTakesItAll(int playerNo) throws RemoteException {
+	Player loser = this.gamePlayers.get(playerNo);
+	
+    
+    }
 
     //TODOOOOOOO Kolla alla dessa funktioner
 
