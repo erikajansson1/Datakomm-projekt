@@ -199,7 +199,18 @@ class Network {
      */
     public String askServerPort() {
 	Scanner userInput = new Scanner(System.in);
-	System.out.printf("Port: ");
+	System.out.printf("Servers port: ");
+	return userInput.nextLine();
+    }
+
+
+    /**
+     * method to ask the user which port the servers object is reachable at.
+     * @return a string containg the users answer.
+     */
+    public String askServerObjPort() {
+	Scanner userInput = new Scanner(System.in);
+	System.out.printf("Servers object port: ");
 	return userInput.nextLine();
     }
 
@@ -218,10 +229,11 @@ class Network {
 	GameInterface serverGame = null;
        	try {
 	    Registry registry = LocateRegistry.getRegistry( exIp, Integer.parseInt(port));
-	    	    System.out.println("Registry found in "+
-			       exIp + ":" + port + "\n" + registry);
-	    
-	    //	    serverGame = (GameInterface) Naming.lookup(inIp+"/"+objectToGet+":"+port);
+	    /*
+	      System.out.println("Registry found in "+
+	      exIp + ":" + port + "\n" + registry);
+	    */
+	    // serverGame = (GameInterface) Naming.lookup(inIp+"/"+objectToGet+":"+port);
 	    serverGame = (GameInterface) Naming.lookup("//"+inIp+":"+port+"/"+objectToGet);
 	}catch (Exception e) {
 	    System.out.println(" exception: " + e);

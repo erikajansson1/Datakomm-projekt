@@ -23,29 +23,31 @@ public class GameClient {
 
 	String serverInIp = null;
 	String serverExIp = null;
-	String serverObjPort = null;
+	String serverRMIPort = null;
+	//String serverObjPort = null;
 	if(args.length == 0) {
 	    serverInIp = networkBuild.askServerInIp();
 	    serverExIp = networkBuild.askServerExIp();
-	    serverObjPort = networkBuild.askServerPort();
+	    serverRMIPort = networkBuild.askServerPort();
+	    //serverObjPort = networkBuild.askServerObjPort();
 	} else {
 	    serverInIp = args[0];
 	    serverExIp = args[1];
-	    serverObjPort = args[2];
+	    serverRMIPort = args[2];
+	    //serverObjPort = args[3];
 	}
 
 	GameInterface serverGame = networkBuild.getServerObj(serverInIp,
 							     serverExIp,
-							     "1099",
+							     serverRMIPort,
 							     gameToGet);
-	System.out.println("rad 41 i Client");
+	//System.out.println(serverGame);
 	try {
 	    networkBuild.buildNetwork(serverGame);
 	    playerNo = networkBuild.joinGame();
 	    BackUp backup = new BackUp(serverGame);
 	    networkBuild.waitingUntilGameCanStart();
-	    
-	    System.out.println("rad 47 i Client");
+
 	    //backup.update(serverGame);
 	    //BEGINNING OF GAME
 	    

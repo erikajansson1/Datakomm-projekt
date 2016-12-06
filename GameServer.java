@@ -29,7 +29,9 @@ public class GameServer {
 		String[] argvClient = new String[]{
 		    networkBuild.getInIp(),
 		    networkBuild.getExIp(),
-		    objPort};
+		    RMIPort,
+		    objPort
+		};
 		
 		GameClient.main(argvClient);
 	    }catch (Exception e) {
