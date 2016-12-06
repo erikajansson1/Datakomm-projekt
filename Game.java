@@ -81,7 +81,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * @param playerNo The player's number ID
      * @param hitTime The new hit time
      */
-    public void updatePlayerTime(int playerNo, int hitTime) throws RemoteException { 
+    public void updatePlayerTime(int playerNo, long hitTime) throws RemoteException { 
 	Player thisGuy = gamePlayers.get(playerNo);
 	thisGuy.setPlayerTime(hitTime);
     }
@@ -137,7 +137,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     }
 
     /** 
-     * OBS EVENTUELLT DEAD CODE. 
+     * LÅT STÅ
      * Finds the Player object in an array whose name matches the given parameter
      * @param alias 
      * @return The found Player object, or an Player object with specific invalid values     
@@ -231,6 +231,33 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	moveDeck(this.gameDeck, loserDeck);    
     }
 
+      
+    /** Player tries to lay a card
+     * @param Player Number ID of the player
+     */
+    public void tryToLayCard(int playerNo) throws RemoteException {
+	Player trying = this.gamePlayers.get(playerNo);
+	long tryingTime = trying.getPlayerTime();
+	while (!waitingForPlayers()) { /* Forever looping, waiting, for youuu */}
+	
+	long maxAnswerTime = 0;
+	Player currGuy;
+	long currAnswerTime;
+	int len = this.gamePlayers.size();
+	for(int i=0; i<len; i++) {
+	    if (i != playerNo) {
+		currGuy = this.gamePlayers.get(i);
+		currAnswerTime = currGuy.getPlayerTime();
+		if(currAnswerTime > maxAnswerTime) {
+		    maxAnswerTime = currAnswerTime;
+		}
+	    }
+	}
+	if (tryingTime <= maxAnswerTime) {
+	    //TODO lay card
+	}
+	
+    }
     //TODOOOOOOO Kolla alla dessa funktioner
 
     //Handle if someone hits at wrong time 

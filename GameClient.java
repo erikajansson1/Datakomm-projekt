@@ -68,17 +68,15 @@ public class GameClient {
 	    for (int i=0; i<5; i++) { 
 
 		//loop until next round
-		System.out.println("rad 69 i Client");
-
 		round = serverGame.updateRound(oldRound); 
 		while (oldRound == round) {
 		    serverGame.updateRound(oldRound);//Doesnt return round nr. 
 		    round = serverGame.getRound();
 		    Thread.sleep(1000);
 		}
-		//Reset player's ready value
+		/* //Reset player's ready value
 		serverGame.setReadyValue(playerNo, false);
-
+		*/
 
 		//Kolla ifall det ar spelarens tur
 		if (serverGame.whoseTurn() == playerNo) { myRound = true; }
@@ -93,9 +91,11 @@ public class GameClient {
 		//Let the player make its move
 		userAction(serverGame, playerNo,canHit,myRound);
 		
+		//TODO UPDATE THE WHOLE GAME STATUS TBH. Kolla så att alla har gjort sitt och att losern har fått kort
 		//TODO: kolla ifall personen fortfarande deltar i spelet eller har vunnit.
 		
 		//Uppdatera Player till att vara redo for nasta runda 
+		serverGame.updatePlayerTime(playerNo, -1);
 		serverGame.setReadyValue(playerNo, true);
 	    }
 	    
@@ -123,6 +123,10 @@ public class GameClient {
 	long answerTime;
 	long startCounting;
 	
+
+	
+	//Reset player's ready value
+	game.setReadyValue(playerNo, false);
 
 	if (myRound) {
 	    System.out.println("Hit dick(h) or play next card(c)?");
@@ -172,7 +176,9 @@ public class GameClient {
 	    default: System.out.println("What's wrong with waiting you impatient monkeybastard?"); break;
 	    }
 	}
-	
+
+	//Made move, ready to do another!
+	game.setReadyValue(playerNo, true);
 
 
     }
