@@ -50,11 +50,24 @@ public class GameTest extends TestCase {
 		}
 	}
 
-	@Test
+    /*	@Test
 	public void test_setReadyValue() {
-		assertTrue(true);
-	}
-	
+	    Game testGame = null;
+	    boolean value = false;
+	    //  Player knasboll = new Player(1, "125.323.32.5", "125.323.32.5", "mupp", false);
+	    try{
+		  testGame = new Game(2);
+		int i = testGame.addPlayer("125.323.32.5", "125.323.32.5", "mupp");
+		testGame.setReadyValue(i, true);
+        value = testGame.findPlayer("mupp").getReadyValue();
+	    }
+	    catch (RemoteException e) {
+		System.out.println("Error" + e.getMessage());
+		e.printStackTrace();
+	    } 
+	    assertTrue(value == true);
+	    } 
+    */
 	@Test
 	public void test_updatePlayerTime() {
 		assertTrue(true);
@@ -106,5 +119,21 @@ public class GameTest extends TestCase {
 	public void test_whoLostRightHit() {
 		assertTrue(true);
 	}
+
+    @Test
+    public void test_addPlayerAndGetPlayerAlias(){
+	Game testGame = null;
+	String test = "";
+	try {
+	     testGame = new Game(1);
+	    int i =  testGame.addPlayer("125.323.32.5", "125.323.32.5", "mupp");
+	  test = testGame.getPlayerAlias(i);
+	}
+	catch (RemoteException e) {
+	 System.out.println("Error " + e.getMessage());
+			 e.printStackTrace();
+	}
+	assertTrue(test.equals("mupp"));
+    }
 }
 
