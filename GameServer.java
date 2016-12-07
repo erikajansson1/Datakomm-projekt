@@ -29,6 +29,7 @@ public class GameServer {
 		Naming.rebind("//"+networkBuild.getInIp()+":"+RMIPort+"/theGame", game);
 		System.out.println(game);
 		networkBuild.publishReady();
+
 		String[] argvClient = new String[]{
 		    networkBuild.getInIp(),
 		    networkBuild.getExIp(),

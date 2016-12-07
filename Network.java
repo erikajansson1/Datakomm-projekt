@@ -143,8 +143,10 @@ class Network {
 		System.setProperty("java.rmi.server.hostname",exIP);
 		System.out.println("RMI server started");
 		//System.getProperties().put("java.rmi.server.hostname", "rmi://"+exIP);
-		registry = LocateRegistry.createRegistry(1099); 
-		System.setProperty("java.rmi.server.hostname", "//"+this.exIP);
+		registry = LocateRegistry.createRegistry(1099);
+		System.setProperty("java.rmi.server.useLocalHostname",inIP);
+		System.setProperty("java.rmi.server.logCalls","true");
+		System.setProperty("java.rmi.server.hostname",this.exIP);
 		
 		
 		
@@ -231,12 +233,12 @@ class Network {
     {
 	GameInterface serverGame = null;
        	try {
-	    Registry registry = LocateRegistry.getRegistry( serverExIp,
-							    Integer.parseInt(serverRMIPort));
+	    /*	    Registry registry = LocateRegistry.getRegistry( "//"+serverExIp,
+		    Integer.parseInt(serverRMIPort));
 	    
-	      System.out.println("Registry found in "+
-	      serverExIp + ":" + serverRMIPort + "\n" + registry);
-	    
+		    System.out.println("Registry found in "+
+		    serverExIp + ":" + serverRMIPort + "\n" + registry);
+	*/  
 	    // serverGame = (GameInterface) Naming.lookup(inIp+"/"+objectToGet+":"+port);
 	    serverGame = (GameInterface) Naming.lookup("//"+
 						       serverExIp+
@@ -244,7 +246,14 @@ class Network {
 						       serverRMIPort+
 						       "/"+
 						       objectToGet);
-	    System.out.println("\n\n\n"+serverGame);
+	    System.out.println("\n\nfound on: //"+
+			       serverExIp+
+			       ":"+
+			       serverRMIPort+
+			       "/"+
+			       objectToGet+
+			       "\n"+
+			       serverGame);
 
 	}catch (Exception e) {
 	    System.out.println(" exception: " + e);
