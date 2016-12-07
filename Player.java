@@ -19,7 +19,7 @@ public class Player implements java.io.Serializable{
 	this.nameOfPlayer = alias;
 	this.readyToPlay = ready;
 	this.rankWhenFinished = -1;
-	this.hitTime = -1;
+	this.hitTime = 0L;
     }
 
     /** Get this Player's ready value

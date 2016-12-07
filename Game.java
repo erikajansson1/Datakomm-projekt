@@ -137,7 +137,7 @@ public class Game implements GameInterface {
     }
 
     /** 
-     * LÅT STÅ
+     * LaT STa
      * Finds the Player object in an array whose name matches the given parameter
      * @param alias 
      * @return The found Player object, or an Player object with specific invalid values     

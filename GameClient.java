@@ -90,7 +90,7 @@ public class GameClient {
 		//Let the player make its move
 		userAction(serverGame, playerNo,canHit,myRound);
 		
-		//TODO UPDATE THE WHOLE GAME STATUS TBH. Kolla så att alla har gjort sitt och att losern har fått kort
+		//TODO UPDATE THE WHOLE GAME STATUS TBH. Kolla sa att alla har gjort sitt och att losern har fatt kort
 		//TODO: kolla ifall personen fortfarande deltar i spelet eller har vunnit.
 		
 		//Uppdatera Player till att vara redo for nasta runda 
@@ -134,7 +134,7 @@ public class GameClient {
 	    System.out.println("Do you want to hit the dick? (y/n)"); 
 	}
 
-	//Tidtagning på svar
+	//Tidtagning pa svar
 	startCounting = System.nanoTime();
 
 	answerTime = System.nanoTime() - startCounting;   
