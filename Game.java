@@ -114,6 +114,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * @return an int which is the players index.
      */
     public int whoseTurn() throws RemoteException{
+    	// TODO Check if it's players turn
 	return 1;
     }
 
@@ -164,45 +165,40 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     }
     
  
-    //Method to hand out the card from the middle deck to the player who lost
     /**
-     * documentation
+     * Gives the deck in the middle to whoever lost
      */
-    //TODO: This only gives one card, not whole deck 
     public void giveWholeDeck(Player loserPlayer){ 
 	loserPlayer.getCardFromMiddleDeck(this.gameDeck);
     } 
 	 
 	 
-    //Handle if someone hits at wrong time 
-    public void handleWrongHit(){
-	//Take the semaphore(attribute) and realise it when done
-	//Look at the player that send the wrong signal, tell it it did bad 
-	//Give the whole deck to it
+    /**
+     * Handle if someone hits at the wrong time
+     */
+    public String handleWrongHit(Player loserPlayer){
+	//TODO Take the semaphore(attribute) 
+	//loserPlayer.getCardFromMiddleDeck();
+    String loserMessage = "Your hit was wrong, pick up the deck!";
+    return loserMessage;
     } 
 		 
-	 
-    //Handle when players hit at right time, last on will have to  
-    //pick up whole deck 
+	 /**
+     * handle when the hit is in the right time
+     */
     public void handleRightHit(){
-	//Take the semaphore(attribute) and realise it when done
-	//wait for all to hit, then tell the last one it lost 
-	//give the whole deck to it 
-    } 
-	 
- 
-    //Look what four cards are legit to be hit  
-    public void whatFourCards(){ 
-	if (gameDeck.possibleToHit() == true) { 
-	    return; 
-	} 
-    } 
-	 
-    //Who is the slowest when hitting the deck. Give the GameDeck to the loser 
-    public void whoLostRightHit(){
-	//TODO Compare times in the player objects and reset it after determining who lost.
-	return; 
-    }
+    	//TODO Semaphores?
+    	//TODO it should wait for the time to be over or that everyone have hit
+		int loser = 0;
+    	for ( int i = 0; this.getAmountOfPlayers() > i; i++){
+    		//if (this.gamePlayers<this.getAmountOfPlayers()>.getPlayerTime() <  this.gamePlayers[i].getPlayerTime()){
+    			loser = this.getAmountOfPlayers(); 
+    		}
+    	//this.gamePlayers[loser].giveWholeDeck();
+    	//String loserMessage = "Player" + this.gamePlayers[loser].getPlayerName() + "lost, you pick up the deck"
+    	return;
+    	}
+	 	 
 
     /**
      * A get method for the attribut round.
@@ -238,8 +234,6 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     public ArrayList<Player> getGamePlayers() throws RemoteException{
 	return this.gamePlayers;
     }
-
-    
 
     
     /**
@@ -324,10 +318,5 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	}
 	return true;
     }
-
-
-
-
-    
 }
 
