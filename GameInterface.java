@@ -14,7 +14,7 @@ public interface GameInterface extends Remote {
     /** Prints out a view of the board:
      *  whose turn it is, and the latest card
      */
-    public String displayBoard() throws RemoteException; //ej implementerad
+    public String displayBoard() throws RemoteException;
 
     /** Set the ready value for a player
      */

@@ -18,7 +18,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     }
 
     public Game (int numberOfPlayers) throws RemoteException {
-	super(1099);
+	super(1100);
 	this.lock = new Semaphore(1);
 	this.round = 0;
 	this.gameDeck = new Deck(0); 
@@ -31,8 +31,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 
     /** 
      * Checks whether it's time to hit,
-     *  that is, check whether any of the previous 4 cards
-     *  match eachother
+     * that is, check whether any of the previous 4 cards
+     * match eachother
      */
     public boolean timeToHit() throws RemoteException {
     	if (gameDeck.possibleToHit()){
@@ -112,7 +112,9 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 		if (playerIsReady) {
 		    readyPlayers++;
 		}
-		if (readyPlayers == allReady) {	//Since this function is used in a loop, this will eventually be true for one player
+		if (readyPlayers == allReady) {
+		    //Since this function is used in a loop,
+		    //this will eventually be true for one player
 		    this.round++;
 		    this.lock.release();
 		    return this.round;
@@ -396,7 +398,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      */
     public boolean waitingForPlayers() throws RemoteException{
 	for (int i = 0; i < gamePlayers.size(); i++) {
-	    if(gamePlayers.get(i).getReadyValue() == false) return false;	    
+	    if((gamePlayers.get(i).getReadyValue() == false) &&
+	       (gamePlayers.get(i).getPlayerName().equals("Empty"))) return false;	    
 	}
 	return true;
     }

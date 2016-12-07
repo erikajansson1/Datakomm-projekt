@@ -51,8 +51,6 @@ public class GameClient {
 	    
 	    //so everyone knows who starts <- crap what does this mean
 
-	    serverGame.setReadyValue(playerNo, true);
-
 	    //START VALUES
 	    long startTime;
 	    long hitTime;
@@ -65,24 +63,13 @@ public class GameClient {
 
 	    //>>>>STOR LOOP: har ska vi egentligen ha en check att spelet inte ar slut
 	    for (int i=0; i<5; i++) { 
-
-		//loop until next round
-		round = serverGame.updateRound(oldRound); 
-		while (oldRound == round) {
-		    serverGame.updateRound(oldRound);//Doesnt return round nr. 
-		    round = serverGame.getRound();
-		    Thread.sleep(1000);
-		}
-		/* //Reset player's ready value
 		serverGame.setReadyValue(playerNo, false);
-		*/
-
 		//Kolla ifall det ar spelarens tur
 		if (serverGame.whoseTurn() == playerNo) { myRound = true; }
 		else { myRound = false; }
 		
 		//Check if it's possible to hit
-		//canHit = serverGame.timeToHit(); //TODO: fkn for checking if its hit the dick time 
+		canHit = serverGame.timeToHit(); //TODO: fkn for checking if its hit the dick time 
 		    
 		//Display board
 		System.out.println(serverGame.displayBoard());
@@ -94,8 +81,19 @@ public class GameClient {
 		//TODO: kolla ifall personen fortfarande deltar i spelet eller har vunnit.
 		
 		//Uppdatera Player till att vara redo for nasta runda 
-		serverGame.updatePlayerTime(playerNo, -1);
-		serverGame.setReadyValue(playerNo, true);
+		
+		//	serverGame.setReadyValue(playerNo, true);
+
+		
+		//loop until next round
+		serverGame.updatePlayerTime(playerNo, 0L);
+		//round = serverGame.updateRound(oldRound); 
+		while (oldRound == round) {
+		    round = serverGame.updateRound(oldRound);
+		    //round = serverGame.getRound();
+		    Thread.sleep(1000);
+		}
+
 	    }
 	    
 	}
