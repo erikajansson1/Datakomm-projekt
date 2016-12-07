@@ -17,7 +17,6 @@ public class GameClient {
     public static void main (String[] args) {
 	int playerNo = -1;
 	String gameToGet = "theGame";
-	String backUpToGet = "theBackUp";
 	Network networkBuild = new Network();
 	networkBuild.welcomeMSG("client",args.length);
 
@@ -41,7 +40,7 @@ public class GameClient {
 							     serverExIp,
 							     serverRMIPort,
 							     gameToGet);
-	//System.out.println(serverGame);
+	System.out.println(serverGame);
 	try {
 	    networkBuild.buildNetwork(serverGame);
 	    playerNo = networkBuild.joinGame();

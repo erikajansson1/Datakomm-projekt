@@ -114,7 +114,7 @@ class Network {
 	else if (user.equals("client")) {
 	    System.out.print("\033[2J\033[;H");
 	    System.out.printf("Welcome to the great Opposom game!\n");
-	    if(gameFromServer != 3) System.out.printf("Which host would you lixe to join? \n");
+	    if(gameFromServer != 4) System.out.printf("Which host would you lixe to join? \n");
 	}
 	else {
 	    System.out.println("Not server or client?");
@@ -143,8 +143,10 @@ class Network {
 		System.setProperty("java.rmi.server.hostname",exIP);
 		System.out.println("RMI server started");
 		//System.getProperties().put("java.rmi.server.hostname", "rmi://"+exIP);
-		registry = LocateRegistry.createRegistry(1099); 
 		System.setProperty("java.rmi.server.hostname", "//"+this.exIP);
+		
+		registry = LocateRegistry.createRegistry(1099); 
+		
 		System.out.println("java RMI registry created.");
 	    }
 	catch (RemoteException e)
@@ -224,17 +226,25 @@ class Network {
      * @param objectToGet is the name of the object to get the reference to.
      * @return a GameInterface object containing the reference to the external object.
      */    
-    public GameInterface getServerObj(String inIp, String exIp, String port ,String objectToGet)
+    public GameInterface getServerObj(String serverInIp, String serverExIp, String serverRMIPort, String objectToGet)
     {
 	GameInterface serverGame = null;
        	try {
-	    Registry registry = LocateRegistry.getRegistry( exIp, Integer.parseInt(port));
-	    /*
+	    Registry registry = LocateRegistry.getRegistry( serverExIp,
+							    Integer.parseInt(serverRMIPort));
+	    
 	      System.out.println("Registry found in "+
-	      exIp + ":" + port + "\n" + registry);
-	    */
+	      serverExIp + ":" + serverRMIPort + "\n" + registry);
+	    
 	    // serverGame = (GameInterface) Naming.lookup(inIp+"/"+objectToGet+":"+port);
-	    serverGame = (GameInterface) Naming.lookup("//"+inIp+":"+port+"/"+objectToGet);
+	    serverGame = (GameInterface) Naming.lookup("//"+
+						       serverExIp+
+						       ":"+
+						       serverRMIPort+
+						       "/"+
+						       objectToGet);
+	    System.out.println("\n\n\n"+serverGame);
+
 	}catch (Exception e) {
 	    System.out.println(" exception: " + e);
 	    e.printStackTrace();
@@ -262,7 +272,10 @@ class Network {
      */
     public int joinGame() throws RemoteException {
       	int playerNo = -1;
-	if(!serverGame.askIsGameFull()){
+	System.out.println("You are now connected!\nChecking if game is full!");
+	System.out.println(this.serverGame);
+
+	if(!this.serverGame.askIsGameFull()) {
 	    playerNo = serverGame.addPlayer(inIP,exIP,this.askAlias());
 	}
 	if(playerNo == -1)
