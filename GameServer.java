@@ -17,7 +17,7 @@ public class GameServer {
 
 		Game game = new Game(noPlayers);
 		String RMIPort = "1099";
-		String objPort = "1100";
+		String objPort = "1099";
 		networkBuild.buildNetwork();
 		networkBuild.welcomeMSG("server",0);
 

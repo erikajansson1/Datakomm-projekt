@@ -233,12 +233,13 @@ class Network {
     {
 	GameInterface serverGame = null;
        	try {
-	    /*	    Registry registry = LocateRegistry.getRegistry( "//"+serverExIp,
-		    Integer.parseInt(serverRMIPort));
-	    
-		    System.out.println("Registry found in "+
-		    serverExIp + ":" + serverRMIPort + "\n" + registry);
-	*/  
+	    /*	   
+		   Registry registry = LocateRegistry.getRegistry( "//"+serverExIp,
+		   Integer.parseInt(serverRMIPort));
+		   
+		   System.out.println("Registry found in "+
+		   serverExIp + ":" + serverRMIPort + "\n" + registry);
+	    */  
 	    // serverGame = (GameInterface) Naming.lookup(inIp+"/"+objectToGet+":"+port);
 	    serverGame = (GameInterface) Naming.lookup("//"+
 						       serverExIp+
@@ -254,7 +255,7 @@ class Network {
 			       objectToGet+
 			       "\n"+
 			       serverGame);
-
+	    
 	}catch (Exception e) {
 	    System.out.println(" exception: " + e);
 	    e.printStackTrace();
