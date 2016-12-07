@@ -61,6 +61,12 @@ public class Player implements java.io.Serializable{
 	this.hitTime = time;
     }
 
+/**
+ * Returns the players hitTime.
+ */
+    public int getPlayerTime() {
+	return this.hitTime;
+    }
     /** TODO
      */
     public void playNextCard(Deck gameDeck){
