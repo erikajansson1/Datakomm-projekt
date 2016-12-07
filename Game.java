@@ -81,7 +81,7 @@ public class Game implements GameInterface {
      * @param playerNo The player's number ID
      * @param hitTime The new hit time
      */
-    public void updatePlayerTime(int playerNo, int hitTime) throws RemoteException { 
+    public void updatePlayerTime(int playerNo, long hitTime) throws RemoteException { 
 	Player thisGuy = gamePlayers.get(playerNo);
 	thisGuy.setPlayerTime(hitTime);
     }
@@ -137,7 +137,7 @@ public class Game implements GameInterface {
     }
 
     /** 
-     * OBS. EVENTUELLT DoD KOD. 
+     * LÅT STÅ
      * Finds the Player object in an array whose name matches the given parameter
      * @param alias 
      * @return The found Player object, or an Player object with specific invalid values     
@@ -161,6 +161,8 @@ public class Game implements GameInterface {
      */
     //TODO: Who should start first, create  ---the server starts the game (playerNo = 1)
      public void startGame(int amountOfPlayers) throws RemoteException { 
+	 //Shuffle cards
+	 
 	 //Dela ut kort 
      }
 	
@@ -182,20 +184,9 @@ public class Game implements GameInterface {
 	Player dessTheGlorious = this.gamePlayers.get(playerNo);
 	int rank = dessTheGlorious.getPlayerRank();
 	return rank;	
-    } 
- 
- 
-    //Method to hand out the card from the middle deck to the player who lost
-    /**
-     * documentation
-     */
-    //TODO: This only gives one card, not whole deck 
-    public void giveWholeDeck(Player loserPlayer){ 
-	loserPlayer.getCardFromMiddleDeck(this.gameDeck);
-    } 
+    } 	 
 	 
-	 
-    /** Check who lost the whole game
+    /** Check who lost the whole(!) game
      * @return player number id of the loser
      */
     public int checkLoser() throws RemoteException {
@@ -216,7 +207,57 @@ public class Game implements GameInterface {
 	return loserID;	
     }
 
+    /** Move all cards from one deck to another
+     * @param from Deck to take cards from
+     * @param to Deck to add cards to
+     * @comments This function is private simply because there's no reason for it to be public
+     */
+    private void moveDeck(Deck from, Deck to) {
+	Card curr;
+	int to_len = to.getDeckSize();
+	for (int i=0; i<to_len; i++) {
+	    curr = from.getCard();
+	    to.addCard(curr);
+	}
+    }
 
+    
+    /** Gives all the losing player all the thrown cards
+     * @param Number ID of the player
+     */
+    public void loserTakesItAll(int playerNo) throws RemoteException {
+	Player loser = this.gamePlayers.get(playerNo);
+	Deck loserDeck = loser.getPlayerDeck();
+	moveDeck(this.gameDeck, loserDeck);    
+    }
+
+      
+    /** Player tries to lay a card
+     * @param Player Number ID of the player
+     */
+    public void tryToLayCard(int playerNo) throws RemoteException {
+	Player trying = this.gamePlayers.get(playerNo);
+	long tryingTime = trying.getPlayerTime();
+	while (!waitingForPlayers()) { /* Forever looping, waiting, for youuu */}
+	
+	long maxAnswerTime = 0;
+	Player currGuy;
+	long currAnswerTime;
+	int len = this.gamePlayers.size();
+	for(int i=0; i<len; i++) {
+	    if (i != playerNo) {
+		currGuy = this.gamePlayers.get(i);
+		currAnswerTime = currGuy.getPlayerTime();
+		if(currAnswerTime > maxAnswerTime) {
+		    maxAnswerTime = currAnswerTime;
+		}
+	    }
+	}
+	if (tryingTime <= maxAnswerTime) {
+	    trying.playNextCard(this.gameDeck);	    
+	}
+	
+    }
     //TODOOOOOOO Kolla alla dessa funktioner
 
     //Handle if someone hits at wrong time 
