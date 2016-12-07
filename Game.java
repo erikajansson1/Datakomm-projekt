@@ -3,7 +3,7 @@ import java.rmi.server.*;
 import java.util.*;
 import java.util.concurrent.Semaphore;
  
-public class Game implements GameInterface {
+public class Game extends UnicastRemoteObject implements GameInterface {
     private static final long serialVersionUID = 1L;
     private final Semaphore lock;
     private int round;
@@ -18,7 +18,7 @@ public class Game implements GameInterface {
     }
 
     public Game (int numberOfPlayers) throws RemoteException {
-	//super(1100);
+	super(1100);
 	this.lock = new Semaphore(1);
 	this.round = 0;
 	this.gameDeck = new Deck(0); 

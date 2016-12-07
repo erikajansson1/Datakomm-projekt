@@ -20,14 +20,13 @@ public class GameServer {
 		String objPort = "1100";
 		networkBuild.buildNetwork();
 		networkBuild.welcomeMSG("server",0);
-		GameInterface gameInterface = (GameInterface)UnicastRemoteObject.exportObject(game, 1100);
 
 		Registry registry = networkBuild.startRMIserver();			
 		// Naming.rebind(networkBuild.getInIp()+"/theGame:"+port, game);
 
 		//		UnicastRemoteObject.exportObject(game, 1100);
 		System.out.println(game);
-		Naming.rebind("//"+networkBuild.getInIp()+":"+RMIPort+"/theGame", gameInterface);
+		Naming.rebind("//"+networkBuild.getInIp()+":"+RMIPort+"/theGame", game);
 		System.out.println(game);
 		networkBuild.publishReady();
 		String[] argvClient = new String[]{

@@ -143,9 +143,10 @@ class Network {
 		System.setProperty("java.rmi.server.hostname",exIP);
 		System.out.println("RMI server started");
 		//System.getProperties().put("java.rmi.server.hostname", "rmi://"+exIP);
+		registry = LocateRegistry.createRegistry(1099); 
 		System.setProperty("java.rmi.server.hostname", "//"+this.exIP);
 		
-		registry = LocateRegistry.createRegistry(1099); 
+		
 		
 		System.out.println("java RMI registry created.");
 	    }
