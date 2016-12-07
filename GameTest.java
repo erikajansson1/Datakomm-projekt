@@ -8,7 +8,7 @@ public class GameTest extends TestCase {
 	
 
 	/**
-	 * This is commented out because if we test serveal games at the same time
+	 * This is commented out because if we test several games at the same time
 	 * their will be conflict because they use the same port.
 	 * @throws RemoteException
 	 */
