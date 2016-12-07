@@ -140,7 +140,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     /**
      * Initiate game by giving out cards and select who start first 
      */
-    //TODO: Who should start first, create  ---the server starts the game (playerNo = 1)
+    //TODO: Fixat?? Who should start first, create  ---the server starts the game (playerNo = 1)
     public void startGame(int amountOfPlayers) throws RemoteException {
 	this.starterDeck.mixup();
 	while (starterDeck.getAmount() > 0) {
@@ -172,14 +172,43 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	loserPlayer.getCardFromMiddleDeck(this.gameDeck);
     } 
 	 
-	 
+
+    /** Gives all the losing player all the thrown cards
+     * @param Number ID of the player
+     */
+    public void loserTakesItAll(int playerNo) throws RemoteException {
+	Player loser = this.gamePlayers.get(playerNo);
+	Deck loserDeck = loser.getPlayerDeck();
+	moveDeck(this.gameDeck, loserDeck);    
+    }
+
+    
+    /** Move all cards from one deck to another
+     * @param from Deck to take cards from
+     * @param to Deck to add cards to
+     * @comments This function is private simply because there's no reason for it to be public
+     */
+    private void moveDeck(Deck from, Deck to) {
+	Card curr;
+	int to_len = to.getDeckSize();
+	for (int i=0; i<to_len; i++) {
+	    curr = from.getCard();
+	    to.addCard(curr);
+	}
+    }
+
+    
     /**
      * Handle if someone hits at the wrong time
      */
     public String handleWrongHit(Player loserPlayer){
 	//TODO Take the semaphore(attribute) 
 	//loserPlayer.getCardFromMiddleDeck();
+	this.lock.acquire();
     String loserMessage = "Your hit was wrong, pick up the deck!";
+    int playerNbr = loserPlayer.getPlayerNumber();
+    this.loserTakesItAll(playerNbr);
+     this.lock.release();
     return loserMessage;
     } 
 		 
