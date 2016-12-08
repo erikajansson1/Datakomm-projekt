@@ -36,9 +36,8 @@ public class GameClient {
 							     serverRMIPort,
 							     gameToGet);
 
-	System.getProperties().put("http.proxyHost", "83.255.61.11");
-	System.getProperties().put("http.proxyPort", "1099");
-	System.out.println(serverGame);
+
+	System.out.println("Erhallit STUBAS:\n"+serverGame);
 	try {
 	    System.out.println(serverGame.getRound());
 	    networkBuild.buildNetwork(serverGame);

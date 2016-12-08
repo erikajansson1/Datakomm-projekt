@@ -252,6 +252,8 @@ class Network {
 							      ":"+
 							      serverRMIPort);
 	    */
+	    System.getProperties().put("http.proxyHost", "83.255.61.11");
+	    System.getProperties().put("http.proxyPort", "1099");
 	    System.setProperty("java.rmi.server.hostname",serverExIp);
 		   serverGame = (GameInterface) Naming.lookup("//"+
 							      serverExIp+
