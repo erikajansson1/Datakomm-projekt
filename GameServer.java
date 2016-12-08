@@ -9,6 +9,7 @@ import java.io.*;
 
 public class GameServer {
     public static Game serverGame;
+    public static Registry registry;
     
     public static void main (String[] argv) {
 	try
@@ -18,7 +19,7 @@ public class GameServer {
 		System.out.println("Creating a game for "+noPlayers+".");
 
 		serverGame = new Game(noPlayers);
-
+		
 		String RMIPort = "1099";
 		networkBuild.buildNetwork();
 		networkBuild.welcomeMSG("server",0);
@@ -27,7 +28,7 @@ public class GameServer {
 		System.getProperties().put("http.proxyPort", "1099");
 		//	System.getProperties().put("socksProxyHost", "83.255.61.11");
 		//System.getProperties().put("socksProxyPort", "1099");
-		Registry registry = networkBuild.startRMIserver();			
+		registry = networkBuild.startRMIserver();			
 		//Naming.rebind("//"+networkBuild.getExIp()+"/theGame:"+RMIPort, game);
 
 		//		UnicastRemoteObject.exportObject(game, 1100);
