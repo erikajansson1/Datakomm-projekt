@@ -12,12 +12,13 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     private ArrayList<Player> gamePlayers; 
  
     public Game (int round,Deck gameDeck,Deck starterDeck,ArrayList<Player> gamePlayers) throws RemoteException {
+	//super(1099);
 	this.lock = new Semaphore(1);
 	setGameValues (round,gameDeck,starterDeck,gamePlayers);
     }
 
     public Game (int numberOfPlayers) throws RemoteException {
-	super(1099);
+	super(1100);
 	this.lock = new Semaphore(1);
 	this.round = 0;
 	this.gameDeck = new Deck(0); 
@@ -26,13 +27,12 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	for (int i = 0; i < numberOfPlayers; i++) {
 	    gamePlayers.add(i,new Player(i,"","","Empty",false));
 	}
-	
     }
 
     /** 
      * Checks whether it's time to hit,
-     *  that is, check whether any of the previous 4 cards
-     *  match eachother
+     * that is, check whether any of the previous 4 cards
+     * match eachother
      */
     public boolean timeToHit() throws RemoteException {
     	if (gameDeck.possibleToHit()){
@@ -59,9 +59,10 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 		players += "NOT READY\n";
 	    }	
 	}
-	String whosTurn = "Turn: ";
+	String whosTurn = "\n\nTurn: "+ gamePlayers.get(this.whoseTurn()).getPlayerName();
+	String currCard = "\nLatest Card: "+this.gameDeck.showTopCard();
 
-	return players;
+	    return ""+ players + whosTurn + currCard;
     }
 
     
@@ -71,8 +72,6 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * @param readyValue The new ready value
      */
     public void setReadyValue(int playerNo, boolean readyValue) throws RemoteException {
-	/*Player thisPlayer = this.findPlayer(alias);
-	  if (thisPlayer.getPlayerNumber() == -1) { return; } //if nobody has the given alias*/
 	Player thisPlayer = gamePlayers.get(playerNo);
 	thisPlayer.setReadyValue(readyValue);
     }; 
@@ -82,7 +81,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * @param playerNo The player's number ID
      * @param hitTime The new hit time
      */
-    public void updatePlayerTime(int playerNo, int hitTime) throws RemoteException { 
+    public void updatePlayerTime(int playerNo, long hitTime) throws RemoteException { 
 	/*Player thisGuy = findPlayer(alias);
 	  String name = thisGuy.getPlayerName();
 	  if (name.equals("")) { return; }
@@ -101,11 +100,40 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * @return The round value 
      */
     public int updateRound(int currRound) throws RemoteException{
-	//TODO if all the players are ready to continue, round++
-	//TODO Semaphore to ensure atomical updating
-	//TODO Compare so that you dont update the Round twice
-	this.round++;
-	return round;
+	try {
+	    this.lock.acquire();
+
+	    //Compare so that you dont update the Round twice
+	    if (this.round == currRound+1) {
+		this.lock.release();
+		return this.round;
+	    }
+	    
+	    //If all the players are ready to continue, round++
+	    int allReady = gamePlayers.size();
+	    int readyPlayers = 0;
+	    Player currPlayer;
+	    for (int i = 0; i < gamePlayers.size(); i++) {
+		currPlayer = gamePlayers.get(i);
+		boolean playerIsReady = currPlayer.getReadyValue();
+		if (playerIsReady) {
+		    readyPlayers++;
+		}
+		if (readyPlayers == allReady) {
+		    //Since this function is used in a loop,
+		    //this will eventually be true for one player
+		    this.round++;
+		    this.lock.release();
+		    return this.round;
+		}
+	    }
+
+	} catch( Exception e) {
+	    e.printStackTrace();
+	}
+	this.lock.release();
+
+	return this.round;
     }
 
 
@@ -114,11 +142,11 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * @return an int which is the players index.
      */
     public int whoseTurn() throws RemoteException{
-    	// TODO Check if it's players turn
-	return 1;
+       return this.round % gamePlayers.size();
     }
 
     /** 
+     * LaT STa
      * Finds the Player object in an array whose name matches the given parameter
      * @param alias 
      * @return The found Player object, or an Player object with specific invalid values     
@@ -154,7 +182,6 @@ public class Game extends UnicastRemoteObject implements GameInterface {
       	}
     }
 	
-   
 	 
     /**
      * Tells the amount of players in the game
@@ -172,17 +199,38 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	loserPlayer.getCardFromMiddleDeck(this.gameDeck);
     } 
 	 
-
-    /** Gives all the losing player all the thrown cards
-     * @param Number ID of the player
+   
+     
+    /** Get the rank of player #playerNo 
+	@param playerNo the player's no id
      */
-    public void loserTakesItAll(int playerNo) throws RemoteException {
-	Player loser = this.gamePlayers.get(playerNo);
-	Deck loserDeck = loser.getPlayerDeck();
-	moveDeck(this.gameDeck, loserDeck);    
+    public int myRank(int playerNo) throws RemoteException {
+	Player pyret = this.gamePlayers.get(playerNo);
+	int rank = pyret.getPlayerRank();
+	return rank;	
+    } 	 
+	 
+    /** Check who lost the whole(!) game
+     * @return player number id of the loser
+     */
+    public int checkLoser() throws RemoteException {
+	int currID = 0; //Didnt exist so added so compilation could be done.
+	int currRank = 0; //Didnt exist so added so compilation could be done.
+
+	int loserID = -1;
+	int loserRank = -1;
+	int len = gamePlayers.size();
+	Player currPlayer;
+	for(int i=0; i<len; i++) {
+	    currPlayer = gamePlayers.get(i);
+	    currID = currPlayer.getPlayerNumber();
+	    currRank = currPlayer.getPlayerRank();
+	    if (currRank >= loserRank) { loserID = currID; }
+	}
+
+	return loserID;	
     }
 
-    
     /** Move all cards from one deck to another
      * @param from Deck to take cards from
      * @param to Deck to add cards to
@@ -195,6 +243,16 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	    curr = from.getCard();
 	    to.addCard(curr);
 	}
+    }
+
+    
+    /** Gives the losing player all the thrown cards
+     * @param Number ID of the player
+     */
+    public void loserTakesItAll(int playerNo) throws RemoteException {
+	Player loser = this.gamePlayers.get(playerNo);
+	Deck loserDeck = loser.getPlayerDeck();
+	moveDeck(this.gameDeck, loserDeck);    
     }
 
     
@@ -228,12 +286,40 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     	return;
     	}
 	 	 
+      
+    /** Player tries to lay a card
+     * @param Player Number ID of the player
+     */
+    public void tryToLayCard(int playerNo) throws RemoteException {
+	Player trying = this.gamePlayers.get(playerNo);
+	long tryingTime = trying.getPlayerTime();
+	while (!waitingForPlayers()) { /* Forever looping, waiting, for youuu */}
+	
+	long maxAnswerTime = 0;
+	Player currGuy;
+	long currAnswerTime;
+	int len = this.gamePlayers.size();
+	for(int i=0; i<len; i++) {
+	    if (i != playerNo) {
+		currGuy = this.gamePlayers.get(i);
+		currAnswerTime = currGuy.getPlayerTime();
+		if(currAnswerTime > maxAnswerTime) {
+		    maxAnswerTime = currAnswerTime;
+		}
+	    }
+	}
+	if (tryingTime <= maxAnswerTime) {
+	    trying.playNextCard(this.gameDeck);	    
+	}
+	
+    }
+   
 
     /**
      * A get method for the attribut round.
      * @return returns the round attribut.
      */
-    public int getRound() throws RemoteException{
+    public int getRound() throws RemoteException {
 	return this.round;
     }
 
@@ -299,7 +385,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 		return -1;
 	    }
 	
- 	    for (int i = 0; i <= (gamePlayers.size()-1); i++) {
+
+	    for (int i = 0; i < gamePlayers.size(); i++) {
 		if(gamePlayers.get(i).getPlayerName().equals("Empty")) {
 		    gamePlayers.set(i,new Player(i, inIp, exIp,alias,true));
 		    this.lock.release();
@@ -343,7 +430,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      */
     public boolean waitingForPlayers() throws RemoteException{
 	for (int i = 0; i < gamePlayers.size(); i++) {
-	    if(gamePlayers.get(i).getReadyValue() == false) return false;	    
+	    if((gamePlayers.get(i).getReadyValue() == false) &&
+	       (gamePlayers.get(i).getPlayerName().equals("Empty"))) return false;	    
 	}
 	return true;
     }
