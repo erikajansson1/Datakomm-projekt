@@ -22,12 +22,10 @@ public class GameClient {
 	    serverInIp = networkBuild.askServerInIp();
 	    serverExIp = networkBuild.askServerExIp();
 	    serverRMIPort = networkBuild.askServerPort();
-	    //serverObjPort = networkBuild.askServerObjPort();
 	} else {
 	    serverInIp = args[0];
 	    serverExIp = args[1];
 	    serverRMIPort = args[2];
-	    //serverObjPort = args[3];
 	}
 
 	System.getProperties().put("http.proxyHost", "83.255.61.11");

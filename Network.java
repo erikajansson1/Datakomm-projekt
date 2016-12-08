@@ -113,7 +113,7 @@ class Network {
 	else if (user.equals("client")) {
 	    System.out.print("\033[2J\033[;H");
 	    System.out.printf("Welcome to the great Opposom game!\n");
-	    if(gameFromServer != 4) System.out.printf("Which host would you lixe to join? \n");
+	    if(gameFromServer == 0) System.out.printf("Which host would you lixe to join? \n");
 	}
 	else {
 	    System.out.println("Not server or client?");

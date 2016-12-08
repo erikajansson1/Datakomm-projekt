@@ -8,6 +8,8 @@ import java.io.*;
 
 
 public class GameServer {
+    public static Game serverGame;
+    
     public static void main (String[] argv) {
 	try
 	    {
@@ -15,9 +17,9 @@ public class GameServer {
 		int noPlayers = networkBuild.askPlayerNo();
 		System.out.println("Creating a game for "+noPlayers+".");
 
-		Game game = new Game(noPlayers);
+		serverGame = new Game(noPlayers);
+
 		String RMIPort = "1099";
-		String objPort = "1100";
 		networkBuild.buildNetwork();
 		networkBuild.welcomeMSG("server",0);
 
@@ -34,15 +36,14 @@ public class GameServer {
 	
 		
 		
-		Naming.rebind("//"+networkBuild.getInIp()+":"+RMIPort+"/theGame", game);
+		Naming.rebind("//"+networkBuild.getInIp()+":"+RMIPort+"/theGame", serverGame);
 		//System.out.println(game);
 		networkBuild.publishReady();
 
 		String[] argvClient = new String[]{
 		    networkBuild.getInIp(),
 		    networkBuild.getExIp(),
-		    RMIPort,
-		    objPort
+		    RMIPort
 		};
 		
 		GameClient.main(argvClient);
