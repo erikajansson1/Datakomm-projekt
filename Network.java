@@ -243,21 +243,28 @@ class Network {
 		   System.out.println("Registry found in "+
 		   serverExIp + ":" + serverRMIPort + "\n" + registry);
 	     
-	     serverGame = (GameInterface) Naming.lookup(serverExIp+"/"+objectToGet+":"+serverRMIPort);
-	     /*serverGame = (GameInterface) Naming.lookup("//"+
-						       serverExIp+
-						       ":"+
-						       serverRMIPort+
-						       "/"+
-						       objectToGet);*/
-	      System.out.println("\n\nfound on: //"+
-			       serverExIp+
-			       ":"+
-			       serverRMIPort+
-			       "/"+
-			       objectToGet+
-			       "\n"+
-			       serverGame);
+		   /*
+		   serverGame = (GameInterface) Naming.lookup("//"+
+							      serverExIp+
+							      "/"+
+							      objectToGet+
+							      ":"+
+							      serverRMIPort);
+		   */
+		   serverGame = (GameInterface) Naming.lookup("//"+
+							      serverExIp+
+							      ":"+
+							      serverRMIPort+
+							      "/"+
+							      objectToGet);
+		   System.out.println("\n\nfound on: //"+
+				      serverExIp+
+				      ":"+
+				      serverRMIPort+
+				      "/"+
+				      objectToGet+
+				      "\n"+
+				      serverGame);
 	    
 	}catch (Exception e) {
 	    System.out.println(" exception: " + e);
