@@ -4,27 +4,34 @@ import java.util.*;
 
 public interface GameInterface extends Remote {
 
-    /** Checks whether it's time to hit,
+    /** 
+     * Checks whether it's time to hit,
      *  that is, check whether any of the previous 4 cards
      *  match eachother
      */
     public boolean timeToHit() throws RemoteException;
 
     
-    /** Prints out a view of the board:
+    /** 
+     * Prints out a view of the board:
      *  whose turn it is, and the latest card
      */
     public String displayBoard() throws RemoteException;
 
-    /** Set the ready value for a player
+    
+    /** 
+     * Set the ready value for a player
      */
     public void setReadyValue(int playerNo, boolean readyValue) throws RemoteException; 
 
+    
     /** Update the hit time for a player     
      */
     public void updatePlayerTime(int playerNo, long hitTime) throws RemoteException; 
 
-    /** Checks whose turn it is, and if it's time for a new turn. If so, it updates accordingly. 
+    
+    /** 
+     * Checks whose turn it is, and if it's time for a new turn. If so, it updates accordingly. 
      * @param currRound Taken to ensure that only one such update is done every round.
      * @return The round value 
      */
@@ -54,11 +61,13 @@ public interface GameInterface extends Remote {
     public Player getPlayer(int playerNo) throws RemoteException;
 
     
-    /** Initiate a game
+    /** 
+     * Initiate a game
      * @param amountOfPlayer The amount of players in the game
      */
     public void startGame(int playerNo) throws RemoteException;
 
+    
     /**
      * a get method for the attribut gameDeck
      * @return returns the gameDeck attribut
@@ -78,7 +87,8 @@ public interface GameInterface extends Remote {
      * @return returns the starterDeck attribut
      */
     public ArrayList<Player> getGamePlayers() throws RemoteException;
-       
+
+    
     /**
      * a update state method for the object game.
      * @rparam round is the new round value
@@ -124,14 +134,27 @@ public interface GameInterface extends Remote {
     public boolean waitingForPlayers() throws RemoteException;
 
     
-    /** Check who lost the whole game
+    /** 
+     * Check who lost the whole game
      * @return player number id of the loser
      */
     public int checkLoser() throws RemoteException;
 
+
+    /**
+     * handle when the hit is in the right time.
+     * @param playerNo of the player trying to hit.
+     */
     public void handleRightHit(int playerNo) throws RemoteException;
+
+
+    /**
+     * Handle if someone hits at the wrong time.
+     * @param playerNo of the player trying to hit.
+     */
     public String handleWrongHit(int playerNo) throws RemoteException;
 
+    
     /** Player tries to lay a card
      * @param Player Number ID of the player
      * @param playerRound The round it is according to the player when it tries to lay its card
