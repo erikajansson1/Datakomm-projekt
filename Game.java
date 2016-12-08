@@ -281,7 +281,12 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	    this.lock.acquire();
 	    
     	    while(!everyoneHasMadeMove()) { /* WAITING LOOP */ }
-
+	    if(playerRound < this.round) { 	    
+		this.lock.release();
+		return "Too slow, it's a new round!"; 
+	    }
+	    
+	    //TODO: ta hänsyn till vem som slog först??
 
 	    loserMessage = "Your hit was wrong, pick up the deck!";
 	    this.loserTakesItAll(playerNo);
