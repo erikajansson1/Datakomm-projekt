@@ -259,13 +259,19 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     /**
      * Handle if someone hits at the wrong time
      */
-    public String handleWrongHit(Player loserPlayer){
+    public String handleWrongHit(Player loserPlayer) throws RemoteException {
 	//TODO Take the semaphore(attribute) 
 	//loserPlayer.getCardFromMiddleDeck();
+	String loserMessage = "";
+	try{
 	this.lock.acquire();
-    String loserMessage = "Your hit was wrong, pick up the deck!";
+    loserMessage = "Your hit was wrong, pick up the deck!";
     int playerNbr = loserPlayer.getPlayerNumber();
     this.loserTakesItAll(playerNbr);
+	}
+    catch( Exception e) {
+	    e.printStackTrace();
+	}
      this.lock.release();
     return loserMessage;
     } 
