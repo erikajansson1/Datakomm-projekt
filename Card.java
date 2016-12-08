@@ -17,6 +17,7 @@ public class Card implements java.io.Serializable{
 	return rank;
     }
 
+
     public String showCard(){
 	String dispCard = "["+ suit + Integer.toString(rank) + "]";
     return dispCard;

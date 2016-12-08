@@ -48,9 +48,7 @@ public class GameClient {
 
 	    //backup.update(serverGame);
 	    //BEGINNING OF GAME
-	    
-	    //so everyone knows who starts <- crap what does this mean
-
+	    	    
 	    //START VALUES
 	    long startTime;
 	    long hitTime;
@@ -139,7 +137,7 @@ public class GameClient {
 	while(answerTime < 300000) { //godtyckligt taget tal har
 	    answer = userInput.nextLine();
 	    answerTime = System.nanoTime() - startCounting;  
-	    if (!answer.equals("")) { break; } //break when player answer
+	    if (!answer.equals("")) { break; } //break when player answer, why break?
 	}
 
 	if (myRound && !canHit) {

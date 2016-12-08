@@ -62,7 +62,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	String whosTurn = "\n\nTurn: "+ gamePlayers.get(this.whoseTurn()).getPlayerName();
 	String currCard = "\nLatest Card: "+this.gameDeck.showTopCard();
 
-	    return ""+ players + whosTurn + currCard;
+	return ""+ players + whosTurn + currCard;
     }
 
     
@@ -142,7 +142,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * @return an int which is the players index.
      */
     public int whoseTurn() throws RemoteException{
-       return this.round % gamePlayers.size();
+	return this.round % gamePlayers.size();
     }
 
     /** 
@@ -203,7 +203,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      
     /** Get the rank of player #playerNo 
 	@param playerNo the player's no id
-     */
+    */
     public int myRank(int playerNo) throws RemoteException {
 	Player pyret = this.gamePlayers.get(playerNo);
 	int rank = pyret.getPlayerRank();
@@ -263,28 +263,28 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	//TODO Take the semaphore(attribute) 
 	//loserPlayer.getCardFromMiddleDeck();
 	this.lock.acquire();
-    String loserMessage = "Your hit was wrong, pick up the deck!";
-    int playerNbr = loserPlayer.getPlayerNumber();
-    this.loserTakesItAll(playerNbr);
-     this.lock.release();
-    return loserMessage;
+	String loserMessage = "Your hit was wrong, pick up the deck!";
+	int playerNbr = loserPlayer.getPlayerNumber();
+	this.loserTakesItAll(playerNbr);
+	this.lock.release();
+	return loserMessage;
     } 
 		 
-	 /**
+    /**
      * handle when the hit is in the right time
      */
     public void handleRightHit(){
     	//TODO Semaphores?
     	//TODO it should wait for the time to be over or that everyone have hit
-		int loser = 0;
+	int loser = 0;
     	for ( int i = 0; this.getAmountOfPlayers() > i; i++){
-    		//if (this.gamePlayers<this.getAmountOfPlayers()>.getPlayerTime() <  this.gamePlayers[i].getPlayerTime()){
-    			loser = this.getAmountOfPlayers(); 
-    		}
+	    //if (this.gamePlayers<this.getAmountOfPlayers()>.getPlayerTime() <  this.gamePlayers[i].getPlayerTime()){
+	    loser = this.getAmountOfPlayers(); 
+	}
     	//this.gamePlayers[loser].giveWholeDeck();
     	//String loserMessage = "Player" + this.gamePlayers[loser].getPlayerName() + "lost, you pick up the deck"
     	return;
-    	}
+    }
 	 	 
       
     /** Player tries to lay a card
