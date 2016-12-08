@@ -8,7 +8,7 @@ public class Player implements java.io.Serializable{
     private String exIp;
     private boolean readyToPlay;
     private int rankWhenFinished;
-    private long hitTime;
+    private long answerTime;
       
 
     public Player (int numberOfPlayer, String inIp, String exIp, String alias,boolean ready) {
@@ -19,7 +19,7 @@ public class Player implements java.io.Serializable{
 	this.nameOfPlayer = alias;
 	this.readyToPlay = ready;
 	this.rankWhenFinished = -1;
-	this.hitTime = 0L;
+	this.answerTime = 0L;
     }
 
     
@@ -88,18 +88,18 @@ public class Player implements java.io.Serializable{
     }
     
     /** 
-     * Set this player's hitTime-attribute to given parameter time
+     * Set this player's answerTime-attribute to given parameter time
      * @param time
      */
     public void setPlayerTime(long time) {
-	this.hitTime = time;
+	this.answerTime = time;
     }
 
 /**
- * Returns the players hitTime.
+ * Returns the players answerTime.
  */
     public long getPlayerTime() {
-	return this.hitTime;
+	return this.answerTime;
     }
 
     

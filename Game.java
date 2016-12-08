@@ -275,13 +275,14 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * Handle if someone hits at the wrong time.
      * @param playerNo of the player trying to hit.
      */
-    public String handleWrongHit(int playerNo) throws RemoteException {
+    public String handleWrongHit(int playerNo, int round) throws RemoteException {
 	String loserMessage = "";
 	try{
 	    this.lock.acquire();
 
 	    loserMessage = "Your hit was wrong, pick up the deck!";
 	    this.loserTakesItAll(playerNo);
+	    
 	}
 	catch( Exception e) {
 	    e.printStackTrace();
@@ -295,19 +296,43 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * handle when the hit is in the right time.
      * @param playerNo of the player trying to hit.
      */
-    public void handleRightHit(int playerNo) throws RemoteException{
-    	//TODO Semaphores?
-    	//TODO it should wait for the time to be over or that everyone have hit
-	int loser = 0;
-    	for ( int i = 0; this.getAmountOfPlayers() > i; i++){
-    		//if (this.gamePlayers<this.getAmountOfPlayers()>.getPlayerTime() <  this.gamePlayers[i].getPlayerTime()){
-    			loser = this.getAmountOfPlayers(); 
-    		}
-    	//this.gamePlayers[loser].giveWholeDeck();
-    	//String loserMessage = "Player" + this.gamePlayers[loser].getPlayerName() + "lost, you pick up the deck"
-    	return;
+    public String handleRightHit(int playerNo, int playerRound) throws RemoteException{
+    	String actionMessage = ""; 
+	try {
+	    this.lock.acquire();
+	    if(playerRound < this.round) { return "Too slow, it's a new round!"; }
+	    while(!everyoneHasMadeMove()) {}
+	    
+	    long longestAnswerTime = 0;
+	    Player currGuy;
+	    long currAnswerTime;
+	    int len = this.gamePlayers.size();
+	    int loserID = -1;
+	    Player loser = null;
+	    for(int i=0; i<len; i++) {
+		currGuy = this.gamePlayers.get(i);
+		currAnswerTime = currGuy.getPlayerTime();
+		if(currAnswerTime > longestAnswerTime) { 
+		    longestAnswerTime = currAnswerTime; 
+		    loserID = i;
+		    loser = currGuy;
+		}
+	    }
+	    
+    	    loserTakesItAll(loserID);
+	    String loserName = loser.getPlayerName();
+	    actionMessage = "Hit succesfull! "+loserName+" lost.";
+	    
+	    round++;
+	    this.lock.release();
+	    return actionMessage;
+	}
+	catch(Exception e){
+	    System.out.println("handleRightHit: "+e);
+	}
+	return actionMessage; 
     }
-	 	 
+	 
       
     /** 
      * Player tries to lay a card
@@ -451,6 +476,17 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	for (int i = 0; i < gamePlayers.size(); i++) {
 	    if((gamePlayers.get(i).getReadyValue() == false) &&
 	       (gamePlayers.get(i).getPlayerName().equals("Empty"))) return false;	    
+	}
+	return true;
+    }
+    
+    /**  Checks every players answer time and returns a boolean saying if all are ready.
+     * @return returns true if all players have answered
+     */
+    public boolean everyoneHasMadeMove() throws RemoteException{
+	for (int i = 0; i < gamePlayers.size(); i++) {
+	    if( (gamePlayers.get(i).getPlayerTime() == -1) ) { return false; }
+	       
 	}
 	return true;
     }

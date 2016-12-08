@@ -80,16 +80,18 @@ public class GameClient {
 		
 
 		    
+		serverGame.setReadyValue(playerNo, false);
+
 		//Let the player make its move
 		userAction(serverGame, playerNo, round, canHit,myRound);
+
+		serverGame.setReadyValue(playerNo, true);
+
 		
 		//TODO UPDATE THE WHOLE GAME STATUS TBH. Kolla sa att alla har gjort sitt och att losern har fatt kort
 		//TODO: kolla ifall personen fortfarande deltar i spelet eller har vunnit.
 		
-		//Uppdatera Player till att vara redo for nasta runda 
-		
-		//	serverGame.setReadyValue(playerNo, true);
-
+	       
 		
 		//loop until next round
 		serverGame.updatePlayerTime(playerNo, 0L);
@@ -135,22 +137,20 @@ public class GameClient {
 	long startCounting;
 	long maxAnswerTime = 30000000000L; //30 sekunder
 	
-	serverGame.setReadyValue(playerNo, false);
-	
 	if(myRound) {  //TODO: ar det har vi kollar ifall ngn har forsvunnit? iom att den personen inte kommer gora sitt drag
    	    System.out.println("Do you wan to hit the dick(h) or play next card(c)?");
 	    answer = getAnswer(serverGame, playerNo, maxAnswerTime);
 	    
 	    if (canHit) {
 		switch(answer) {
-		case "h": serverGame.handleRightHit(playerNo); break;
+		case "h": serverGame.handleRightHit(playerNo, round); break;
 		case "c": serverGame.tryToLayCard(playerNo, round); break;
 		default: break;
 		}
 	    } 
 	    else {
 		switch(answer) {
-		case "h": actionMessage = serverGame.handleWrongHit(playerNo); break;
+		case "h": actionMessage = serverGame.handleWrongHit(playerNo, round); break;
 		case "c": serverGame.tryToLayCard(playerNo, round); break;
 		default: break;
 		}
@@ -162,21 +162,20 @@ public class GameClient {
 		
 	    if(canHit) {
 		switch(answer) {
-		case "y": serverGame.handleRightHit(playerNo); break;
-		case "n": actionMessage = serverGame.handleWrongHit(playerNo); break;
+		case "y": serverGame.handleRightHit(playerNo, round); break;
+		case "n": actionMessage = serverGame.handleWrongHit(playerNo, round); break;
 		default: break;
 		}
 	    }
 	    else {
 		switch(answer) {
-		case "y":  actionMessage = serverGame.handleWrongHit(playerNo); break;
-		case "n": serverGame.handleRightHit(playerNo); break;
+		case "y":  actionMessage = serverGame.handleWrongHit(playerNo, round); break;
+		case "n": serverGame.handleRightHit(playerNo, round); break;
 		default: break;
 		}
 	    }
 	    
 	}
-	serverGame.setReadyValue(playerNo, true);
     }
 
     /** Asks user for input
@@ -192,9 +191,9 @@ public class GameClient {
 	long startTime = System.nanoTime();
 	answer = userInput.nextLine();
 	while(answerTime < maxAnswerTime) {
+	    if (!answer.equals("")) { break; }
 	    answer = userInput.nextLine();
 	    answerTime = System.nanoTime() - startTime;  
-	    if (!answer.equals("")) { break; }
 	}	
 	if(answer.equals("")) { answerTime = -1L; }
 	game.updatePlayerTime(playerNo, answerTime);

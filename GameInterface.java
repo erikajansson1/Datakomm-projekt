@@ -90,13 +90,13 @@ public interface GameInterface extends Remote {
      * Handle if someone hits at the wrong time
      * @param Player Number ID of the player
      */
-    public void handleRightHit(int playerNo) throws RemoteException;
+    public String handleRightHit(int playerNo, int round) throws RemoteException;
 
 		 
     /** Handle when the hit is in the right time
      * @param Player Number ID of the player
      */
-    public String handleWrongHit(int playerNo) throws RemoteException;
+    public String handleWrongHit(int playerNo, int round) throws RemoteException;
 
     /** Player tries to lay a card
      * @param Player Number ID of the player
