@@ -131,6 +131,12 @@ public interface GameInterface extends Remote {
 
     public void handleRightHit() throws RemoteException;
     public String handleWrongHit(Player loserPlayer) throws RemoteException;
-    public void tryToLayCard(int playerNo) throws RemoteException;
+
+    /** Player tries to lay a card
+     * @param Player Number ID of the player
+     * @param playerRound The round it is according to the player when it tries to lay its card
+     * @return Returns true if player could lay a card, otherwise false
+     */
+    public boolean tryToLayCard(int playerNo, int playerRound) throws RemoteException;
 }
 
