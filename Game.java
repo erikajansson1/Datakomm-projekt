@@ -451,5 +451,6 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	}
 	return true;
     }
+
 }
 
