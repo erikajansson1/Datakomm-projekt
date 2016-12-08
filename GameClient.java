@@ -187,9 +187,9 @@ public class GameClient {
 	long startTime = System.nanoTime();
 	answer = userInput.nextLine();
 	while(answerTime < maxAnswerTime) {
+	    if (!answer.equals("")) { break; }
 	    answer = userInput.nextLine();
 	    answerTime = System.nanoTime() - startTime;  
-	    if (!answer.equals("")) { break; }
 	}	
 	if(answer.equals("")) { answerTime = -1L; }
 	game.updatePlayerTime(playerNo, answerTime);
