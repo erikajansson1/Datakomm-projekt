@@ -142,18 +142,11 @@ class Network {
 		//System.setProperty("java.rmi.server.hostname",this.exIP);
 		System.out.println("RMI server started");
 
-
-		System.getProperties().put("http.proxyHost", "83.255.61.11");
-		System.getProperties().put("http.proxyPort", "1099");
-		
-		System.getProperties().put("java.rmi.server.hostname", "//"+exIP);
-		//System.setProperty("java.rmi.server.useLocalHostname",inIP);
-		//System.setProperty("java.rmi.server.logCalls","true");
-		
+		//System.getProperties().put("java.rmi.server.hostname", "//"+exIP);
 		System.setProperty("java.rmi.server.useLocalHostname",inIP);
 		System.setProperty("java.rmi.server.logCalls","true");
-		//System.setProperty("java.rmi.server.hostname",this.exIP);
-		System.getProperties().put("java.rmi.server.hostname",exIP);
+		System.setProperty("java.rmi.server.hostname",this.exIP);
+
 		registry = LocateRegistry.createRegistry(1099);
 
 		System.out.println("java RMI registry created.");

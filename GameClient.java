@@ -30,6 +30,10 @@ public class GameClient {
 	    //serverObjPort = args[3];
 	}
 
+	System.getProperties().put("http.proxyHost", "83.255.61.11");
+	System.getProperties().put("http.proxyPort", "1099");
+	//	System.getProperties().put("socksProxyHost", "83.255.61.11");
+	//System.getProperties().put("socksProxyPort", "1099");
 	GameInterface serverGame= networkBuild.getServerObj(serverInIp,
 							    serverExIp,
 							    serverRMIPort,
