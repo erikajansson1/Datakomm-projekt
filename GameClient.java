@@ -104,7 +104,7 @@ public class GameClient {
 	    e.printStackTrace();
 	}
 
-	//TODO Add ability to passivly look at game after winning.	    
+	//TODO Add ability to passivly look at game after winning.
     }
 
 
@@ -129,7 +129,7 @@ public class GameClient {
 	
 	serverGame.setReadyValue(playerNo, false);
 	
-	if(myRound) {  //TODO: är det här vi kollar ifall ngn har försvunnit? iom att den personen inte kommer göra sitt drag
+	if(myRound) {  //TODO: ar det har vi kollar ifall ngn har forsvunnit? iom att den personen inte kommer gora sitt drag
    	    System.out.println("Do you wan to hit the dick(h) or play next card(c)?");
 	    answer = getAnswer(serverGame, playerNo, maxAnswerTime);
 	    
