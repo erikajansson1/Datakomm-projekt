@@ -290,7 +290,7 @@ class Network {
     public int joinGame() throws RemoteException {
       	int playerNo = -1;
 	System.out.println("You are now connected!\nChecking if game is full!");
-	//	System.out.println(this.serverGame);
+	System.out.println(this.serverGame);
 
 	if(!this.serverGame.askIsGameFull()) {
 	    playerNo = serverGame.addPlayer(inIP,exIP,this.askAlias());

@@ -3,7 +3,7 @@ import java.rmi.server.*;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
-public class Game extends UnicastRemoteObject implements GameInterface {
+public class Game extends UnicastRemoteObject implements GameInterface, java.io.Serializable {
     private static final long serialVersionUID = 1L;
     private final Semaphore lock;
     private int round;
