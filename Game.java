@@ -275,27 +275,25 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     /**
      * Handle if someone hits at the wrong time
      */
-    public String handleWrongHit(Player loserPlayer) throws RemoteException {
-	//TODO Take the semaphore(attribute) 
-	//loserPlayer.getCardFromMiddleDeck();
+    public String handleWrongHit(int playerNo) throws RemoteException {
 	String loserMessage = "";
 	try{
-	this.lock.acquire();
-    loserMessage = "Your hit was wrong, pick up the deck!";
-    int playerNbr = loserPlayer.getPlayerNumber();
-    this.loserTakesItAll(playerNbr);
+	    this.lock.acquire();
+
+	    loserMessage = "Your hit was wrong, pick up the deck!";
+	    this.loserTakesItAll(playerNo);
 	}
-    catch( Exception e) {
+	catch( Exception e) {
 	    e.printStackTrace();
 	}
-     this.lock.release();
-    return loserMessage;
+	this.lock.release();
+	return loserMessage;
     } 
 		 
     /**
      * handle when the hit is in the right time
      */
-    public void handleRightHit() throws RemoteException{
+    public void handleRightHit(int playerNo) throws RemoteException{
     	//TODO Semaphores?
     	//TODO it should wait for the time to be over or that everyone have hit
 	int loser = 0;
@@ -311,29 +309,25 @@ public class Game extends UnicastRemoteObject implements GameInterface {
       
     /** Player tries to lay a card
      * @param Player Number ID of the player
+     * @param playerRound The round it is according to the player when it tries to lay its card
+     * @return Returns true if player could lay a card, otherwise false
      */
-    public void tryToLayCard(int playerNo) throws RemoteException {
-	Player trying = this.gamePlayers.get(playerNo);
-	long tryingTime = trying.getPlayerTime();
-	while (!waitingForPlayers()) { /* Forever looping, waiting, for youuu */}
-	
-	long maxAnswerTime = 0;
-	Player currGuy;
-	long currAnswerTime;
-	int len = this.gamePlayers.size();
-	for(int i=0; i<len; i++) {
-	    if (i != playerNo) {
-		currGuy = this.gamePlayers.get(i);
-		currAnswerTime = currGuy.getPlayerTime();
-		if(currAnswerTime > maxAnswerTime) {
-		    maxAnswerTime = currAnswerTime;
-		}
+    public boolean tryToLayCard(int playerNo, int playerRound) throws RemoteException {
+	try {
+	    this.lock.acquire();
+	    if(playerRound < this.round) {
+		Player trying = this.gamePlayers.get(playerNo);
+		trying.playNextCard(this.gameDeck);
+		this.round++;
+		this.lock.release();
+		return true;
 	    }
+	}catch(InterruptedException e) {
+	    e.printStackTrace();
 	}
-	if (tryingTime <= maxAnswerTime) {
-	    trying.playNextCard(this.gameDeck);	    
-	}
-	
+
+	this.lock.release();
+	return false;
     }
    
 

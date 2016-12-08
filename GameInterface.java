@@ -22,7 +22,7 @@ public interface GameInterface extends Remote {
 
     /** Update the hit time for a player     
      */
-    public void updatePlayerTime(int playerNo, long hitTime) throws RemoteException; //ej implementerad
+    public void updatePlayerTime(int playerNo, long hitTime) throws RemoteException; 
 
     /** Checks whose turn it is, and if it's time for a new turn. If so, it updates accordingly. 
      * @param currRound Taken to ensure that only one such update is done every round.
@@ -129,8 +129,14 @@ public interface GameInterface extends Remote {
      */
     public int checkLoser() throws RemoteException;
 
-    public void handleRightHit() throws RemoteException;
-    public String handleWrongHit(Player loserPlayer) throws RemoteException;
-    public void tryToLayCard(int playerNo) throws RemoteException;
+    public void handleRightHit(int playerNo) throws RemoteException;
+    public String handleWrongHit(int playerNo) throws RemoteException;
+
+    /** Player tries to lay a card
+     * @param Player Number ID of the player
+     * @param playerRound The round it is according to the player when it tries to lay its card
+     * @return Returns true if player could lay a card, otherwise false
+     */
+    public boolean tryToLayCard(int playerNo, int playerRound) throws RemoteException;
 }
 
