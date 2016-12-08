@@ -79,17 +79,20 @@ public class Deck implements java.io.Serializable{
     }
    
     //Check if possible to hit, 
-    public boolean possibleToHit(){
-    	int n = 0;
-	int index = cardList.size()-1;
-	    int amount = cardList.size();
-    	if(amount > 4){
-	    while (cardList.get(index).getRank() !=
-		   cardList.get(index-(1+n)).getRank() &&
-		   n != 4){    
+    public boolean possibleToHit(int noPlayers){
+	if(cardList.size() < 2) return false;
+
+	int n = 0;
+	int topCard = cardList.size()-1;
+	int amount = cardList.size();
+
+	if(amount > noPlayers){
+	    while (n != noPlayers &&
+		   (cardList.get(topCard).getRank() !=
+		    cardList.get(topCard-(1+n)).getRank())){    
 		    n++;
-		    }
-        	if (n == 4){
+	    }
+        	if (n == noPlayers){
         		return false;
         		}
         	else {
@@ -97,9 +100,9 @@ public class Deck implements java.io.Serializable{
         		}
         	}
     	else {
-	    while((cardList.get(index).getRank() !=
-		   cardList.get(index-(n+1)).getRank() &&
-		   amount != 0)){
+	    while( amount != 0 &&
+		   (cardList.get(topCard).getRank() !=
+		    cardList.get(topCard-(n+1)).getRank())){
 			amount--;
 			n++;
 		    }
@@ -112,14 +115,17 @@ public class Deck implements java.io.Serializable{
 	    }
     }
 
+    
     public int getAmount() {
 	return cardList.size();
     }
+
     
     public ArrayList<Card> getCardList() {
 	return this.cardList;
     }
 
+    
     public void combineDeck(ArrayList<Card> toAdd) {
 	this.cardList.addAll(toAdd);
     }

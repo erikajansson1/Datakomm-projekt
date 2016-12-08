@@ -22,7 +22,7 @@ public interface GameInterface extends Remote {
 
     /** Update the hit time for a player     
      */
-    public void updatePlayerTime(int playerNo, long hitTime) throws RemoteException; //ej implementerad
+    public void updatePlayerTime(int playerNo, long hitTime) throws RemoteException; 
 
     /** Checks whose turn it is, and if it's time for a new turn. If so, it updates accordingly. 
      * @param currRound Taken to ensure that only one such update is done every round.
@@ -45,10 +45,19 @@ public interface GameInterface extends Remote {
     public int getRound() throws RemoteException;
 
 
+     /** 
+     * Finds the Player object in an array whose name matches the given parameter
+     * @param alias 
+     * @return The found Player object, or an Player object with specific invalid values     
+     */
+    public Player getPlayer(String alias) throws RemoteException;
+    public Player getPlayer(int playerNo) throws RemoteException;
+
+    
     /** Initiate a game
      * @param amountOfPlayer The amount of players in the game
      */
-    public void startGame(int amountOfPlayers) throws RemoteException;
+    public void startGame(int playerNo) throws RemoteException;
 
     /**
      * a get method for the attribut gameDeck
@@ -107,13 +116,27 @@ public interface GameInterface extends Remote {
      */
     public boolean askIsGameFull() throws RemoteException;
 
-    //TODO documentation
+    
+   /**
+     * Checks every players ready status and returns a boolean saying if all are ready.
+     * @return returns true if all players are ready.
+     */
     public boolean waitingForPlayers() throws RemoteException;
 
+    
     /** Check who lost the whole game
      * @return player number id of the loser
      */
     public int checkLoser() throws RemoteException;
-    
+
+    public void handleRightHit(int playerNo) throws RemoteException;
+    public String handleWrongHit(int playerNo) throws RemoteException;
+
+    /** Player tries to lay a card
+     * @param Player Number ID of the player
+     * @param playerRound The round it is according to the player when it tries to lay its card
+     * @return Returns true if player could lay a card, otherwise false
+     */
+    public boolean tryToLayCard(int playerNo, int playerRound) throws RemoteException;
 }
 

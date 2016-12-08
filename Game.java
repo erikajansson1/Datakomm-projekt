@@ -35,11 +35,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * match eachother
      */
     public boolean timeToHit() throws RemoteException {
-    	if (gameDeck.possibleToHit()){
-	    return true;
-    	}
- 	return false;
-    };
+    	return gameDeck.possibleToHit(gamePlayers.size());
+	    }
 
 
     /** Prints out a view of the board:
@@ -49,9 +46,10 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	String players = "";
 	for (int i = 0; i < this.gamePlayers.size(); i++) {
 	    if(!(i == 0)) players += "\n";
-
 	    players += ""+gamePlayers.get(i).getPlayerName();
+	    players += "\nCards on hand: "+gamePlayers.get(i).getAmountOfCardsOnHand();
 	    players += "\nStatus: ";
+	    
 	    
 	    if(gamePlayers.get(i).getReadyValue()){
 		players += "READY\n";
@@ -60,9 +58,10 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	    }	
 	}
 	String whosTurn = "\n\nTurn: "+ gamePlayers.get(this.whoseTurn()).getPlayerName();
+	String round = "\n"+this.round;
 	String currCard = "\nLatest Card: "+this.gameDeck.showTopCard();
 
-	    return ""+ players + whosTurn + currCard;
+	return ""+ players + whosTurn + round + currCard;
     }
 
     
@@ -142,16 +141,15 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * @return an int which is the players index.
      */
     public int whoseTurn() throws RemoteException{
-       return this.round % gamePlayers.size();
+	return this.round % gamePlayers.size();
     }
 
     /** 
-     * LaT STa
      * Finds the Player object in an array whose name matches the given parameter
      * @param alias 
      * @return The found Player object, or an Player object with specific invalid values     
      */
-    public Player findPlayer(String alias) throws RemoteException {
+    public Player getPlayer(String alias) throws RemoteException {
 	int len = gamePlayers.size();
 	String name;
 	for(int i=0; i < len; i++) {
@@ -165,21 +163,34 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     }
 
 
+    
+    /** 
+     * Finds the Player object in an array whose name matches the given parameter
+     * @param player number 
+     * @return The found Player object, or an Player object with specific invalid values     
+     */
+    public Player getPlayer(int playerNo) throws RemoteException {
+	return gamePlayers.get(playerNo);
+    }
+
+
     /**
      * Initiate game by giving out cards and select who start first 
      */
     //TODO: Fixat?? Who should start first, create  ---the server starts the game (playerNo = 1)
-    public void startGame(int amountOfPlayers) throws RemoteException {
-	this.starterDeck.mixup();
-	while (starterDeck.getAmount() > 0) {
-	    for (int i = 0; i <= amountOfPlayers; i++){
-		if (starterDeck.getAmount() > 0){
-		    Player thePlayer = gamePlayers.get(i);
-		    Card cardToInsert = starterDeck.getCard();
-		    thePlayer.getPlayerDeck().addCard(cardToInsert);
+    public void startGame(int playerNo) throws RemoteException {
+	if(playerNo == 0) {
+	    this.starterDeck.mixup();
+	    while (starterDeck.getAmount() > 0) {
+		for (int i = 0; i < gamePlayers.size(); i++){
+		    if (starterDeck.getAmount() > 0){
+			Player thePlayer = gamePlayers.get(i);
+			Card cardToInsert = starterDeck.getCard();
+			thePlayer.getPlayerDeck().addCard(cardToInsert);
+		    }
 		}
 	    }
-      	}
+	}
     }
 	
 	 
@@ -203,7 +214,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      
     /** Get the rank of player #playerNo 
 	@param playerNo the player's no id
-     */
+    */
     public int myRank(int playerNo) throws RemoteException {
 	Player pyret = this.gamePlayers.get(playerNo);
 	int rank = pyret.getPlayerRank();
@@ -259,30 +270,28 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     /**
      * Handle if someone hits at the wrong time
      */
-    public String handleWrongHit(Player loserPlayer) throws RemoteException {
-	//TODO Take the semaphore(attribute) 
-	//loserPlayer.getCardFromMiddleDeck();
+    public String handleWrongHit(int playerNo) throws RemoteException {
 	String loserMessage = "";
 	try{
-	this.lock.acquire();
-    loserMessage = "Your hit was wrong, pick up the deck!";
-    int playerNbr = loserPlayer.getPlayerNumber();
-    this.loserTakesItAll(playerNbr);
+	    this.lock.acquire();
+
+	    loserMessage = "Your hit was wrong, pick up the deck!";
+	    this.loserTakesItAll(playerNo);
 	}
-    catch( Exception e) {
+	catch( Exception e) {
 	    e.printStackTrace();
 	}
-     this.lock.release();
-    return loserMessage;
+	this.lock.release();
+	return loserMessage;
     } 
 		 
-	 /**
+    /**
      * handle when the hit is in the right time
      */
-    public void handleRightHit(){
+    public void handleRightHit(int playerNo) throws RemoteException{
     	//TODO Semaphores?
     	//TODO it should wait for the time to be over or that everyone have hit
-		int loser = 0;
+	int loser = 0;
     	for ( int i = 0; this.getAmountOfPlayers() > i; i++){
     		//if (this.gamePlayers<this.getAmountOfPlayers()>.getPlayerTime() <  this.gamePlayers[i].getPlayerTime()){
     			loser = this.getAmountOfPlayers(); 
@@ -290,34 +299,30 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     	//this.gamePlayers[loser].giveWholeDeck();
     	//String loserMessage = "Player" + this.gamePlayers[loser].getPlayerName() + "lost, you pick up the deck"
     	return;
-    	}
+    }
 	 	 
       
     /** Player tries to lay a card
      * @param Player Number ID of the player
+     * @param playerRound The round it is according to the player when it tries to lay its card
+     * @return Returns true if player could lay a card, otherwise false
      */
-    public void tryToLayCard(int playerNo) throws RemoteException {
-	Player trying = this.gamePlayers.get(playerNo);
-	long tryingTime = trying.getPlayerTime();
-	while (!waitingForPlayers()) { /* Forever looping, waiting, for youuu */}
-	
-	long maxAnswerTime = 0;
-	Player currGuy;
-	long currAnswerTime;
-	int len = this.gamePlayers.size();
-	for(int i=0; i<len; i++) {
-	    if (i != playerNo) {
-		currGuy = this.gamePlayers.get(i);
-		currAnswerTime = currGuy.getPlayerTime();
-		if(currAnswerTime > maxAnswerTime) {
-		    maxAnswerTime = currAnswerTime;
-		}
+    public boolean tryToLayCard(int playerNo, int playerRound) throws RemoteException {
+	try {
+	    this.lock.acquire();
+	    if(playerRound < this.round) {
+		Player trying = this.gamePlayers.get(playerNo);
+		trying.playNextCard(this.gameDeck);
+		this.round++;
+		this.lock.release();
+		return true;
 	    }
+	}catch(InterruptedException e) {
+	    e.printStackTrace();
 	}
-	if (tryingTime <= maxAnswerTime) {
-	    trying.playNextCard(this.gameDeck);	    
-	}
-	
+
+	this.lock.release();
+	return false;
     }
    
 
