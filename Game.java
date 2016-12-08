@@ -279,6 +279,9 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	String loserMessage = "";
 	try{
 	    this.lock.acquire();
+	    
+    	    while(!everyoneHasMadeMove()) { /* WAITING LOOP */ }
+
 
 	    loserMessage = "Your hit was wrong, pick up the deck!";
 	    this.loserTakesItAll(playerNo);
@@ -289,8 +292,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	}
 	this.lock.release();
 	return loserMessage;
-    } 
-		 
+    }  
 
     /**
      * handle when the hit is in the right time.
@@ -300,8 +302,10 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     	String actionMessage = ""; 
 	try {
 	    this.lock.acquire();
-	    if(playerRound < this.round) { return "Too slow, it's a new round!"; }
-	    while(!everyoneHasMadeMove()) {}
+	    if(playerRound < this.round) { 	    
+		this.lock.release();
+		return "Too slow, it's a new round!"; }
+	    while(!everyoneHasMadeMove()) { /* WAITING LOOP */ }
 	    
 	    long longestAnswerTime = 0;
 	    Player currGuy;
@@ -330,6 +334,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	catch(Exception e){
 	    System.out.println("handleRightHit: "+e);
 	}
+	this.lock.release();
 	return actionMessage; 
     }
 	 
