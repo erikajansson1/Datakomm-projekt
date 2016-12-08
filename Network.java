@@ -185,6 +185,17 @@ class Network {
 	return userInput.nextLine();
     }
 
+
+        /**
+     * method to ask the user which external IP port the server has whom he wishes to join.
+     * @return a string containg the users answer.
+     */
+    /*    public String askServerNAT() {
+	Scanner userInput = new Scanner(System.in);
+	System.out.printf("Is the server behind a NAT?");
+
+	}*/
+
     
     /**
      * method to ask the user which external IP port the server has whom he wishes to join.
@@ -252,9 +263,9 @@ class Network {
 							      ":"+
 							      serverRMIPort);
 	    */
-	    System.getProperties().put("http.proxyHost", "83.255.61.11");
-	    System.getProperties().put("http.proxyPort", "1099");
-	    System.setProperty("java.rmi.server.hostname",serverExIp);
+	    //    System.getProperties().put("http.proxyHost", "83.255.61.11");
+	    //System.getProperties().put("http.proxyPort", "1099");
+	    
 		   serverGame = (GameInterface) Naming.lookup("//"+
 							      serverExIp+
 							      ":"+

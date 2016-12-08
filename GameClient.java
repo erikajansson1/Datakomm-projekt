@@ -17,8 +17,8 @@ public class GameClient {
 	String serverInIp = null;
 	String serverExIp = null;
 	String serverRMIPort = null;
-	//String serverObjPort = null;
 	if(args.length == 0) {
+	    //serverNAT = networkBuild.askServerNAT();
 	    serverInIp = networkBuild.askServerInIp();
 	    serverExIp = networkBuild.askServerExIp();
 	    serverRMIPort = networkBuild.askServerPort();
@@ -31,6 +31,7 @@ public class GameClient {
 
 	//System.getProperties().put("socksProxyHost", "83.255.61.11");
 	//System.getProperties().put("socksProxyPort", "1099");
+	System.setProperty("java.rmi.server.hostname",serverExIp);
 	GameInterface serverGame = networkBuild.getServerObj(serverInIp,
 							     serverExIp,
 							     serverRMIPort,
