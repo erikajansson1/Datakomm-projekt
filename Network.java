@@ -141,16 +141,18 @@ class Network {
 	Registry registry = null;
 	try  //special exception handler for registry creation
 	    {
-		System.setProperty("java.rmi.server.hostname",exIP);
+		//System.setProperty("java.rmi.server.hostname",this.exIP);
 		System.out.println("RMI server started");
-		//System.getProperties().put("java.rmi.server.hostname", "rmi://"+exIP);
-		registry = LocateRegistry.createRegistry(1099);
+		System.getProperties().put("java.rmi.server.hostname", "//"+exIP);
+		//System.setProperty("java.rmi.server.useLocalHostname",inIP);
+		//System.setProperty("java.rmi.server.logCalls","true");
+		
 		System.setProperty("java.rmi.server.useLocalHostname",inIP);
 		System.setProperty("java.rmi.server.logCalls","true");
 		//System.setProperty("java.rmi.server.hostname",this.exIP);
 		System.getProperties().put("java.rmi.server.hostname",exIP);
 		registry = LocateRegistry.createRegistry(1099);
-	
+
 		System.out.println("java RMI registry created.");
 	    }
 	catch (RemoteException e)
