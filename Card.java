@@ -9,15 +9,28 @@ public class Card implements java.io.Serializable{
 	this.suit = suit;
     }
 
+
+    /**
+     * A get method for suit.
+     * @return returns the suit of the card.
+     */
     public String getSuit() {
 	return suit;
     }
 
+
+    /**
+     * A get method for rank.
+     * @return returns the rank of the card.
+     */
     public int getRank(){
 	return rank;
     }
 
 
+    /**
+     * A toString method for card showing the suit and value.
+     */
     public String showCard(){
 	String dispCard = "["+ suit + Integer.toString(rank) + "]";
     return dispCard;
