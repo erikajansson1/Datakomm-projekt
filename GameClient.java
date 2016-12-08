@@ -46,9 +46,10 @@ public class GameClient {
 	    BackUp backup = new BackUp(serverGame);
 	    networkBuild.waitingUntilGameCanStart();
 
-	    //backup.update(serverGame);
+	    
 	    //BEGINNING OF GAME
-	    	    
+	    
+	    serverGame.startGame(playerNo);
 	    //START VALUES
 	    long startTime;
 	    long hitTime;
@@ -60,7 +61,8 @@ public class GameClient {
 	    boolean myRound = false; 
 
 	    //>>>>STOR LOOP: har ska vi egentligen ha en check att spelet inte ar slut
-	    for (int i=0; i<5; i++) { 
+	    for (int i=0; i<5; i++) {
+		backup.update(serverGame);
 		serverGame.setReadyValue(playerNo, false);
 		//Kolla ifall det ar spelarens tur
 		if (serverGame.whoseTurn() == playerNo) { myRound = true; }
@@ -88,6 +90,7 @@ public class GameClient {
 		//round = serverGame.updateRound(oldRound); 
 		while (oldRound == round) {
 		    round = serverGame.updateRound(oldRound);
+		    System.out.println(serverGame.displayBoard());
 		    //round = serverGame.getRound();
 		    Thread.sleep(1000);
 		}
@@ -112,16 +115,17 @@ public class GameClient {
       2a. Hit is possible
       2b. Hit is not possible      
     */
-    public static void userAction(GameInterface game, int playerNo, boolean canHit, boolean myRound) throws RemoteException {
+    public static void userAction(GameInterface serverGame, int playerNo, boolean canHit, boolean myRound) throws RemoteException {
 	Scanner userInput = new Scanner(System.in);
 	String answer = "";
 	long answerTime;
 	long startCounting;
+	long maxAnswerTime = 30000000000L; //30 sekunder
 	
 
 	
 	//Reset player's ready value
-	game.setReadyValue(playerNo, false);
+	serverGame.setReadyValue(playerNo, false);
 
 	if (myRound) {
 	    System.out.println("Hit dick(h) or play next card(c)?");
@@ -132,20 +136,24 @@ public class GameClient {
 
 	//Tidtagning pa svar
 	startCounting = System.nanoTime();
-
 	answerTime = System.nanoTime() - startCounting;   
-	while(answerTime < 300000) { //godtyckligt taget tal har
+
+	while(answerTime < maxAnswerTime) {
 	    answer = userInput.nextLine();
 	    answerTime = System.nanoTime() - startCounting;  
-	    if (!answer.equals("")) { break; } //break when player answer, why break?
+	    if (!answer.equals("")) { break; } //break when player answer
 	}
 
 	if (myRound && !canHit) {
- 
-	    answer = userInput.nextLine(); //#1
 	    switch(answer) {
-	    case "h": answerTime = 0; game.updatePlayerTime(playerNo,answerTime); break; //TODO: hit fail
-	    case "c": game.updatePlayerTime(playerNo,answerTime); break; //TODO: try to place card
+	    case "h":
+		//serverGame.updatePlayerTime(playerNo,0L); //is done in main
+		serverGame.handleWrongHit(serverGame.findPlayer(playerNo));
+		break; 		
+	    case "c":
+		//serverGame.updatePlayerTime(playerNo,0L);  //is done in main
+		serverGame.tryToLayCard(playerNo);
+		break;
 	    default: break;
 	    }
 	    
@@ -153,10 +161,10 @@ public class GameClient {
 	if (canHit) {
 	    switch(answer) { 
 	    case "h":
-	    case "y": game.updatePlayerTime(playerNo,answerTime); break; 
-	    case "n": answerTime = 0; game.updatePlayerTime(playerNo,answerTime);
+	    case "y": serverGame.updatePlayerTime(playerNo,answerTime); break; 
+	    case "n": answerTime = 0; serverGame.updatePlayerTime(playerNo,answerTime);
  break;
-	    case "c": game.updatePlayerTime(playerNo,answerTime); break; //TODO: try to place card 
+	    case "c": serverGame.updatePlayerTime(playerNo,answerTime); break; //TODO: try to place card 
 	    default: answerTime = 0; break;
 	    }
 
@@ -173,7 +181,7 @@ public class GameClient {
 	}
 
 	//Made move, ready to do another!
-	game.setReadyValue(playerNo, true);
+	serverGame.setReadyValue(playerNo, true);
 
 
     }

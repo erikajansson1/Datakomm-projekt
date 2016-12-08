@@ -45,10 +45,19 @@ public interface GameInterface extends Remote {
     public int getRound() throws RemoteException;
 
 
+     /** 
+     * Finds the Player object in an array whose name matches the given parameter
+     * @param alias 
+     * @return The found Player object, or an Player object with specific invalid values     
+     */
+    public Player findPlayer(String alias) throws RemoteException;
+    public Player findPlayer(int playerNo) throws RemoteException;
+
+    
     /** Initiate a game
      * @param amountOfPlayer The amount of players in the game
      */
-    public void startGame(int amountOfPlayers) throws RemoteException;
+    public void startGame(int playerNo) throws RemoteException;
 
     /**
      * a get method for the attribut gameDeck
@@ -107,13 +116,21 @@ public interface GameInterface extends Remote {
      */
     public boolean askIsGameFull() throws RemoteException;
 
-    //TODO documentation
+    
+   /**
+     * Checks every players ready status and returns a boolean saying if all are ready.
+     * @return returns true if all players are ready.
+     */
     public boolean waitingForPlayers() throws RemoteException;
 
+    
     /** Check who lost the whole game
      * @return player number id of the loser
      */
     public int checkLoser() throws RemoteException;
-    
+
+    public void handleRightHit() throws RemoteException;
+    public String handleWrongHit(Player loserPlayer) throws RemoteException;
+    public void tryToLayCard(int playerNo) throws RemoteException;
 }
 

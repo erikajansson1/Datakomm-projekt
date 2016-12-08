@@ -35,11 +35,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * match eachother
      */
     public boolean timeToHit() throws RemoteException {
-    	if (gameDeck.possibleToHit()){
-	    return true;
-    	}
- 	return false;
-    };
+    	return gameDeck.possibleToHit(gamePlayers.size());
+	    }
 
 
     /** Prints out a view of the board:
@@ -146,7 +143,6 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     }
 
     /** 
-     * LaT STa
      * Finds the Player object in an array whose name matches the given parameter
      * @param alias 
      * @return The found Player object, or an Player object with specific invalid values     
@@ -165,21 +161,34 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     }
 
 
+    
+    /** 
+     * Finds the Player object in an array whose name matches the given parameter
+     * @param player number 
+     * @return The found Player object, or an Player object with specific invalid values     
+     */
+    public Player findPlayer(int playerNo) throws RemoteException {
+	return gamePlayers.get(playerNo);
+    }
+
+
     /**
      * Initiate game by giving out cards and select who start first 
      */
     //TODO: Fixat?? Who should start first, create  ---the server starts the game (playerNo = 1)
-    public void startGame(int amountOfPlayers) throws RemoteException {
-	this.starterDeck.mixup();
-	while (starterDeck.getAmount() > 0) {
-	    for (int i = 0; i <= amountOfPlayers; i++){
-		if (starterDeck.getAmount() > 0){
-		    Player thePlayer = gamePlayers.get(i);
-		    Card cardToInsert = starterDeck.getCard();
-		    thePlayer.getPlayerDeck().addCard(cardToInsert);
+    public void startGame(int playerNo) throws RemoteException {
+	if(playerNo == 0) {
+	    this.starterDeck.mixup();
+	    while (starterDeck.getAmount() > 0) {
+		for (int i = 0; i < gamePlayers.size(); i++){
+		    if (starterDeck.getAmount() > 0){
+			Player thePlayer = gamePlayers.get(i);
+			Card cardToInsert = starterDeck.getCard();
+			thePlayer.getPlayerDeck().addCard(cardToInsert);
+		    }
 		}
 	    }
-      	}
+	}
     }
 	
 	 
@@ -279,7 +288,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     /**
      * handle when the hit is in the right time
      */
-    public void handleRightHit(){
+    public void handleRightHit() throws RemoteException{
     	//TODO Semaphores?
     	//TODO it should wait for the time to be over or that everyone have hit
 	int loser = 0;
