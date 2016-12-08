@@ -46,9 +46,10 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	String players = "";
 	for (int i = 0; i < this.gamePlayers.size(); i++) {
 	    if(!(i == 0)) players += "\n";
-
 	    players += ""+gamePlayers.get(i).getPlayerName();
+	    players += "\nCards on hand: "+gamePlayers.get(i).getAmountOfCardsOnHand();
 	    players += "\nStatus: ";
+	    
 	    
 	    if(gamePlayers.get(i).getReadyValue()){
 		players += "READY\n";
@@ -57,9 +58,10 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	    }	
 	}
 	String whosTurn = "\n\nTurn: "+ gamePlayers.get(this.whoseTurn()).getPlayerName();
+	String round = "\n"+this.round;
 	String currCard = "\nLatest Card: "+this.gameDeck.showTopCard();
 
-	return ""+ players + whosTurn + currCard;
+	return ""+ players + whosTurn + round + currCard;
     }
 
     
@@ -147,7 +149,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * @param alias 
      * @return The found Player object, or an Player object with specific invalid values     
      */
-    public Player findPlayer(String alias) throws RemoteException {
+    public Player getPlayer(String alias) throws RemoteException {
 	int len = gamePlayers.size();
 	String name;
 	for(int i=0; i < len; i++) {
@@ -167,7 +169,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * @param player number 
      * @return The found Player object, or an Player object with specific invalid values     
      */
-    public Player findPlayer(int playerNo) throws RemoteException {
+    public Player getPlayer(int playerNo) throws RemoteException {
 	return gamePlayers.get(playerNo);
     }
 

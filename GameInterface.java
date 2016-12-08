@@ -50,8 +50,8 @@ public interface GameInterface extends Remote {
      * @param alias 
      * @return The found Player object, or an Player object with specific invalid values     
      */
-    public Player findPlayer(String alias) throws RemoteException;
-    public Player findPlayer(int playerNo) throws RemoteException;
+    public Player getPlayer(String alias) throws RemoteException;
+    public Player getPlayer(int playerNo) throws RemoteException;
 
     
     /** Initiate a game
