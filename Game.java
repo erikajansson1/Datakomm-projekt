@@ -177,8 +177,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     /**
      * Initiate game by giving out cards and select who start first 
      */
-    //TODO: Fixat?? Who should start first, create  ---the server starts the game (playerNo = 1)
-    public void startGame(int playerNo) throws RemoteException {
+     public void startGame(int playerNo) throws RemoteException {
 	if(playerNo == 0) {
 	    this.starterDeck.mixup();
 	    while (starterDeck.getAmount() > 0) {
@@ -269,6 +268,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     
     /**
      * Handle if someone hits at the wrong time
+     * @param Player Number ID of the player
      */
     public String handleWrongHit(int playerNo) throws RemoteException {
 	String loserMessage = "";
@@ -285,8 +285,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	return loserMessage;
     } 
 		 
-    /**
-     * handle when the hit is in the right time
+    /** Handle when the hit is in the right time
+     * @param Player Number ID of the player
      */
     public void handleRightHit(int playerNo) throws RemoteException{
     	//TODO Semaphores?

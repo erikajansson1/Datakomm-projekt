@@ -143,8 +143,8 @@ class Network {
 		System.out.println("RMI server started");
 		System.setProperty("java.rmi.server.useLocalHostname",inIP);
 		System.setProperty("java.rmi.server.logCalls","true");
-		//System.setProperty("java.rmi.server.hostname",this.exIP);
-		System.getProperties().put("java.rmi.server.hostname",exIP);
+		System.setProperty("java.rmi.server.hostname",this.exIP);
+		//System.getProperties().put("java.rmi.server.hostname",exIP);
 		registry = LocateRegistry.createRegistry(1099);
 		
 		

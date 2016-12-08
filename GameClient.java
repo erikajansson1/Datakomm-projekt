@@ -34,10 +34,12 @@ public class GameClient {
 							    serverExIp,
 							    serverRMIPort,
 							    gameToGet);
-	//	System.out.println(serverGame);
+	System.out.println(serverGame);
 	try {
 	    networkBuild.buildNetwork(serverGame);
+	    System.out.println("Build complete");
 	    playerNo = networkBuild.joinGame();
+	    
 	    BackUp backup = new BackUp(serverGame);
 	    networkBuild.waitingUntilGameCanStart();
 
