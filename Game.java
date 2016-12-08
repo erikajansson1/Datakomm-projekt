@@ -270,27 +270,25 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     /**
      * Handle if someone hits at the wrong time
      */
-    public String handleWrongHit(Player loserPlayer) throws RemoteException {
-	//TODO Take the semaphore(attribute) 
-	//loserPlayer.getCardFromMiddleDeck();
+    public String handleWrongHit(int playerNo) throws RemoteException {
 	String loserMessage = "";
 	try{
-	this.lock.acquire();
-    loserMessage = "Your hit was wrong, pick up the deck!";
-    int playerNbr = loserPlayer.getPlayerNumber();
-    this.loserTakesItAll(playerNbr);
+	    this.lock.acquire();
+
+	    loserMessage = "Your hit was wrong, pick up the deck!";
+	    this.loserTakesItAll(playerNo);
 	}
-    catch( Exception e) {
+	catch( Exception e) {
 	    e.printStackTrace();
 	}
-     this.lock.release();
-    return loserMessage;
+	this.lock.release();
+	return loserMessage;
     } 
 		 
     /**
      * handle when the hit is in the right time
      */
-    public void handleRightHit() throws RemoteException{
+    public void handleRightHit(int playerNo) throws RemoteException{
     	//TODO Semaphores?
     	//TODO it should wait for the time to be over or that everyone have hit
 	int loser = 0;
@@ -310,21 +308,21 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * @return Returns true if player could lay a card, otherwise false
      */
     public boolean tryToLayCard(int playerNo, int playerRound) throws RemoteException {
-	
-	this.lock.acquire();
-	if(playerRound < this.round) {
-	    Player trying = this.gamePlayers.get(playerNo);
-	    trying.playNextCard(this.gameDeck);
-	    this.round++;
+	try {
 	    this.lock.acquire();
-	    return true;
-	}
-	else {
-	    this.lock.acquire();
-	    return false;
+	    if(playerRound < this.round) {
+		Player trying = this.gamePlayers.get(playerNo);
+		trying.playNextCard(this.gameDeck);
+		this.round++;
+		this.lock.release();
+		return true;
+	    }
+	}catch(InterruptedException e) {
+	    e.printStackTrace();
 	}
 
-	
+	this.lock.release();
+	return false;
     }
    
 
