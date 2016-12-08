@@ -39,8 +39,6 @@ class Network {
      * @param serverGame is the remote object.
      */
     public void buildNetwork(GameInterface serverGame) throws Exception  {
-	this.exIP = this.extIP();
-	this.inIP = this.inIP();
 	this.serverGame = serverGame;
     }
 
@@ -143,6 +141,11 @@ class Network {
 	    {
 		//System.setProperty("java.rmi.server.hostname",this.exIP);
 		System.out.println("RMI server started");
+
+
+		System.getProperties().put("http.proxyHost", "83.255.61.11");
+		System.getProperties().put("http.proxyPort", "1099");
+		
 		System.getProperties().put("java.rmi.server.hostname", "//"+exIP);
 		//System.setProperty("java.rmi.server.useLocalHostname",inIP);
 		//System.setProperty("java.rmi.server.logCalls","true");
