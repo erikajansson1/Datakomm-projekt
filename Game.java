@@ -39,8 +39,9 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	    }
 
 
-    /** Prints out a view of the board:
-     *  whose turn it is, and the latest card
+    /** 
+     * Prints out a view of the board:
+     * whose turn it is, and the latest card
      */
     public String displayBoard() throws RemoteException {
 	String players = "";
@@ -211,16 +212,18 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	 
    
      
-    /** Get the rank of player #playerNo 
-	@param playerNo the player's no id
-    */
+    /** 
+     * Get the rank of player #playerNo 
+     * @param playerNo the player's no id
+     */
     public int myRank(int playerNo) throws RemoteException {
 	Player pyret = this.gamePlayers.get(playerNo);
 	int rank = pyret.getPlayerRank();
 	return rank;	
     } 	 
 	 
-    /** Check who lost the whole(!) game
+    /** 
+     * Check who lost the whole(!) game
      * @return player number id of the loser
      */
     public int checkLoser() throws RemoteException {
@@ -241,7 +244,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	return loserID;	
     }
 
-    /** Move all cards from one deck to another
+    /** 
+     * Move all cards from one deck to another
      * @param from Deck to take cards from
      * @param to Deck to add cards to
      * @comments This function is private simply because there's no reason for it to be public
@@ -256,7 +260,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     }
 
     
-    /** Gives the losing player all the thrown cards
+    /** 
+     * Gives the losing player all the thrown cards
      * @param Number ID of the player
      */
     public void loserTakesItAll(int playerNo) throws RemoteException {
