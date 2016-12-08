@@ -13,49 +13,49 @@ import java.io.*;
 */
 
 public class GameClient {
-
-    public static void main (String[] args) {
+     public static void main (String[] args) {
 	int playerNo = -1;
 	String gameToGet = "theGame";
-	String backUpToGet = "theBackUp";
 	Network networkBuild = new Network();
 	networkBuild.welcomeMSG("client",args.length);
 
 	String serverInIp = null;
 	String serverExIp = null;
-	String serverPort = null;
+	String serverRMIPort = null;
+	//String serverObjPort = null;
 	if(args.length == 0) {
 	    serverInIp = networkBuild.askServerInIp();
 	    serverExIp = networkBuild.askServerExIp();
-	    serverPort = networkBuild.askServerPort();
+	    serverRMIPort = networkBuild.askServerPort();
+	    //serverObjPort = networkBuild.askServerObjPort();
 	} else {
 	    serverInIp = args[0];
 	    serverExIp = args[1];
-	    serverPort = args[2];
+	    serverRMIPort = args[2];
+	    //serverObjPort = args[3];
 	}
-		
-	GameInterface serverGame = networkBuild.getServerObj(serverInIp,
+
+	 GameInterface serverGame= networkBuild.getServerObj(serverInIp,
 							     serverExIp,
-							     serverPort,
+							     serverRMIPort,
 							     gameToGet);
+	System.out.println(serverGame);
 	try {
 	    networkBuild.buildNetwork(serverGame);
 	    playerNo = networkBuild.joinGame();
 	    BackUp backup = new BackUp(serverGame);
 	    networkBuild.waitingUntilGameCanStart();
-	    
+
 	    //backup.update(serverGame);
 	    //BEGINNING OF GAME
 	    
 	    //so everyone knows who starts <- crap what does this mean
 
-	    serverGame.setReadyValue(playerNo, true);
-
 	    //START VALUES
 	    long startTime;
 	    long hitTime;
 	    String answer = "";
-	    int oldRound = 1;
+	    int oldRound = 0;
 	    int round = 1;
 	    Scanner userInput = new Scanner(System.in);
 	    boolean canHit = false;
@@ -63,37 +63,36 @@ public class GameClient {
 
 	    //>>>>STOR LOOP: har ska vi egentligen ha en check att spelet inte ar slut
 	    for (int i=0; i<5; i++) { 
-
-		//loop until next round
-		System.out.println("test");
-
-		oldRound = serverGame.updateRound(oldRound); //or is it oldR?
-		while (oldRound == round) {
-		    //serverGame.updateRound(oldRound); //TODO: semaphores needed here, at client???
-		    //Doesnt return round nr.
-		}
-		//Reset player's ready value
 		serverGame.setReadyValue(playerNo, false);
-
-
 		//Kolla ifall det ar spelarens tur
 		if (serverGame.whoseTurn() == playerNo) { myRound = true; }
 		else { myRound = false; }
 		
 		//Check if it's possible to hit
-		canHit = true; //TODO: fkn for checking if its hit the dick time 
+		canHit = serverGame.timeToHit(); //TODO: fkn for checking if its hit the dick time 
 		    
 		//Display board
 		System.out.println(serverGame.displayBoard());
 		    
 		//Let the player make its move
-		userAction(myRound,canHit);
+		userAction(serverGame, playerNo,canHit,myRound);
 		
+		//TODO UPDATE THE WHOLE GAME STATUS TBH. Kolla sa att alla har gjort sitt och att losern har fatt kort
 		//TODO: kolla ifall personen fortfarande deltar i spelet eller har vunnit.
 		
-		//TODO: Uppdatera Player till att vara redo for nasta runda 
-		serverGame.setReadyValue(playerNo, true);
+		//Uppdatera Player till att vara redo for nasta runda 
+		
+		//	serverGame.setReadyValue(playerNo, true);
 
+		
+		//loop until next round
+		serverGame.updatePlayerTime(playerNo, 0L);
+		//round = serverGame.updateRound(oldRound); 
+		while (oldRound == round) {
+		    round = serverGame.updateRound(oldRound);
+		    //round = serverGame.getRound();
+		    Thread.sleep(1000);
+		}
 
 	    }
 	    
@@ -115,12 +114,16 @@ public class GameClient {
       2a. Hit is possible
       2b. Hit is not possible      
     */
-    public static void userAction(boolean canHit, boolean myRound){
+    public static void userAction(GameInterface game, int playerNo, boolean canHit, boolean myRound) throws RemoteException {
 	Scanner userInput = new Scanner(System.in);
 	String answer = "";
 	long answerTime;
 	long startCounting;
 	
+
+	
+	//Reset player's ready value
+	game.setReadyValue(playerNo, false);
 
 	if (myRound) {
 	    System.out.println("Hit dick(h) or play next card(c)?");
@@ -128,47 +131,51 @@ public class GameClient {
 	if (!myRound) {
 	    System.out.println("Do you want to hit the dick? (y/n)"); 
 	}
+
+	//Tidtagning pa svar
+	startCounting = System.nanoTime();
+
+	answerTime = System.nanoTime() - startCounting;   
+	while(answerTime < 300000) { //godtyckligt taget tal har
+	    answer = userInput.nextLine();
+	    answerTime = System.nanoTime() - startCounting;  
+	    if (!answer.equals("")) { break; } //break when player answer
+	}
+
 	if (myRound && !canHit) {
  
 	    answer = userInput.nextLine(); //#1
 	    switch(answer) {
-	    case "h": System.out.println("there was no dick to hit :c"); break; //TODO: hit fail
-	    case "c": System.out.println("Placed a card"); break; //TODO: place card
-	    default: System.out.println("What are you trying to do?"); break;
+	    case "h": answerTime = 0; game.updatePlayerTime(playerNo,answerTime); break; //TODO: hit fail
+	    case "c": game.updatePlayerTime(playerNo,answerTime); break; //TODO: try to place card
+	    default: break;
 	    }
 	    
 	}
 	if (canHit) {
-	    startCounting = System.nanoTime();
-
-	    answerTime = System.nanoTime() - startCounting;   
-	    while(answerTime < 300000) { //godtyckligt taget tal har
-		answer = userInput.nextLine();
-		answerTime = System.nanoTime() - startCounting;  
-	    }
-
-	    switch(answer) { //#1
+	    switch(answer) { 
 	    case "h":
-	    case "y": System.out.print("\nYOU HIT THE DICK :D"); break; //TODO: Updated player"s answerTime-attribute
-	    case "n": answerTime = 0; System.out.println("there was no dick to hit :c"); break; //TODO: Lost round - update answerTime = 0?
-	    case "c": System.out.print("\nYou tried to place a card"); break; //TODO: Update player"s answerTime-attribute and try to place card 
-	    default: System.out.print("\nWhat are you trying to do?"); break;
+	    case "y": game.updatePlayerTime(playerNo,answerTime); break; 
+	    case "n": answerTime = 0; game.updatePlayerTime(playerNo,answerTime);
+ break;
+	    case "c": game.updatePlayerTime(playerNo,answerTime); break; //TODO: try to place card 
+	    default: answerTime = 0; break;
 	    }
-	    
-	    System.out.print(" and you took "+answerTime+"ns\n\n");
+
+	    System.out.println("you took "+answerTime+"ns\n\n");
 	}
 	if (!myRound && !canHit) {
 	
-	    //System.out.println("Do you want to hit the dick? (y/n)");  
- 
 	    answer = userInput.nextLine(); //#1
 	    switch(answer) {
-	    case "y": System.out.println("there was no dick to hit :c"); break; //TODO: hit fail
-	    case "n": System.out.println("Moving on"); break; //TODO: 
-	    default: System.out.println("What are you trying to do?"); break;
+	    case "y": break; //TODO: hit fail
+	    case "n": /* NOTHING HAPPENS */  break;
+	    default: System.out.println("What's wrong with waiting you impatient monkeybastard?"); break;
 	    }
 	}
-	
+
+	//Made move, ready to do another!
+	game.setReadyValue(playerNo, true);
 
 
     }

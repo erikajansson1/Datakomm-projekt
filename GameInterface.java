@@ -14,7 +14,7 @@ public interface GameInterface extends Remote {
     /** Prints out a view of the board:
      *  whose turn it is, and the latest card
      */
-    public String displayBoard() throws RemoteException; //ej implementerad
+    public String displayBoard() throws RemoteException;
 
     /** Set the ready value for a player
      */
@@ -22,7 +22,7 @@ public interface GameInterface extends Remote {
 
     /** Update the hit time for a player     
      */
-    public void updatePlayerTime(int playerNo, int hitTime) throws RemoteException; //ej implementerad
+    public void updatePlayerTime(int playerNo, long hitTime) throws RemoteException; //ej implementerad
 
     /** Checks whose turn it is, and if it's time for a new turn. If so, it updates accordingly. 
      * @param currRound Taken to ensure that only one such update is done every round.
@@ -107,8 +107,13 @@ public interface GameInterface extends Remote {
      */
     public boolean askIsGameFull() throws RemoteException;
 
-
+    //TODO documentation
     public boolean waitingForPlayers() throws RemoteException;
+
+    /** Check who lost the whole game
+     * @return player number id of the loser
+     */
+    public int checkLoser() throws RemoteException;
     
 }
 
