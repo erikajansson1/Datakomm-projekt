@@ -52,7 +52,8 @@ public class GameClient {
 	    long hitTime;
 	    String answer = "";
 	    int oldRound = 0;
-	    int round = 0;
+	    int round = serverGame.updateRound(oldRound);
+	    oldRound = round;
 	    Scanner userInput = new Scanner(System.in);
 	    boolean canHit = false;
 	    boolean myRound = false; 
@@ -61,16 +62,19 @@ public class GameClient {
 	    while (serverGame.getPlayer(playerNo).getPlayerRank() == -1) {
 		backup.update(serverGame);
 		serverGame.setReadyValue(playerNo, false);
+		//Check if it's possible to hit
+		canHit = serverGame.timeToHit(); //TODO: fkn for checking if its hit the dick time 
+
+		//Display board
+		System.out.printf("\033[2J\033[;H");
+		System.out.println(serverGame.displayBoard());
+
+
 		//Kolla ifall det ar spelarens tur
 		if (serverGame.whoseTurn() == playerNo) { myRound = true; }
 		else { myRound = false; }
 		
-		//Check if it's possible to hit
-		canHit = serverGame.timeToHit(); //TODO: fkn for checking if its hit the dick time 
-		    
-		//Display board
-		System.out.printf("\033[2J\033[;H");
-		System.out.println(serverGame.displayBoard());
+
 		    
 		//Let the player make its move
 		userAction(serverGame, playerNo, round, canHit,myRound);

@@ -5,6 +5,7 @@ import java.util.*;
 public interface GameInterface extends Remote {
 
     ////////// Game object related //////////////////////////////////////
+
     /**
      * a get method for the attribut gameDeck
      * @return returns the gameDeck attribut
@@ -24,7 +25,8 @@ public interface GameInterface extends Remote {
      * @return returns the starterDeck attribut
      */
     public ArrayList<Player> getGamePlayers() throws RemoteException;
-       
+
+    
     /**
      * a update state method for the object game.
      * @rparam round is the new round value
@@ -169,11 +171,11 @@ public interface GameInterface extends Remote {
     public boolean waitingForPlayers() throws RemoteException;
 
     
-    /** Check who lost the whole game
+    /** 
+     * Check who lost the whole game
      * @return player number id of the loser
      */
     public int checkLoser() throws RemoteException;
 
-  
 }
 

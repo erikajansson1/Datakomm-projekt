@@ -272,8 +272,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 
     
     /**
-     * Handle if someone hits at the wrong time
-     * @param Player Number ID of the player
+     * Handle if someone hits at the wrong time.
+     * @param playerNo of the player trying to hit.
      */
     public String handleWrongHit(int playerNo) throws RemoteException {
 	String loserMessage = "";
@@ -290,8 +290,10 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	return loserMessage;
     } 
 		 
-    /** Handle when the hit is in the right time
-     * @param Player Number ID of the player
+
+    /**
+     * handle when the hit is in the right time.
+     * @param playerNo of the player trying to hit.
      */
     public void handleRightHit(int playerNo) throws RemoteException{
     	//TODO Semaphores?
@@ -307,7 +309,8 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     }
 	 	 
       
-    /** Player tries to lay a card
+    /** 
+     * Player tries to lay a card
      * @param Player Number ID of the player
      * @param playerRound The round it is according to the player when it tries to lay its card
      * @return Returns true if player could lay a card, otherwise false
@@ -451,5 +454,6 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	}
 	return true;
     }
+
 }
 
