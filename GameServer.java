@@ -22,11 +22,11 @@ public class GameServer {
 		networkBuild.welcomeMSG("server",0);
 
 		Registry registry = networkBuild.startRMIserver();			
-		Naming.rebind(networkBuild.getExIp()+"/theGame:"+RMIPort, game);
+		//Naming.rebind("//"+networkBuild.getExIp()+"/theGame:"+RMIPort, game);
 
 		//		UnicastRemoteObject.exportObject(game, 1100);
 		//System.out.println(game);
-		//Naming.rebind("//"+networkBuild.getInIp()+":"+RMIPort+"/theGame", game);
+		Naming.rebind("//"+networkBuild.getInIp()+":"+RMIPort+"/theGame", game);
 		//System.out.println(game);
 		networkBuild.publishReady();
 
