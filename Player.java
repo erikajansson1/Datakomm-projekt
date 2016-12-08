@@ -120,5 +120,12 @@ public class Player implements java.io.Serializable{
 	gameDeck.cleanDeck();
     }
 
+
+    /**
+     * returns the amount of cards the player currentyl has.
+     */
+    public int getAmountOfCardsOnHand() {
+	return this.playerDeck.getDeckSize();
+    }
  
 }

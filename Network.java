@@ -246,14 +246,14 @@ class Network {
 						       serverRMIPort+
 						       "/"+
 						       objectToGet);
-	    System.out.println("\n\nfound on: //"+
+	    /*  System.out.println("\n\nfound on: //"+
 			       serverExIp+
 			       ":"+
 			       serverRMIPort+
 			       "/"+
 			       objectToGet+
 			       "\n"+
-			       serverGame);
+			       serverGame);*/
 	    
 	}catch (Exception e) {
 	    System.out.println(" exception: " + e);
@@ -283,7 +283,7 @@ class Network {
     public int joinGame() throws RemoteException {
       	int playerNo = -1;
 	System.out.println("You are now connected!\nChecking if game is full!");
-	System.out.println(this.serverGame);
+	//	System.out.println(this.serverGame);
 
 	if(!this.serverGame.askIsGameFull()) {
 	    playerNo = serverGame.addPlayer(inIP,exIP,this.askAlias());
@@ -315,12 +315,12 @@ class Network {
 		    case 2:count = ".."; break;
 		    default:;
 		    };
-		System.out.printf("\033[2J\033[;H");
-		System.out.println(serverGame.displayBoard());
-		System.out.printf("Waiting for players"+count);
-		Thread.sleep(500);				  
+		    System.out.printf("\033[2J\033[;H");
+		    System.out.println(serverGame.displayBoard());
+		    System.out.printf("Waiting for players"+count);
+		    Thread.sleep(500);				  
 		}
-
+		
 	    }
 	} catch (InterruptedException e) {
 	    e.printStackTrace();

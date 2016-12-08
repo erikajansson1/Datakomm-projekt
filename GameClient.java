@@ -39,7 +39,7 @@ public class GameClient {
 							     serverExIp,
 							     serverRMIPort,
 							     gameToGet);
-	System.out.println(serverGame);
+	 //	System.out.println(serverGame);
 	try {
 	    networkBuild.buildNetwork(serverGame);
 	    playerNo = networkBuild.joinGame();
@@ -55,13 +55,13 @@ public class GameClient {
 	    long hitTime;
 	    String answer = "";
 	    int oldRound = 0;
-	    int round = 1;
+	    int round = 0;
 	    Scanner userInput = new Scanner(System.in);
 	    boolean canHit = false;
 	    boolean myRound = false; 
 
 	    //>>>>STOR LOOP: har ska vi egentligen ha en check att spelet inte ar slut
-	    for (int i=0; i<5; i++) {
+	    while (serverGame.getPlayer(playerNo).getPlayerRank() == -1) {
 		backup.update(serverGame);
 		serverGame.setReadyValue(playerNo, false);
 		//Kolla ifall det ar spelarens tur
@@ -72,6 +72,7 @@ public class GameClient {
 		canHit = serverGame.timeToHit(); //TODO: fkn for checking if its hit the dick time 
 		    
 		//Display board
+		System.out.printf("\033[2J\033[;H");
 		System.out.println(serverGame.displayBoard());
 		    
 		//Let the player make its move
@@ -89,11 +90,14 @@ public class GameClient {
 		serverGame.updatePlayerTime(playerNo, 0L);
 		//round = serverGame.updateRound(oldRound); 
 		while (oldRound == round) {
+		    System.out.printf("\033[2J\033[;H");
 		    round = serverGame.updateRound(oldRound);
 		    System.out.println(serverGame.displayBoard());
 		    //round = serverGame.getRound();
-		    Thread.sleep(1000);
+		    Thread.sleep(500);
 		}
+      
+		oldRound = round;
 
 	    }
 	    
@@ -148,7 +152,7 @@ public class GameClient {
 	    switch(answer) {
 	    case "h":
 		//serverGame.updatePlayerTime(playerNo,0L); //is done in main
-		serverGame.handleWrongHit(serverGame.findPlayer(playerNo));
+		serverGame.handleWrongHit(serverGame.getPlayer(playerNo));
 		break; 		
 	    case "c":
 		//serverGame.updatePlayerTime(playerNo,0L);  //is done in main

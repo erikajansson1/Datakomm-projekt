@@ -25,9 +25,9 @@ public class GameServer {
 		// Naming.rebind(networkBuild.getInIp()+"/theGame:"+port, game);
 
 		//		UnicastRemoteObject.exportObject(game, 1100);
-		System.out.println(game);
+		//System.out.println(game);
 		Naming.rebind("//"+networkBuild.getInIp()+":"+RMIPort+"/theGame", game);
-		System.out.println(game);
+		//System.out.println(game);
 		networkBuild.publishReady();
 
 		String[] argvClient = new String[]{
