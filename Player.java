@@ -86,7 +86,6 @@ public class Player implements java.io.Serializable{
     public Deck getPlayerDeck() {
 	return this.playerDeck;
     }
-
     
     /** 
      * Set this player's hitTime-attribute to given parameter time
@@ -96,9 +95,9 @@ public class Player implements java.io.Serializable{
 	this.hitTime = time;
     }
 
-    /**
-     * Returns the players hitTime.
-     */
+/**
+ * Returns the players hitTime.
+ */
     public long getPlayerTime() {
 	return this.hitTime;
     }

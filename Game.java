@@ -259,15 +259,21 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     /**
      * Handle if someone hits at the wrong time
      */
-    public String handleWrongHit(Player loserPlayer){
+    public String handleWrongHit(Player loserPlayer) throws RemoteException {
 	//TODO Take the semaphore(attribute) 
 	//loserPlayer.getCardFromMiddleDeck();
+	String loserMessage = "";
+	try{
 	this.lock.acquire();
-	String loserMessage = "Your hit was wrong, pick up the deck!";
-	int playerNbr = loserPlayer.getPlayerNumber();
-	this.loserTakesItAll(playerNbr);
-	this.lock.release();
-	return loserMessage;
+    loserMessage = "Your hit was wrong, pick up the deck!";
+    int playerNbr = loserPlayer.getPlayerNumber();
+    this.loserTakesItAll(playerNbr);
+	}
+    catch( Exception e) {
+	    e.printStackTrace();
+	}
+     this.lock.release();
+    return loserMessage;
     } 
 		 
     /**
@@ -278,9 +284,9 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     	//TODO it should wait for the time to be over or that everyone have hit
 	int loser = 0;
     	for ( int i = 0; this.getAmountOfPlayers() > i; i++){
-	    //if (this.gamePlayers<this.getAmountOfPlayers()>.getPlayerTime() <  this.gamePlayers[i].getPlayerTime()){
-	    loser = this.getAmountOfPlayers(); 
-	}
+    		//if (this.gamePlayers<this.getAmountOfPlayers()>.getPlayerTime() <  this.gamePlayers[i].getPlayerTime()){
+    			loser = this.getAmountOfPlayers(); 
+    		}
     	//this.gamePlayers[loser].giveWholeDeck();
     	//String loserMessage = "Player" + this.gamePlayers[loser].getPlayerName() + "lost, you pick up the deck"
     	return;
