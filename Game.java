@@ -332,20 +332,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	}
 	return actionMessage; 
     }
-	
-
-    /*
-     //TODO Semaphores?
-    	//TODO it should wait for the time to be over or that everyone have hit
-	int loser = 0;
-    	for ( int i = 0; this.getAmountOfPlayers() > i; i++){
-    		//if (this.gamePlayers<this.getAmountOfPlayers()>.getPlayerTime() <  this.gamePlayers[i].getPlayerTime()){
-    			loser = this.getAmountOfPlayers(); 
-    		}
-    	//this.gamePlayers[loser].giveWholeDeck();
-    	//String loserMessage = "Player" + this.gamePlayers[loser].getPlayerName() + "lost, you pick up the deck"
-    	return;
-     */ 	 
+	 
       
     /** 
      * Player tries to lay a card
