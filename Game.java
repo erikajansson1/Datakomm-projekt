@@ -2,7 +2,7 @@ import java.rmi.*;
 import java.rmi.server.*;
 import java.util.*;
 import java.util.concurrent.Semaphore;
- 
+
 public class Game extends UnicastRemoteObject implements GameInterface {
     private static final long serialVersionUID = 1L;
     private final Semaphore lock;
@@ -36,7 +36,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      */
     public boolean timeToHit() throws RemoteException {
     	if (gameDeck.possibleToHit()){
-    		return true;
+	    return true;
     	}
  	return false;
     };
@@ -55,9 +55,9 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	    
 	    if(gamePlayers.get(i).getReadyValue()){
 		players += "READY\n";
-		    } else {
+	    } else {
 		players += "NOT READY\n";
-		    }	
+	    }	
 	}
 	String whosTurn = "\n\nTurn: "+ gamePlayers.get(this.whoseTurn()).getPlayerName();
 	String currCard = "\nLatest Card: "+this.gameDeck.showTopCard();
@@ -82,6 +82,13 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      * @param hitTime The new hit time
      */
     public void updatePlayerTime(int playerNo, long hitTime) throws RemoteException { 
+	/*Player thisGuy = findPlayer(alias);
+	  String name = thisGuy.getPlayerName();
+	  if (name.equals("")) { return; }
+	  else {
+	  setPlayerTime(hitTime);
+	  return;
+	  }*/
 	Player thisGuy = gamePlayers.get(playerNo);
 	thisGuy.setPlayerTime(hitTime);
     }
@@ -161,14 +168,20 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     /**
      * Initiate game by giving out cards and select who start first 
      */
-    //TODO: Who should start first, create  ---the server starts the game (playerNo = 1)
-     public void startGame(int amountOfPlayers) throws RemoteException { 
-	 //Shuffle cards
-	 
-	 //Dela ut kort 
-     }
+    //TODO: Fixat?? Who should start first, create  ---the server starts the game (playerNo = 1)
+    public void startGame(int amountOfPlayers) throws RemoteException {
+	this.starterDeck.mixup();
+	while (starterDeck.getAmount() > 0) {
+	    for (int i = 0; i <= amountOfPlayers; i++){
+		if (starterDeck.getAmount() > 0){
+		    Player thePlayer = gamePlayers.get(i);
+		    Card cardToInsert = starterDeck.getCard();
+		    thePlayer.getPlayerDeck().addCard(cardToInsert);
+		}
+	    }
+      	}
+    }
 	
-    
 	 
     /**
      * Tells the amount of players in the game
@@ -177,14 +190,23 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     	int amountPlayers = this.gamePlayers.size();
     	return amountPlayers;
     }
+    
+ 
+    /**
+     * Gives the deck in the middle to whoever lost
+     */
+    public void giveWholeDeck(Player loserPlayer){ 
+	loserPlayer.getCardFromMiddleDeck(this.gameDeck);
+    } 
+	 
    
      
     /** Get the rank of player #playerNo 
 	@param playerNo the player's no id
      */
-    public int myRank(int playerNo) throws RemoteException{
-	Player dessTheGlorious = this.gamePlayers.get(playerNo);
-	int rank = dessTheGlorious.getPlayerRank();
+    public int myRank(int playerNo) throws RemoteException {
+	Player pyret = this.gamePlayers.get(playerNo);
+	int rank = pyret.getPlayerRank();
 	return rank;	
     } 	 
 	 
@@ -224,7 +246,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     }
 
     
-    /** Gives all the losing player all the thrown cards
+    /** Gives the losing player all the thrown cards
      * @param Number ID of the player
      */
     public void loserTakesItAll(int playerNo) throws RemoteException {
@@ -233,6 +255,37 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	moveDeck(this.gameDeck, loserDeck);    
     }
 
+    
+    /**
+     * Handle if someone hits at the wrong time
+     */
+    public String handleWrongHit(Player loserPlayer){
+	//TODO Take the semaphore(attribute) 
+	//loserPlayer.getCardFromMiddleDeck();
+	this.lock.acquire();
+    String loserMessage = "Your hit was wrong, pick up the deck!";
+    int playerNbr = loserPlayer.getPlayerNumber();
+    this.loserTakesItAll(playerNbr);
+     this.lock.release();
+    return loserMessage;
+    } 
+		 
+	 /**
+     * handle when the hit is in the right time
+     */
+    public void handleRightHit(){
+    	//TODO Semaphores?
+    	//TODO it should wait for the time to be over or that everyone have hit
+		int loser = 0;
+    	for ( int i = 0; this.getAmountOfPlayers() > i; i++){
+    		//if (this.gamePlayers<this.getAmountOfPlayers()>.getPlayerTime() <  this.gamePlayers[i].getPlayerTime()){
+    			loser = this.getAmountOfPlayers(); 
+    		}
+    	//this.gamePlayers[loser].giveWholeDeck();
+    	//String loserMessage = "Player" + this.gamePlayers[loser].getPlayerName() + "lost, you pick up the deck"
+    	return;
+    	}
+	 	 
       
     /** Player tries to lay a card
      * @param Player Number ID of the player
@@ -260,27 +313,7 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	}
 	
     }
-    //TODOOOOOOO Kolla alla dessa funktioner
-
-    //Handle if someone hits at wrong time 
-    public void handleWrongHit(){ 
-	//Look at the player that send the wrong signal, tell it it did bad 
-	//Give the whole deck to it 
-    } 
-		 
-	 
-    //Handle when players hit at right time, last on will have to  
-    //pick up whole deck 
-    public void handleRightHit(){ 
-	//wait for all to hit, then tell the last one it lost 
-	//give the whole deck to it 
-    } 
-	 
-    //Who is the slowest when hitting the deck. Give the GameDeck to the loser 
-    public void whoLostRightHit(){
-	//TODO Compare times in the player objects and reset it after determining who lost.
-	return; 
-    }
+   
 
     /**
      * A get method for the attribut round.
@@ -318,8 +351,6 @@ public class Game extends UnicastRemoteObject implements GameInterface {
     }
 
     
-
-    
     /**
      * A update state method for the object game.
      * @param round is the new round value.
@@ -347,13 +378,14 @@ public class Game extends UnicastRemoteObject implements GameInterface {
      */
     public int addPlayer(String inIp, String exIp, String alias) throws RemoteException {
 	try {
-	this.lock.acquire();
+	    this.lock.acquire();
 
-	if(this.askIsGameFull()) {
-	    this.lock.release();	
-	    return -1;
-	}
+	    if(this.askIsGameFull()) {
+		this.lock.release();	
+		return -1;
+	    }
 	
+
 	    for (int i = 0; i < gamePlayers.size(); i++) {
 		if(gamePlayers.get(i).getPlayerName().equals("Empty")) {
 		    gamePlayers.set(i,new Player(i, inIp, exIp,alias,true));
@@ -403,10 +435,5 @@ public class Game extends UnicastRemoteObject implements GameInterface {
 	}
 	return true;
     }
-
-
-
-
-    
 }
 
