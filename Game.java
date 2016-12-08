@@ -304,28 +304,24 @@ public class Game extends UnicastRemoteObject implements GameInterface {
       
     /** Player tries to lay a card
      * @param Player Number ID of the player
+     * @param playerRound The round it is according to the player when it tries to lay its card
+     * @return Returns true if player could lay a card, otherwise false
      */
-    public void tryToLayCard(int playerNo) throws RemoteException {
-	Player trying = this.gamePlayers.get(playerNo);
-	long tryingTime = trying.getPlayerTime();
-	while (!waitingForPlayers()) { /* Forever looping, waiting, for youuu */}
+    public boolean tryToLayCard(int playerNo, int playerRound) throws RemoteException {
 	
-	long maxAnswerTime = 0;
-	Player currGuy;
-	long currAnswerTime;
-	int len = this.gamePlayers.size();
-	for(int i=0; i<len; i++) {
-	    if (i != playerNo) {
-		currGuy = this.gamePlayers.get(i);
-		currAnswerTime = currGuy.getPlayerTime();
-		if(currAnswerTime > maxAnswerTime) {
-		    maxAnswerTime = currAnswerTime;
-		}
-	    }
+	this.lock.acquire();
+	if(playerRound < this.round) {
+	    Player trying = this.gamePlayers.get(playerNo);
+	    trying.playNextCard(this.gameDeck);
+	    this.round++;
+	    this.lock.acquire();
+	    return true;
 	}
-	if (tryingTime <= maxAnswerTime) {
-	    trying.playNextCard(this.gameDeck);	    
+	else {
+	    this.lock.acquire();
+	    return false;
 	}
+
 	
     }
    
