@@ -141,7 +141,8 @@ class Network {
 	    {
 		//System.setProperty("java.rmi.server.hostname",this.exIP);
 		System.out.println("RMI server started");
-
+		System.getProperties().put("http.proxyHost", "83.255.61.11");
+		System.getProperties().put("http.proxyPort", "1099");
 		//System.getProperties().put("java.rmi.server.hostname", "//"+exIP);
 		System.setProperty("java.rmi.server.useLocalHostname",inIP);
 		//System.setProperty("java.rmi.server.logCalls","true");
@@ -263,23 +264,23 @@ class Network {
 							      ":"+
 							      serverRMIPort);
 	    */
-	    //    System.getProperties().put("http.proxyHost", "83.255.61.11");
-	    //System.getProperties().put("http.proxyPort", "1099");
+	    System.getProperties().put("http.proxyHost", "83.255.61.11");
+	    System.getProperties().put("http.proxyPort", "1099");
 	    
-		   serverGame = (GameInterface) Naming.lookup("//"+
-							      serverExIp+
-							      ":"+
-							      serverRMIPort+
-							      "/"+
-							      objectToGet);
-		   System.out.println("\n\nfound on: //"+
-				      serverExIp+
-				      ":"+
-				      serverRMIPort+
-				      "/"+
-				      objectToGet+
-				      "\n"+
-				      serverGame);
+	    serverGame = (GameInterface) Naming.lookup("//"+
+						       serverExIp+
+						       ":"+
+						       serverRMIPort+
+						       "/"+
+						       objectToGet);
+	    System.out.println("\n\nfound on: //"+
+			       serverExIp+
+			       ":"+
+			       serverRMIPort+
+			       "/"+
+			       objectToGet+
+			       "\n"+
+			       serverGame);
 	    
 	}catch (Exception e) {
 	    System.out.println(" exception: " + e);
