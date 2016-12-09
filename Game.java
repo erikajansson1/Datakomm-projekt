@@ -67,7 +67,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	    }	
 	}
 	String whosTurn = "\n\nTurn: "+ gamePlayers.get(this.whoseTurn()).getPlayerName();
-	String round = "\n"+this.round;
+	String round = "\nRound: "+this.round;
 	String currCard = "\nLatest Card: "+this.gameDeck.showTopCard();
 
 	return ""+ players + whosTurn + round + currCard;
@@ -187,8 +187,9 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
      * Initiate game by giving out cards and select who start first 
      */
     // TODO : This won't be printed, save instead in list and return !
+    // TODO : The prints are for debugging and are printed on server side...
      public void startGame(int playerNo) throws RemoteException {
-	if(playerNo != 0) {
+	if(playerNo == 0) {
 	    this.starterDeck.mixup();
 	    Player thePlayer;
 	    Card cardToInsert;
@@ -305,7 +306,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 		return loserMessage; 
 	    }
 	    
-	    //KOLLA VEM SOM SLOG FÖRST
+	    //KALLA VEM SAM SLAG FARST
 	    long fastestAnswerTime = 0;
 	    Player currGuy;
 	    long currAnswerTime;
@@ -347,7 +348,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 		return "Too slow, it's a new round!"; }
 	    while(!everyoneHasMadeMove()) { /* WAITING LOOP */ }
 
-	    //KOLLA VEM SOM VAR LÅNGSAMMAST	    
+	    //KOLLA VEM SOM VAR LONGSOMMOST	    
 	    long longestAnswerTime = 0;
 	    Player currGuy;
 	    long currAnswerTime;

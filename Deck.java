@@ -116,17 +116,18 @@ public class Deck implements java.io.Serializable{
 		    cardList.get(topCard-(1+n)).getRank())){    
 		    n++;
 	    }
-        	if (n == noPlayers){
-        		return false;
-        		}
-        	else {
-        		return true;
-        		}
-        	}
+	    if (n == noPlayers){
+		return false;
+	    }
+	    else {
+		return true;
+	    }
+	}
     	else {
-	    while( amount != 0 &&
+	    while( amount != 1 &&
 		   (cardList.get(topCard).getRank() !=
-		    cardList.get(topCard-(n+1)).getRank())){
+		    cardList.get(topCard-(n+1)).getRank())
+		   ){
 			amount--;
 			n++;
 		    }

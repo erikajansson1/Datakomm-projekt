@@ -42,7 +42,7 @@ public class GameClient {
 
 	    
 	    //BEGINNING OF GAME
-	    
+	    //PLAYER ZERo Starts the game always.
 	    serverGame.startGame(playerNo);
 	    
 	    //Gives out information about how many player. We need functions to get strings that get aliases
@@ -70,6 +70,7 @@ public class GameClient {
 
 		//Display board
 		System.out.printf("\033[2J\033[;H"); //Why do we print out this?
+		// to "Refresh" the display?
 		System.out.println(serverGame.displayBoard());
 		System.out.println("Current dick size " + serverGame.getDeckSize());
 		System.out.println(checkVar);
@@ -88,16 +89,16 @@ public class GameClient {
 		serverGame.setReadyValue(playerNo, true);
 
 		
-		//TODO UPDATE THE WHOLE GAME STATUS TBH. Kolla sa att alla har gjort sitt och att losern har fatt kort
-				//Completely lost in how we compare players to eachother from this loop
-		
+		//TODO UPDATE THE WHOLE GAME STATUS TBH.
+		//Kolla sa att alla har gjort sitt och att losern har fatt kort
+		//Completely lost in how we compare players to eachother from this loop
 		//TODO: kolla ifall personen fortfarande deltar i spelet eller har vunnit.
-			//Take rankWhenFinished from player in startGame function
-			//When cards on hand == 0, change the rankWhenFinished in player (need function)
-			//Put in while a statement about rankWhenFinished. If we do this we can have to
-			// state, 
-			// 1.You are still playing and go though this loop
-			// 2.You won but still se the outprint in another loop
+		//Take rankWhenFinished from player in startGame function
+		//When cards on hand == 0, change the rankWhenFinished in player (need function)
+		//Put in while a statement about rankWhenFinished. If we do this we can have to
+		// state, 
+		// 1.You are still playing and go though this loop
+		// 2.You won but still se the outprint in another loop
 		
 	       
 		
