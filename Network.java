@@ -276,14 +276,16 @@ class Network {
 						       serverRMIPort+
 						       "/"+
 						       objectToGet);
-	    System.out.println("\n\nfound on: //"+
-			       serverExIp+
-			       ":"+
-			       serverRMIPort+
-			       "/"+
-			       objectToGet+
-			       "\n"+
-			       serverGame);
+	    /*
+	      System.out.println("\n\nfound on: //"+
+	      serverExIp+
+	      ":"+
+	      serverRMIPort+
+	      "/"+
+	      objectToGet+
+	      "\n"+
+	      serverGame);
+	    */
 	    
 	}catch (Exception e) {
 	    System.out.println(" exception: " + e);
@@ -313,8 +315,6 @@ class Network {
     public int joinGame() throws RemoteException {
 	int playerNo = -1;
 	System.out.println("You are now connected!\nChecking if game is full!");
-	System.out.println(this.serverGame);
-	
 	if(!this.serverGame.askIsGameFull()) {
 	    playerNo = serverGame.addPlayer(inIP,exIP,this.askAlias());
 	}
@@ -362,6 +362,8 @@ class Network {
 	    registry = this.startRMIserver("debug");
 	    serverGame = new Game(noPlayers);
 	    Naming.rebind("//"+this.getInIp()+":1099/theGame", serverGame);
+	    this.publishReady();
+	    System.out.println("ignore external IP!");
 	    String[] argvClient = new String[] {
 		this.getInIp(),
 		this.getInIp(),
