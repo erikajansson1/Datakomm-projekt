@@ -27,17 +27,13 @@ public class GameClient {
 	    serverExIp = args[1];
 	    serverRMIPort = args[2];
 	}
-
 	GameInterface serverGame = networkBuild.getServerObj(serverInIp,
 							     serverExIp,
 							     serverRMIPort,
 							     gameToGet);
-
-	System.out.println("Erhallit STUBAS:\n"+serverGame);
 	try {
-	    System.out.println(serverGame.getRound());
+	    
 	    networkBuild.buildNetwork(serverGame);
-	    System.out.println(serverGame);
 	    System.out.println("Build complete");
 	    playerNo = networkBuild.joinGame();
 	    
