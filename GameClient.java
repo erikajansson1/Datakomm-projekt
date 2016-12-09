@@ -28,15 +28,10 @@ public class GameClient {
 	    serverRMIPort = args[2];
 	}
 
-
-	//System.getProperties().put("socksProxyHost", "83.255.61.11");
-	//System.getProperties().put("socksProxyPort", "1099");
-	System.setProperty("java.rmi.server.hostname",serverExIp);
 	GameInterface serverGame = networkBuild.getServerObj(serverInIp,
 							     serverExIp,
 							     serverRMIPort,
 							     gameToGet);
-
 
 	System.out.println("Erhallit STUBAS:\n"+serverGame);
 	try {

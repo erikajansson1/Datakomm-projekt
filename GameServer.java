@@ -30,12 +30,8 @@ public class GameServer {
 		serverGame = new Game(noPlayers);
 		//Naming.rebind("//"+networkBuild.getExIp()+"/theGame:"+RMIPort, game);
 
-		//		UnicastRemoteObject.exportObject(serverGame, 1100);
+		//UnicastRemoteObject.exportObject(serverGame, 1100);
 		//System.out.println(game);
-
-	
-		
-		
 		Naming.rebind("//"+networkBuild.getInIp()+":"+RMIPort+"/theGame", serverGame);
 		//System.out.println(game);
 		networkBuild.publishReady();
