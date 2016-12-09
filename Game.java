@@ -36,8 +36,16 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
      */
     public boolean timeToHit() throws RemoteException {
     	return gameDeck.possibleToHit(gamePlayers.size());
-	    }
+    }
 
+
+    /** Get middle deck size
+     */
+    public int getDeckSize() throws RemoteException{
+	
+	Deck middle = this.gameDeck;
+	return middle.getDeckSize();
+    }
 
     /** 
      * Prints out a view of the board:
@@ -100,7 +108,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
      * @return The round value 
      */
     public int updateRound(int currRound) throws RemoteException{
-	try {
+	try{
 	    this.lock.acquire();
 
 	    //Compare so that you dont update the Round twice
@@ -179,16 +187,24 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
      * Initiate game by giving out cards and select who start first 
      */
      public void startGame(int playerNo) throws RemoteException {
-	if(playerNo == 0) {
+	if(playerNo != 0) {
 	    this.starterDeck.mixup();
-	    while (starterDeck.getAmount() > 0) {
+	    Player thePlayer;
+	    Card cardToInsert;
+ 	    while (starterDeck.getAmount() > 0) {
 		for (int i = 0; i < gamePlayers.size(); i++){
 		    if (starterDeck.getAmount() > 0){
-			Player thePlayer = gamePlayers.get(i);
-			Card cardToInsert = starterDeck.getCard();
+			thePlayer = gamePlayers.get(i);
+			cardToInsert = starterDeck.getCard();
 			thePlayer.getPlayerDeck().addCard(cardToInsert);
+			
+
 		    }
 		}
+	    }
+	    for(int j=0; j<gamePlayers.size();j++) {
+		thePlayer = gamePlayers.get(j);
+		System.out.println("Game.java:207. Player "+j+": "+thePlayer.getPlayerDeck().getDeckSize());
 	    }
 	}
     }
@@ -276,21 +292,37 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
      * @param playerNo of the player trying to hit.
      */
     public String handleWrongHit(int playerNo, int round) throws RemoteException {
-	String loserMessage = "";
+	String loserMessage = "Too slow, it's a new round!";
 	try{
 	    this.lock.acquire();
 	    
     	    while(!everyoneHasMadeMove()) { /* WAITING LOOP */ }
 	    if(round < this.round) { 	    
 		this.lock.release();
-		return "Too slow, it's a new round!"; 
+		return loserMessage; 
 	    }
 	    
-	    //TODO: ta hansyn till vem som slog forst??
+	    //KOLLA VEM SOM SLOG FÖRST
+	    long fastestAnswerTime = 0;
+	    Player currGuy;
+	    long currAnswerTime;
+	    int len = this.gamePlayers.size();
+	    int firstID = -1;
+	    Player first = null;
+	    for(int i=0; i<len; i++) {
+		currGuy = this.gamePlayers.get(i);
+		currAnswerTime = currGuy.getPlayerTime();
+		if(currAnswerTime < fastestAnswerTime) { 
+		    fastestAnswerTime = currAnswerTime; 
+		    firstID = i;
+		    first = currGuy;
+		}
+	    }
 
-	    loserMessage = "Your hit was wrong, pick up the deck!";
-	    this.loserTakesItAll(playerNo);
-	    
+	    if(firstID == playerNo){
+		loserMessage = "Your hit was wrong, pick up the deck!";
+		this.loserTakesItAll(playerNo);
+	    }
 	}
 	catch( Exception e) {
 	    e.printStackTrace();
@@ -311,7 +343,8 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 		this.lock.release();
 		return "Too slow, it's a new round!"; }
 	    while(!everyoneHasMadeMove()) { /* WAITING LOOP */ }
-	    
+
+	    //KOLLA VEM SOM VAR LÅNGSAMMAST	    
 	    long longestAnswerTime = 0;
 	    Player currGuy;
 	    long currAnswerTime;
@@ -332,7 +365,6 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	    String loserName = loser.getPlayerName();
 	    actionMessage = "Hit succesfull! "+loserName+" lost.";
 	    
-	    round++;
 	    this.lock.release();
 	    return actionMessage;
 	}
@@ -353,14 +385,17 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     public boolean tryToLayCard(int playerNo, int playerRound) throws RemoteException {
 	try {
 	    this.lock.acquire();
-	    if(playerRound < this.round) {
+	    if(playerRound <= this.round) {
 		Player trying = this.gamePlayers.get(playerNo);
 		trying.playNextCard(this.gameDeck);
+		System.out.println("Game.java:191 gameDeck=" +gameDeck.getDeckSize()
+				   + ", Player"+playerNo+" deck="+trying.getPlayerDeck().getDeckSize());
 		this.round++;
 		this.lock.release();
 		return true;
 	    }
 	}catch(InterruptedException e) {
+	    System.out.println("NOOOOO");
 	    e.printStackTrace();
 	}
 

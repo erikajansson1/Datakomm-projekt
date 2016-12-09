@@ -177,5 +177,9 @@ public interface GameInterface extends Remote {
      */
     public int checkLoser() throws RemoteException;
 
+    /** Get middle deck size
+     */
+    public int getDeckSize()  throws RemoteException;
+
 }
 
