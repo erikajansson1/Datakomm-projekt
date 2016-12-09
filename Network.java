@@ -357,6 +357,13 @@ class Network {
 	}
     }
 
+
+    /**
+     * A debug method that is supposed to to create a game locally and cirumvent the network part.
+     * @param serverGame is the static game object
+     * @param reference to the static registry 
+     * @param noPlayers to create the game for.
+     */
     public void debugLocal(Game serverGame, Registry registry, int noPlayers) throws RemoteException{
 	try {
 	    registry = this.startRMIserver("debug");
