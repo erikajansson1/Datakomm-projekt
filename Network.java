@@ -135,22 +135,25 @@ class Network {
     /**
      * Method to start a RMI server on port 1099.
      */
-    public Registry startRMIserver() {
+    public Registry startRMIserver(String type) {
 	Registry registry = null;
 	try  //special exception handler for registry creation
 	    {
-		//System.setProperty("java.rmi.server.hostname",this.exIP);
-		System.out.println("RMI server started");
-		//System.getProperties().put("http.proxyHost", "83.255.61.11");
-		//System.getProperties().put("http.proxyPort", "1099");
-		//System.getProperties().put("java.rmi.server.hostname", "//"+exIP);
-		//System.setProperty("java.rmi.server.useLocalHostname",inIP);
-		//System.setProperty("java.rmi.server.logCalls","true");
-		System.setProperty("java.rmi.server.hostname",this.exIP);
-
-		registry = LocateRegistry.createRegistry(1099);
-
-		System.out.println("java RMI registry created.");
+		if (type.equals("standard")){
+			//System.setProperty("java.rmi.server.hostname",this.exIP);
+			System.out.println("RMI server started");
+			//System.getProperties().put("http.proxyHost", "83.255.61.11");
+			//System.getProperties().put("http.proxyPort", "1099");
+			//System.getProperties().put("java.rmi.server.hostname", "//"+exIP);
+			//System.setProperty("java.rmi.server.useLocalHostname",inIP);
+			//System.setProperty("java.rmi.server.logCalls","true");
+			System.setProperty("java.rmi.server.hostname",this.exIP);
+			registry = LocateRegistry.createRegistry(1099);
+			System.out.println("java RMI registry created.");
+		    } else if (type.equals("debug")) {
+		    System.out.println("RMI server started");
+		    registry = LocateRegistry.createRegistry(1099);
+		}
 	    }
 	catch (RemoteException e)
 	    {
@@ -187,15 +190,15 @@ class Network {
     }
 
 
-        /**
+    /**
      * method to ask the user which external IP port the server has whom he wishes to join.
      * @return a string containg the users answer.
      */
     /*    public String askServerNAT() {
-	Scanner userInput = new Scanner(System.in);
-	System.out.printf("Is the server behind a NAT?");
+	  Scanner userInput = new Scanner(System.in);
+	  System.out.printf("Is the server behind a NAT?");
 
-	}*/
+	  }*/
 
     
     /**
@@ -243,26 +246,26 @@ class Network {
     public GameInterface getServerObj(String serverInIp, String serverExIp, String serverRMIPort, String objectToGet)
     {
 	GameInterface serverGame = null;
-       	try {
+	try {
 	       
 	    /*
-	    Registry registry = LocateRegistry.getRegistry( "//"+serverExIp,
-							    Integer.parseInt(serverRMIPort));
+	      Registry registry = LocateRegistry.getRegistry( "//"+serverExIp,
+	      Integer.parseInt(serverRMIPort));
 		   
-	    System.out.println("Registry found in "+
-			       serverExIp +
-			       ":" +
-			       serverRMIPort +
-			       "\n" +
-			       registry);
+	      System.out.println("Registry found in "+
+	      serverExIp +
+	      ":" +
+	      serverRMIPort +
+	      "\n" +
+	      registry);
 	    
 		   
-		   serverGame = (GameInterface) Naming.lookup("//"+
-							      serverExIp+
-							      "/"+
-							      objectToGet+
-							      ":"+
-							      serverRMIPort);
+	      serverGame = (GameInterface) Naming.lookup("//"+
+	      serverExIp+
+	      "/"+
+	      objectToGet+
+	      ":"+
+	      serverRMIPort);
 	    */
 	    //System.getProperties().put("http.proxyHost", "83.255.61.11");
 	    //System.getProperties().put("http.proxyPort", "1099");
@@ -308,7 +311,7 @@ class Network {
      * @return int symbolising the players assigned player number.
      */
     public int joinGame() throws RemoteException {
-      	int playerNo = -1;
+	int playerNo = -1;
 	System.out.println("You are now connected!\nChecking if game is full!");
 	System.out.println(this.serverGame);
 	
@@ -354,7 +357,23 @@ class Network {
 	}
     }
 
-    
+    public void debugLocal(Game serverGame, Registry registry, int noPlayers) throws RemoteException{
+	try {
+	    registry = this.startRMIserver("debug");
+	    serverGame = new Game(noPlayers);
+	    Naming.rebind("//"+this.getInIp()+":1099/theGame", serverGame);
+	    String[] argvClient = new String[] {
+		this.getInIp(),
+		this.getInIp(),
+		"1099"
+	    };
+	    GameClient.main(argvClient);
+	    System.exit(0);
+	}catch (Exception e){
+	    System.out.printf("You got fucked!%n");
+	    System.exit(0);
+	}
+    }
 }
 
 
