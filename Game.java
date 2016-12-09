@@ -186,6 +186,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     /**
      * Initiate game by giving out cards and select who start first 
      */
+    // TODO : This won't be printed, save instead in list and return !
      public void startGame(int playerNo) throws RemoteException {
 	if(playerNo != 0) {
 	    this.starterDeck.mixup();
@@ -202,7 +203,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 		    }
 		}
 	    }
-	    for(int j=0; j<gamePlayers.size();j++) {
+	   for(int j=0; j<gamePlayers.size();j++) {
 		thePlayer = gamePlayers.get(j);
 		System.out.println("Game.java:207. Player "+j+": "+thePlayer.getPlayerDeck().getDeckSize());
 	    }
@@ -291,8 +292,10 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
      * Handle if someone hits at the wrong time.
      * @param playerNo of the player trying to hit.
      */
-    public String handleWrongHit(int playerNo, int round) throws RemoteException {
+    public String handleWrongHit(int playerNo, int round) throws RemoteException { 
 	String loserMessage = "Too slow, it's a new round!";
+	//String loserMessage = "Awh you hit at the wrong time buddy";
+	//String loserMessage = "You said no, to bad you should have said yes!";
 	try{
 	    this.lock.acquire();
 	    
@@ -395,7 +398,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 		return true;
 	    }
 	}catch(InterruptedException e) {
-	    System.out.println("NOOOOO");
+	    System.out.println("Something went wrong when trying to lay card");
 	    e.printStackTrace();
 	}
 
