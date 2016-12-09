@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 // Don't know how to make catch exception to work as I want to
 public class GameTest extends TestCase {
 	
-
+    /*
 	/**
 	 * This is commented out because if we test several games at the same time
 	 * their will be conflict because they use the same port.
@@ -32,7 +32,7 @@ public class GameTest extends TestCase {
 	
 	@Test
 	public void test_timeToHit() {	
-	    /*try{
+	    try{
 		Game testGame = new Game(2);
 		boolean isItTrue = testGame.timeToHit();
 		assertFalse(isItTrue);
@@ -40,14 +40,15 @@ public class GameTest extends TestCase {
 		catch (RemoteException e) {
 			 System.out.println("Error " + e.getMessage());
 			 e.printStackTrace();
-		}*/
+		}
 	    assertTrue(true);
 	}
+*/
 
-	
+	/*
 	@Test
 	public void test_displayBoard() {
-	    /*try {
+	    try {
 			Game testGame = new Game(2);
 			String testDisplay = testGame.displayBoard(); 
 			assertTrue(testDisplay == " ");		
@@ -55,8 +56,8 @@ public class GameTest extends TestCase {
 		catch (RemoteException e) {
 			 System.out.println("Error " + e.getMessage());
 			 e.printStackTrace();
-		}*/
-	}
+		}
+		}
 
 	
     @Test
@@ -67,14 +68,14 @@ public class GameTest extends TestCase {
 	    testGame1 = new Game(1);
 	    int i = testGame1.addPlayer("125.323.32.5", "125.323.32.5", "mupp");
 	    testGame1.setReadyValue(i, true);
-	    value = testGame1.findPlayer("mupp").getReadyValue();
+	    value = testGame1.getPlayer("mupp").getReadyValue();
 	}
 	catch (RemoteException e) {
 	    System.out.println("Error" + e.getMessage());
 	    e.printStackTrace();
 	} 
 	assertTrue(value == true);
-    }  
+	}  */
     
 	/*
     @Test
@@ -99,7 +100,6 @@ public class GameTest extends TestCase {
     public void test_whoseRound() {
 	assertTrue(true);
     }
-	
 
     /*
     @Test
@@ -126,7 +126,7 @@ public class GameTest extends TestCase {
 	assertTrue(lall == 2);
     } */
 	
-	
+    /*	
     @Test
     public void test_nextplayer() {
 	assertTrue(true);	
@@ -156,18 +156,60 @@ public class GameTest extends TestCase {
     public void test_whatFourCards() {
 	assertTrue(true);
     }
-    
-    /**
+    */
+    /*
     @Test
     public void test_startGame() {
-	assertTrue(true);
-    }
-    */
+	try {
+	Game server = new Game(2); 
+	Player player1 = new Player(0, "123546", "123546", "Dess", true);
+	Player player2 = new Player(1, "123546", "123546", "Elsa", true);
+	int size = server.getDeckSize();
 	
+	server.startGame(2);
+	int deck0 = server.getPlayer(0).getPlayerDeck().getDeckSize();
+	int deck1 = server.getPlayer(1).getPlayerDeck().getDeckSize();
+	System.out.println("startGame: player 1 size="+deck0);
+	System.out.println("startGame: player 2 size="+deck1);
+	assertTrue(deck0==deck1);
+
+	}
+	catch(Exception e) {
+	    System.out.println(e);
+	}
+	assertTrue(true);
+    }*/
+    
+    
+    @Test
+    public void test_tryToLayCard() {
+	try {
+	Game server = new Game(2); 
+	Player player1 = new Player(0, "123546", "123546", "Dess", true);
+	Player player2 = new Player(1, "123546", "123546", "Elsa", true);
+	server.startGame(2);
+	server.updatePlayerTime(1, 2L);
+	server.updatePlayerTime(0, 1L);
+	int round = server.getRound();
+	boolean say = server.tryToLayCard(0, round);
+	
+	int size = server.getDeckSize();
+	int deck0 = server.getPlayer(0).getPlayerDeck().getDeckSize();
+	int deck1 = server.getPlayer(1).getPlayerDeck().getDeckSize();
+	
+	System.out.println(say+" round: "+round+" , Player 1: "+deck0 + ", player 2: "+deck1 +", size: "+size);
+	assertTrue(size == 1);
+	}
+	catch(Exception e) { System.out.println(e); }
+    }
+    
+
+
+    /*	
     @Test
     public void test_whoLostRightHit() {
 	assertTrue(true);
-    }
+    }*/
 
     /*
     @Test
@@ -185,6 +227,6 @@ public class GameTest extends TestCase {
 	}
 	assertTrue(test.equals("mupp"));
     } 
-    */
+   */
 }
 

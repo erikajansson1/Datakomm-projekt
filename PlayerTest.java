@@ -37,9 +37,15 @@ public class PlayerTest extends TestCase {
 		Player testPlayer = new Player(2, "77660", "875943", "Dess", true);
 		Deck gameDeck = new Deck();
 		testPlayer.getCardFromMiddleDeck(gameDeck);
+		/*	System.out.println("MY DECK: "+testPlayer.getPlayerDeck().getAmount() + "\n" +
+				   "OTHER DECK:  "+gameDeck.getDeckSize());
+		*/
 		testPlayer.playNextCard(gameDeck);
 		assertTrue(testPlayer.getPlayerDeck().getAmount() == 51);
-	}
+		assertTrue(gameDeck.getDeckSize() == 1);
+		/*System.out.println("\n MY DECK: "+testPlayer.getPlayerDeck().getAmount() + "\n" +
+		 		   "OTHER DECK:  "+gameDeck.getDeckSize());
+		*/	}
 	
 	@Test
 	public void test_gameAddCard(){

@@ -44,6 +44,11 @@ public class GameClient {
 	    //BEGINNING OF GAME
 	    
 	    serverGame.startGame(playerNo);
+	    
+	    //Gives out information about how many player. We need functions to get strings that get aliases
+	    // and everyones Deck size.
+	   
+	    
 	    //START VALUES
 	    long startTime;
 	    long hitTime;
@@ -54,35 +59,45 @@ public class GameClient {
 	    Scanner userInput = new Scanner(System.in);
 	    boolean canHit = false;
 	    boolean myRound = false; 
+	    boolean checkVar = false;
 
-	    //>>>>STOR LOOP: har ska vi egentligen ha en check att spelet inte ar slut
+	    //>>>>STOR LOOP: Here we should also have a check if the game is finished or not
 	    while (serverGame.getPlayer(playerNo).getPlayerRank() == -1) {
 		backup.update(serverGame);
 		serverGame.setReadyValue(playerNo, false);
 		//Check if it's possible to hit
-		canHit = serverGame.timeToHit(); //TODO: fkn for checking if its hit the dick time 
+		canHit = serverGame.timeToHit(); 
 
 		//Display board
-		System.out.printf("\033[2J\033[;H");
+		System.out.printf("\033[2J\033[;H"); //Why do we print out this?
 		System.out.println(serverGame.displayBoard());
+		System.out.println("Current dick size " + serverGame.getDeckSize());
+		System.out.println(checkVar);
 
-
-		//Kolla ifall det ar spelarens tur
+		//Check if it's current player's time to lay card
 		if (serverGame.whoseTurn() == playerNo) { myRound = true; }
 		else { myRound = false; }
 		
 
 		    
-		serverGame.setReadyValue(playerNo, false);
-
+		serverGame.setReadyValue(playerNo, false); 
+		
 		//Let the player make its move
-		userAction(serverGame, playerNo, round, canHit,myRound);
+		checkVar = userAction(serverGame, playerNo, round, canHit,myRound);
 
 		serverGame.setReadyValue(playerNo, true);
 
 		
 		//TODO UPDATE THE WHOLE GAME STATUS TBH. Kolla sa att alla har gjort sitt och att losern har fatt kort
+				//Completely lost in how we compare players to eachother from this loop
+		
 		//TODO: kolla ifall personen fortfarande deltar i spelet eller har vunnit.
+			//Take rankWhenFinished from player in startGame function
+			//When cards on hand == 0, change the rankWhenFinished in player (need function)
+			//Put in while a statement about rankWhenFinished. If we do this we can have to
+			// state, 
+			// 1.You are still playing and go though this loop
+			// 2.You won but still se the outprint in another loop
 		
 	       
 		
@@ -108,6 +123,7 @@ public class GameClient {
 	}
 
 	//TODO Add ability to passivly look at game after winning.
+		//Look above
     }
 
 
@@ -123,12 +139,13 @@ public class GameClient {
       2a. Hit is possible
       2b. Hit is not possible      
     */
-    public static void userAction(GameInterface serverGame, int playerNo, int round, boolean canHit, boolean myRound) throws RemoteException {
+    public static boolean  userAction(GameInterface serverGame, int playerNo, int round, boolean canHit, boolean myRound) throws RemoteException {
 	String answer = "";
 	String actionMessage = "";
 	long answerTime;
 	long startCounting;
 	long maxAnswerTime = 30000000000L; //30 sekunder
+	boolean card = false;
 	
 	if(myRound) {  //TODO: ar det har vi kollar ifall ngn har forsvunnit? iom att den personen inte kommer gora sitt drag
    	    System.out.println("Do you wan to hit the dick(h) or play next card(c)?");
@@ -136,15 +153,15 @@ public class GameClient {
 	    
 	    if (canHit) {
 		switch(answer) {
-		case "h": serverGame.handleRightHit(playerNo, round); break;
-		case "c": serverGame.tryToLayCard(playerNo, round); break;
+		case "h": serverGame.handleRightHit(playerNo, round); break; 
+		case "c": card = serverGame.tryToLayCard(playerNo, round); break;
 		default: break;
 		}
 	    } 
 	    else {
 		switch(answer) {
-		case "h": actionMessage = serverGame.handleWrongHit(playerNo, round); break;
-		case "c": serverGame.tryToLayCard(playerNo, round); break;
+		case "h": actionMessage = serverGame.handleWrongHit(playerNo, round); break; //what happens with message?
+		case "c": card = serverGame.tryToLayCard(playerNo, round); break; //Creates Error, IndexOutOfBoundsException
 		default: break;
 		}
 	    }
@@ -162,13 +179,15 @@ public class GameClient {
 	    }
 	    else {
 		switch(answer) {
-		case "y":  actionMessage = serverGame.handleWrongHit(playerNo, round); break;
+		case "y": actionMessage = serverGame.handleWrongHit(playerNo, round); break;
 		case "n": serverGame.handleRightHit(playerNo, round); break;
 		default: break;
 		}
 	    }
 	    
 	}
+
+	return card;
     }
 
     /** Asks user for input
