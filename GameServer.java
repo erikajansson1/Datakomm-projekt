@@ -18,7 +18,7 @@ public class GameServer {
 		int noPlayers = networkBuild.askPlayerNo();
 		System.out.println("Creating a game for "+noPlayers+".");
 
-		serverGame = new Game(noPlayers);
+		
 		
 		String RMIPort = "1099";
 		networkBuild.buildNetwork();
@@ -28,7 +28,8 @@ public class GameServer {
 		//System.getProperties().put("http.proxyPort", "1099");
 		//System.getProperties().put("socksProxyHost", "83.255.61.11");
 		//System.getProperties().put("socksProxyPort", "1099");
-		registry = networkBuild.startRMIserver();			
+		registry = networkBuild.startRMIserver();
+		serverGame = new Game(noPlayers);
 		//Naming.rebind("//"+networkBuild.getExIp()+"/theGame:"+RMIPort, game);
 
 		//		UnicastRemoteObject.exportObject(serverGame, 1100);
