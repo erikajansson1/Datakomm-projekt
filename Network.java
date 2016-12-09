@@ -124,6 +124,7 @@ class Network {
     /**
      * Method to get how many players the server intends to host a game for.
      */
+    // TODO : Needs to loop if given not int 
     public int askPlayerNo() {
 	System.out.println("How many player slots would you like?");
 	Scanner userInput = new Scanner(System.in);
@@ -333,7 +334,8 @@ class Network {
 
 
     /**
-     * A method that holds the client in a wait state until the game is ready to start.
+     *  A method that holds the client in a wait state until the game is ready to start.
+     * @throws RemoteException
      */
     public void waitingUntilGameCanStart() throws RemoteException {
 	try {
@@ -357,6 +359,14 @@ class Network {
 	}
     }
 
+    
+    /**
+     * So we can try it
+     * @param serverGame
+     * @param registry
+     * @param noPlayers
+     * @throws RemoteException
+     */
     public void debugLocal(Game serverGame, Registry registry, int noPlayers) throws RemoteException{
 	try {
 	    registry = this.startRMIserver("debug");
