@@ -8,8 +8,6 @@ import java.io.*;
 
 
 public class GameServer {
-    public static Game serverGame;
-    public static Registry registry;
     
     public static void main (String[] argv) {
 	try
@@ -22,11 +20,12 @@ public class GameServer {
 		networkBuild.welcomeMSG("server",0);
 	
 		if (argv.length > 0 && argv[0].equals("debug")) {
-		    networkBuild.debugLocal(serverGame,registry,noPlayers);
+		    GameClient.main(networkBuild.debugLocal(noPlayers, false));
+				    System.exit(0);
 		}
 		
-		registry = networkBuild.startRMIserver("standard");
-		serverGame = new Game(noPlayers);
+		Registry registry = networkBuild.startRMIserver("standard",false);
+		Game serverGame = new Game(noPlayers);
 		Naming.rebind("//"+networkBuild.getInIp()+":"+RMIPort+"/theGame", serverGame);
 		networkBuild.publishReady();
 

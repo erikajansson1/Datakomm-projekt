@@ -32,7 +32,7 @@ public class Card implements java.io.Serializable{
      * A toString method for card showing the suit and value.
      */
     public String showCard(){
-	String dispCard = "["+ suit + Integer.toString(rank) + "]";
+	String dispCard = "["+ suit +" "+ Integer.toString(rank) + "]";
     return dispCard;
     }
     

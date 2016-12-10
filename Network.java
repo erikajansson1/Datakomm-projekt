@@ -136,7 +136,7 @@ class Network {
     /**
      * Method to start a RMI server on port 1099.
      */
-    public Registry startRMIserver(String type) {
+    public Registry startRMIserver(String type, boolean Junit) {
 	Registry registry = null;
 	try  //special exception handler for registry creation
 	    {
@@ -152,15 +152,17 @@ class Network {
 			registry = LocateRegistry.createRegistry(1099);
 			System.out.println("java RMI registry created.");
 		    } else if (type.equals("debug")) {
-		    System.out.println("RMI server started");
+		    if (!Junit) System.out.println("RMI server started");
 		    registry = LocateRegistry.createRegistry(1099);
 		}
 	    }
 	catch (RemoteException e)
 	    {
 		//do nothing, error means registry already exists
-		System.out.println("java RMI registry already exists.");
-		System.out.println("Or the RMI server is already running");
+		if(!Junit) {
+		    System.out.println("java RMI registry already exists.");
+		    System.out.println("Or the RMI server is already running");
+		}
 	    }
 	return registry;
     }
@@ -367,24 +369,27 @@ class Network {
      * @param noPlayers
      * @throws RemoteException
      */
-    public void debugLocal(Game serverGame, Registry registry, int noPlayers) throws RemoteException{
+    public String[] debugLocal(int noPlayers, boolean Junit) throws RemoteException{
+	String[] argvClient = null;
 	try {
-	    registry = this.startRMIserver("debug");
-	    serverGame = new Game(noPlayers);
+	    Registry registry = this.startRMIserver("debug",true);
+	    Game serverGame = new Game(noPlayers);
 	    Naming.rebind("//"+this.getInIp()+":1099/theGame", serverGame);
-	    this.publishReady();
-	    System.out.println("ignore external IP!");
-	    String[] argvClient = new String[] {
-		this.getInIp(),
-		this.getInIp(),
-		"1099"
+	   if (!Junit) {
+	       this.publishReady();
+	       System.out.println("ignore external IP!");
+	   }
+	       argvClient = new String[] {
+		   this.getInIp(),
+		   this.getInIp(),
+		   "1099"
 	    };
-	    GameClient.main(argvClient);
-	    System.exit(0);
+	    
 	}catch (Exception e){
 	    System.out.printf("You got fucked!%n");
 	    System.exit(0);
 	}
+	return argvClient;
     }
 }
 

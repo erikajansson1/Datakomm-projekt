@@ -18,7 +18,6 @@ public class GameClient {
 	String serverExIp = null;
 	String serverRMIPort = null;
 	if(args.length == 0) {
-	    //serverNAT = networkBuild.askServerNAT();
 	    serverInIp = networkBuild.askServerInIp();
 	    serverExIp = networkBuild.askServerExIp();
 	    serverRMIPort = networkBuild.askServerPort();

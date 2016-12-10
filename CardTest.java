@@ -19,7 +19,7 @@ public class CardTest extends TestCase {
     @Test
     public void test_showCard() {
 	Card theCard = new Card(7, "D");
-	assertTrue(theCard.showCard().equals("[D7]"));
+	assertTrue(theCard.showCard().equals("[D 7]"));
     }
 
     @Test

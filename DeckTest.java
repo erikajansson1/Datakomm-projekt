@@ -18,7 +18,7 @@ public class DeckTest extends TestCase {
     @Test
     public void test_getCard() {
 	Deck theDeck = new Deck();
-	assertTrue(theDeck.getCard().showCard().equals("[Diamond13]"));
+	assertTrue(theDeck.getCard().showCard().equals("[Diamond 13]"));
     }
 
     @Test
@@ -39,9 +39,9 @@ public class DeckTest extends TestCase {
 	theDeck4.addCard(theCard);
 	theDeck4.addCard(theCard2);
 	theDeck4.addCard(theCard3);
-	if(theDeck4.getCardList().get(0).showCard().equals("[Heart7]") &&
-	   theDeck4.getCardList().get(1).showCard().equals("[Spade8]") &&
-	   theDeck4.getCardList().get(2).showCard().equals("[Diamond9]")) {
+	if(theDeck4.getCardList().get(0).showCard().equals("[Heart 7]") &&
+	   theDeck4.getCardList().get(1).showCard().equals("[Spade 8]") &&
+	   theDeck4.getCardList().get(2).showCard().equals("[Diamond 9]")) {
 	    knas = true;
 	}
 	else {
@@ -90,12 +90,12 @@ public class DeckTest extends TestCase {
 	theDeck9.addCard(theCard2);
 	theDeck9.addCard(theCard3);
 	theDeck8.combineDeck(theDeck9.getCardList());
-	if (theDeck8.getCardList().get(0).showCard().equals("[Club6]") &&
-	    theDeck8.getCardList().get(3).showCard().equals("[Club6]") &&
-	    theDeck8.getCardList().get(1).showCard().equals("[Spade8]") &&
-	    theDeck8.getCardList().get(4).showCard().equals("[Spade8]") &&
-	    theDeck8.getCardList().get(2).showCard().equals("[Heart1]") &&
-	    theDeck8.getCardList().get(5).showCard().equals("[Heart1]")){
+	if (theDeck8.getCardList().get(0).showCard().equals("[Club 6]") &&
+	    theDeck8.getCardList().get(3).showCard().equals("[Club 6]") &&
+	    theDeck8.getCardList().get(1).showCard().equals("[Spade 8]") &&
+	    theDeck8.getCardList().get(4).showCard().equals("[Spade 8]") &&
+	    theDeck8.getCardList().get(2).showCard().equals("[Heart 1]") &&
+	    theDeck8.getCardList().get(5).showCard().equals("[Heart 1]")){
 	    knas = true;
 	}
 	else {
@@ -108,9 +108,9 @@ public class DeckTest extends TestCase {
     @Test
     public void test_buildDeckAndBuildSuit() {
 	Deck theDeck10 = new Deck();
-	assertTrue(theDeck10.getCardList().get(0).showCard().equals("[Heart1]"));
-	assertTrue(theDeck10.getCardList().get(13).showCard().equals("[Spade1]"));
-	assertTrue(theDeck10.getCardList().get(51).showCard().equals("[Diamond13]"));
+	assertTrue(theDeck10.getCardList().get(0).showCard().equals("[Heart 1]"));
+	assertTrue(theDeck10.getCardList().get(13).showCard().equals("[Spade 1]"));
+	assertTrue(theDeck10.getCardList().get(51).showCard().equals("[Diamond 13]"));
 	
     }
 }
