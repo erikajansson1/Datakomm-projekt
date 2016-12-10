@@ -13,7 +13,11 @@ import java.rmi.registry.*;
 public class GameTest extends TestCase {
     private static GameInterface serverGame;
 
-    public static GameInterface setUpServerGame() throws RemoteException{
+    /**
+     * This method builds a RMI server with a existing game in it.
+     * CATUION!! Using this method invokes extreme latency on the test suit
+     */
+    public static GameInterface setUpRMIGame() throws RemoteException{
 	try {
 	    Network networkBuild = new Network();
 	    networkBuild.buildNetwork();
@@ -30,7 +34,6 @@ public class GameTest extends TestCase {
 	    deck.addCard(new Card(2,"Heart"));
 	    deck.addCard(new Card(3,"Spade"));
 	    deck.addCard(new Card(2,"Spade"));
-	    assertTrue(deck.getDeckSize() == 4);
 	    
 	    serverGame = (GameInterface) Naming.lookup("//"+
 						       networkBuild.getInIp()+
@@ -45,6 +48,27 @@ public class GameTest extends TestCase {
 	    assertFalse(true);
 	}
 	return serverGame;
+    }
+
+
+    /**
+     * A method which creates a game which creates a game.
+     */
+    public static Game setUpNonRMIGame() throws RemoteException{
+	Game newGame = new Game(4);
+	ArrayList<Player> gamePlayers = new ArrayList<Player>();
+	for (int i = 0; i < 4; i++) {
+	    gamePlayers.add(new Player(i,"","","player"+i,false));	
+	}
+	    
+	Deck deck = new Deck(4);
+	deck.addCard(new Card(1,"Heart"));
+	deck.addCard(new Card(2,"Heart"));
+	deck.addCard(new Card(3,"Spade"));
+	deck.addCard(new Card(2,"Spade"));
+	
+	newGame.setGameValues(5,deck,null,gamePlayers);
+	return newGame;
     }
 
 
@@ -64,128 +88,134 @@ public class GameTest extends TestCase {
     ////////////////////////////////////////////////
 
     @Test
-    public void test_timeToHit()  throws Exception{
-	serverGame = setUpServerGame();
-	assertTrue(serverGame.getRound() == 5);
-
-	
+    public void test_timeToHit() throws Exception{
 	assertTrue(true);
     }
 
     @Test
-    public void test_getDeckSize()  throws Exception{
-	serverGame = setUpServerGame();
-	assertTrue(serverGame.getRound() == 5);
+    public void test_getDeckSize() throws Exception{
 	assertTrue(true);
     }
 
     @Test
-    public void test_displayBoard()  throws RemoteException{
+    public void test_displayBoard() throws Exception{
 	try {
-	    serverGame = setUpServerGame();
-	    assertTrue(serverGame != null);
+	    Game newGame = setUpNonRMIGame();
 	    String testString =
 		"player0"+
 		"\nCards on hand: 0"+
 		"\nStatus: NOT READY\n"+
-		"\n\n" +
-		"p layer1"+
+		"\n" +
+		"player1"+
 		"\nCards on hand: 0"+
 		"\nStatus: NOT READY\n"+
-		"\n\n" +
+		"\n" +
 		"player2"+
 		"\nCards on hand: 0"+
-		"\nStatus: NOT READY"+
-		"\n\n" +
+		"\nStatus: NOT READY\n"+
+		"\n" +
 		"player3"+
 		"\nCards on hand: 0"+
-		"\nStatus: NOT READY"+
-		"\n\n\n"+
+		"\nStatus: NOT READY\n"+
+		"\n\n"+
 		"Turn: player1"+
 		"\nRound: 5"+
 		"\nLatest Card: [Spade 2]";
-	    assertEquals(serverGame.displayBoard(), testString);
+	    assertEquals(newGame.displayBoard(), testString);
 	}catch (Exception e){
-	    e.printStackTrace();
 	    assertFalse(true);
 	    }
+    }
+
+    @Test
+    public void test_setReadyValue() throws Exception {
 	assertTrue(true);
     }
 
     @Test
-    public void test_setReadyValue() {
+    public void test_updatePlayerTime() throws Exception {
 	assertTrue(true);
     }
 
     @Test
-    public void test_updatePlayerTime() {
+    public void test_updateRound() throws Exception {
 	assertTrue(true);
     }
 
     @Test
-    public void test_updateRound() {
+    public void test_whoseTurn() throws Exception {
 	assertTrue(true);
     }
 
     @Test
-    public void test_whoseTurn() {
-	assertTrue(true);
-    }
-
-    @Test
-    public void test_getPlayer() {
-	assertTrue(true);
-    }
-    
-    @Test
-    public void test_startGame() {
-	assertTrue(true);
-    }
-
-    @Test
-    public void test_getAmountOfPlayers() {
-	assertTrue(true);
-    }
-
-    @Test
-    public void test_giveWholeDeck() {
-	assertTrue(true);
-    }
-
-    @Test
-    public void test_myRank() {
-	assertTrue(true);
-    }
-
-    @Test
-    public void test_checkLoser() {
-	assertTrue(true);
-    }
-
-    @Test
-    public void test_moveDeck() {
-	assertTrue(true);
-    }
-
-    @Test
-    public void test_loserTakesItAll() {
-	assertTrue(true);
-    }
-
-    @Test
-    public void test_handleWrongHit() {
-	assertTrue(true);
-    }
-
-    @Test
-    public void test_handleRightHit() {
-	assertTrue(true);
-    }
-    
-    @Test
-    public void test_tryToLayCard() {
-	/*
+    public void test_getPlayer() throws Exception {
+	int a = -1;
+	int b = -1;
+	Game testGame2 = setUpNonRMIGame();
 	try {
+	    Player person1 = testGame2.getPlayer("player0");
+	    Player person2 = testGame2.getPlayer("player1");
+	    a = person1.getPlayerNumber();
+	    b = person2.getPlayerNumber();
+	}
+      catch(RemoteException e){
+	  assertFalse(true);
+      }
+	assertFalse(a == 1);
+	assertFalse(b == 0);
+	assertTrue(a == 0);
+	assertTrue(b == 1);
+    }
+    
+    @Test
+    public void test_startGame() throws Exception {
+	assertTrue(true);
+    }
+
+    @Test
+    public void test_getAmountOfPlayers() throws Exception {
+	assertTrue(true);
+    }
+
+    @Test
+    public void test_giveWholeDeck() throws Exception {
+	assertTrue(true);
+    }
+
+    @Test
+    public void test_myRank() throws Exception {
+	assertTrue(true);
+    }
+
+    @Test
+    public void test_checkLoser() throws Exception {
+	assertTrue(true);
+    }
+
+    @Test
+    public void test_moveDeck() throws Exception {
+	assertTrue(true);
+    }
+
+    @Test
+    public void test_loserTakesItAll() throws Exception {
+	assertTrue(true);
+    }
+
+    @Test
+    public void test_handleWrongHit() throws Exception {
+	assertTrue(true);
+    }
+
+    @Test
+    public void test_handleRightHit() throws Exception {
+	assertTrue(true);
+    }
+    
+    @Test
+    public void test_tryToLayCard() throws Exception {
+	/* //GIVES EXCEPTION IN USE!
+	try{
 	    Game server = new Game(2); 
 	    Player player1 = new Player(0, "123546", "123546", "Dess", true);
 	    Player player2 = new Player(1, "123546", "123546", "Elsa", true);
@@ -207,62 +237,62 @@ public class GameTest extends TestCase {
     }
     
     @Test
-    public void test_getRound() {
+    public void test_getRound() throws Exception {
 	assertTrue(true);
     }
     
     @Test
-    public void test_getGameDeck() {
+    public void test_getGameDeck() throws Exception {
 	assertTrue(true);
     }
     
     @Test
-    public void test_getStarterDeck() {
+    public void test_getStarterDeck() throws Exception {
 	assertTrue(true);
     }
     
     @Test
-    public void test_getGamePlayers() {
+    public void test_getGamePlayers() throws Exception {
 	assertTrue(true);
     }
     
     @Test
-    public void test_setGameValues() {
+    public void test_setGameValues() throws Exception {
 	assertTrue(true);
     }
     
     @Test
-    public void test_addPlayer() {
+    public void test_addPlayer() throws Exception {
 	assertTrue(true);
     }
     
     @Test
-    public void test_getPlayerAlias() {
+    public void test_getPlayerAlias() throws Exception {
 	assertTrue(true);
     }
     
     @Test
-    public void test_askIsGameFull() {
+    public void test_askIsGameFull() throws Exception {
 	assertTrue(true);
     }   
     
     @Test
-    public void test_waitingForPlayers() {
+    public void test_waitingForPlayers() throws Exception {
 	assertTrue(true);
     }  
     
     @Test
-    public void test_everyoneHasMadeMove() {
+    public void test_everyoneHasMadeMove() throws Exception {
 	assertTrue(true);
     }  
     
     @Test
-    public void test_askGameEnded() {
+    public void test_askGameEnded() throws Exception {
 	assertTrue(true);
     }  
     
     @Test
-    public void test_displayGameResult() {
+    public void test_displayGameResult() throws Exception {
 	assertTrue(true);
     }  
     
