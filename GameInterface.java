@@ -52,7 +52,7 @@ public interface GameInterface extends Remote {
 
 
 
-   /////////// Game status related //////////////////////////////////////
+    /////////// Game status related //////////////////////////////////////
     
     /** Checks whether it's time to hit,
      *  that is, check whether any of the previous 4 cards
@@ -61,7 +61,7 @@ public interface GameInterface extends Remote {
     public boolean timeToHit() throws RemoteException;
 
 
-   /**
+    /**
      * a get method for the attribut round
      * @return returns the round attribut
      */
@@ -86,7 +86,7 @@ public interface GameInterface extends Remote {
 
     /////////// Action //////////////////////////////////////
 
-   /**
+    /**
      * Handle if someone hits at the wrong time
      * @param Player Number ID of the player
      */
@@ -119,7 +119,7 @@ public interface GameInterface extends Remote {
      */
     public void updatePlayerTime(int playerNo, long hitTime) throws RemoteException; 
 
-     /** 
+    /** 
      * Finds the Player object in an array whose name matches the given parameter
      * @param alias 
      * @return The found Player object, or an Player object with specific invalid values     
@@ -164,7 +164,7 @@ public interface GameInterface extends Remote {
     public boolean askIsGameFull() throws RemoteException;
 
     
-   /**
+    /**
      * Checks every players ready status and returns a boolean saying if all are ready.
      * @return returns true if all players are ready.
      */
@@ -177,9 +177,24 @@ public interface GameInterface extends Remote {
      */
     public int checkLoser() throws RemoteException;
 
-    /** Get middle deck size
+    
+    /** 
+     * Get middle deck size
      */
     public int getDeckSize()  throws RemoteException;
 
+
+    /**
+     * Ask method that checks if the game has ended.
+     * @return boolean indicating if the game has ended.
+     */
+    public boolean askGameEnded() throws RemoteException;
+
+	
+    /**
+     * display method for when the game has ended and the ranking is set.
+     * @return a string describing the result.
+     */
+    public String displayGameResult() throws RemoteException;
 }
 

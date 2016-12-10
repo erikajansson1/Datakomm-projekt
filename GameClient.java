@@ -32,11 +32,9 @@ public class GameClient {
 							     serverRMIPort,
 							     gameToGet);
 	try {
-	    
 	    networkBuild.buildNetwork(serverGame);
 	    System.out.println("Build complete");
 	    playerNo = networkBuild.joinGame();
-	    
 	    BackUp backup = new BackUp(serverGame);
 	    networkBuild.waitingUntilGameCanStart();
 
@@ -60,7 +58,7 @@ public class GameClient {
 	    boolean canHit = false;
 	    boolean myRound = false; 
 	    boolean checkVar = false;
-
+	    
 	    //>>>>STOR LOOP: Here we should also have a check if the game is finished or not
 	    while (serverGame.getPlayer(playerNo).getPlayerRank() == -1) {
 		backup.update(serverGame);
@@ -110,21 +108,26 @@ public class GameClient {
 		    round = serverGame.updateRound(oldRound);
 		    System.out.println(serverGame.displayBoard());
 		    //round = serverGame.getRound();
-		    Thread.sleep(500);
+		    Thread.sleep(1000);
 		}
       
 		oldRound = round;
 
 	    }
 	    
+	    while((serverGame.getPlayer(playerNo).getPlayerRank() != -1) &&
+		  !serverGame.askGameEnded()) {
+		serverGame.displayBoard();
+		Thread.sleep(2000);
+	    }
+	    System.out.println(serverGame.displayGameResult());
 	}
 	catch (Exception e) {
 	    System.out.println("Error " + e.getMessage());
 	    e.printStackTrace();
 	}
 
-	//TODO Add ability to passivly look at game after winning.
-		//Look above
+
     }
 
 

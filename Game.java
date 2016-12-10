@@ -540,5 +540,31 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	return true;
     }
 
+
+    /**
+     * Ask method that checks if the game has ended.
+     * @return boolean indicating if the game has ended.
+     */
+    public boolean askGameEnded() throws RemoteException{
+	for (int i = 0; i < gamePlayers.size(); i++) {
+	    if (gamePlayers.get(i).getPlayerRank() == -1) return false;
+	}
+	return true;
+    }
+
+
+    /**
+     * display method for when the game has ended and the ranking is set.
+     * @return a string describing the result.
+     */
+    public String displayGameResult() throws RemoteException{
+	String result = null;
+	for (int i = 0; i < this.gamePlayers.size(); i++) {
+	    if(!(i == 0)) result += "\n";
+	    result += gamePlayers.get(i).getPlayerName();
+	    result += "\nPlace: " + gamePlayers.get(i).getPlayerRank() + "\n";
+	}
+	return result;
+    }
 }
 
