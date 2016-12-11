@@ -26,8 +26,11 @@ public class GameTest extends TestCase {
 	    ArrayList<Player> gamePlayers = new ArrayList<Player>();
 	    
 	    for (int i = 0; i < 4; i++) {
-		gamePlayers.add(new Player(i,"","","player"+i,false));	
+		gamePlayers.add(new Player(i,"","","player"+i,false));
+		gamePlayers.get(i).getPlayerDeck().addCard(new Card((i+1)*2,"Diamond"));
 	    }
+
+
 	    
 	    Deck deck = new Deck(4);
 	    deck.addCard(new Card(1,"Heart"));
@@ -52,15 +55,15 @@ public class GameTest extends TestCase {
 
 
     /**
-     * A method which creates a game which creates a game.
+     * A method which creates a game for 4 which hittable.
      */
-    public static Game setUpNonRMIGame() throws RemoteException{
+    public static Game setUpNonRMIGame4() throws RemoteException{
 	Game newGame = new Game(4);
 	ArrayList<Player> gamePlayers = new ArrayList<Player>();
 	for (int i = 0; i < 4; i++) {
-	    gamePlayers.add(new Player(i,"","","player"+i,false));	
+	    gamePlayers.add(new Player(i,"","","player"+i,false));
+	    gamePlayers.get(i).getPlayerDeck().addCard(new Card((i+1)*2,"Diamond"));
 	}
-	    
 	Deck deck = new Deck(4);
 	deck.addCard(new Card(1,"Heart"));
 	deck.addCard(new Card(2,"Heart"));
@@ -72,8 +75,30 @@ public class GameTest extends TestCase {
     }
 
 
+    /**
+     * A method which creates a game for 2 player. No hit.
+     */
+    public static Game setUpNonRMIGame2() throws RemoteException{
+	Game newGame = new Game(2);
+	ArrayList<Player> gamePlayers = new ArrayList<Player>();
+	for (int i = 0; i < 2; i++) {
+	    gamePlayers.add(new Player(i,"","","player"+i,false));
+	    gamePlayers.get(i).getPlayerDeck().addCard(new Card((i+1)*2,"Diamond"));
+	}
+	Deck deck = new Deck(2);
+	deck.addCard(new Card(1,"Heart"));
+	deck.addCard(new Card(2,"Heart"));
+	
+	newGame.setGameValues(3,deck,null,gamePlayers);
+	return newGame;
+    }
+
+
    
-    
+    /**
+     * Emulates console input.
+     * @param input is the string the user wants to emulate.
+     */
     public void setUserInput(String input) {
 	InputStream in = new ByteArrayInputStream(input.getBytes());
 	System.setIn(in);
@@ -89,397 +114,277 @@ public class GameTest extends TestCase {
 
     @Test
     public void test_timeToHit() throws Exception{
-	assertTrue(true);
+	Game testGame1 = setUpNonRMIGame4();
+	assertTrue(testGame1.timeToHit());
+	Game testGame2 = setUpNonRMIGame2();
+	assertFalse(testGame2.timeToHit());
     }
 
+    
     @Test
     public void test_getDeckSize() throws Exception{
-	assertTrue(true);
+	Game testGame = setUpNonRMIGame4();
+	assertEquals(testGame.getDeckSize(),4);
     }
 
+    
     @Test
     public void test_displayBoard() throws Exception{
-	try {
-	    Game newGame = setUpNonRMIGame();
+	    Game newGame = setUpNonRMIGame4();
 	    String testString =
 		"player0"+
-		"\nCards on hand: 0"+
+		"\nCards on hand: 1"+
 		"\nStatus: NOT READY\n"+
 		"\n" +
 		"player1"+
-		"\nCards on hand: 0"+
+		"\nCards on hand: 1"+
 		"\nStatus: NOT READY\n"+
 		"\n" +
 		"player2"+
-		"\nCards on hand: 0"+
+		"\nCards on hand: 1"+
 		"\nStatus: NOT READY\n"+
 		"\n" +
 		"player3"+
-		"\nCards on hand: 0"+
+		"\nCards on hand: 1"+
 		"\nStatus: NOT READY\n"+
 		"\n\n"+
 		"Turn: player1"+
 		"\nRound: 5"+
 		"\nLatest Card: [Spade 2]";
 	    assertEquals(newGame.displayBoard(), testString);
-	}catch (Exception e){
-	    assertFalse(true);
-	    }
     }
 
+    
     @Test
     public void test_setReadyValue() throws Exception {
-	assertTrue(true);
+	Game testGame = setUpNonRMIGame4();
+	for (int i = 0; i < 4; i++) {
+	    testGame.setReadyValue(i, true);
+	    assertTrue(testGame.getPlayer("player"+i).getReadyValue());
+	    testGame.setReadyValue(i, false);
+	    assertFalse(testGame.getPlayer("player"+i).getReadyValue());
+	}
     }
 
+    
     @Test
     public void test_updatePlayerTime() throws Exception {
-	assertTrue(true);
+	Game testGame = setUpNonRMIGame4();
+      int test = 0;
+      for (int i = 0; i < 4; i++) {
+	  testGame.updatePlayerTime(i, 10);
+	  assertEquals(testGame.getPlayer("player"+i).getPlayerTime(),10);
+      }
     }
 
+    
     @Test
     public void test_updateRound() throws Exception {
-	assertTrue(true);
+	Game testGame = setUpNonRMIGame4();
+	testGame.updateRound(5);
+	assertEquals(testGame.getRound(),5);
+	
+	for (int i = 0; i < 4; i++) {
+	    testGame.setReadyValue(i,true);
+	}
+	
+	testGame.updateRound(5);
+	assertEquals(testGame.getRound(),6);
     }
 
+    
     @Test
     public void test_whoseTurn() throws Exception {
-	assertTrue(true);
+	Game testGame = setUpNonRMIGame4();
+	assertEquals(testGame.whoseTurn(),1);
     }
 
+    
     @Test
     public void test_getPlayer() throws Exception {
 	int a = -1;
 	int b = -1;
-	Game testGame2 = setUpNonRMIGame();
-	try {
+	Game testGame2 = setUpNonRMIGame2();
 	    Player person1 = testGame2.getPlayer("player0");
 	    Player person2 = testGame2.getPlayer("player1");
 	    a = person1.getPlayerNumber();
 	    b = person2.getPlayerNumber();
-	}
-      catch(RemoteException e){
-	  assertFalse(true);
-      }
-	assertFalse(a == 1);
-	assertFalse(b == 0);
+
 	assertTrue(a == 0);
 	assertTrue(b == 1);
+	assertFalse(a == 2);
+	assertFalse(b == 3);
     }
+
     
     @Test
     public void test_startGame() throws Exception {
-	assertTrue(true);
+	Game testGame = setUpNonRMIGame4();
+	boolean knas = false;
+	if(testGame.getAmountOfPlayers() == 4) knas = true;
+	assertTrue(knas);
     }
 
+    
     @Test
     public void test_getAmountOfPlayers() throws Exception {
-	assertTrue(true);
+	Game testGame1 = setUpNonRMIGame4();
+	assertEquals(testGame1.getAmountOfPlayers(),4);
+	Game testGame2 = setUpNonRMIGame2();
+	assertEquals(testGame2.getAmountOfPlayers(),2);
     }
 
+    
     @Test
     public void test_giveWholeDeck() throws Exception {
-	assertTrue(true);
+	Game testGame = setUpNonRMIGame4();
+
+	int amountBefore = testGame.getPlayer(0).getAmountOfCardsOnHand();
+	assertTrue(amountBefore == 1);
+
+	assertTrue(testGame.getDeckSize() == 4);
+	
+	testGame.giveWholeDeck(testGame.getPlayer(0));
+	int amountAfter = testGame.getPlayer(0).getAmountOfCardsOnHand();
+	assertTrue(amountAfter == 5);
+
+	assertTrue(testGame.getDeckSize() == 0);
     }
 
+    
     @Test
     public void test_myRank() throws Exception {
-	assertTrue(true);
+	Game testGame = setUpNonRMIGame4();
+	assertEquals(testGame.myRank(0),-1);
     }
 
+    
     @Test
     public void test_checkLoser() throws Exception {
-	assertTrue(true);
+	Game testGame = setUpNonRMIGame4();
+	for (int i = 0; i < 4; i++) {
+	    testGame.getPlayer(i).setPlayerRank(i+1);	    
+	}
+	assertTrue(testGame.checkLoser() == 3);
     }
+    
 
     @Test
     public void test_moveDeck() throws Exception {
-	assertTrue(true);
+	Game testGame = setUpNonRMIGame4();
+
+	Deck a = testGame.getPlayer(0).getPlayerDeck();
+	assertTrue(a.getAmount() == 1);
+	Deck b = testGame.getPlayer(1).getPlayerDeck();
+	assertTrue(b.getAmount() == 1);
+
+	testGame.moveDeck(a,b);
+	assertTrue(b.getAmount() == 2);
     }
 
+    
     @Test
     public void test_loserTakesItAll() throws Exception {
 	assertTrue(true);
     }
 
+    
     @Test
     public void test_handleWrongHit() throws Exception {
 	assertTrue(true);
     }
 
+    
     @Test
     public void test_handleRightHit() throws Exception {
 	assertTrue(true);
     }
+
     
     @Test
     public void test_tryToLayCard() throws Exception {
-	/* //GIVES EXCEPTION IN USE!
-	try{
-	    Game server = new Game(2); 
-	    Player player1 = new Player(0, "123546", "123546", "Dess", true);
-	    Player player2 = new Player(1, "123546", "123546", "Elsa", true);
-	    server.startGame(2);
-	    server.updatePlayerTime(1, 2L);
-	    server.updatePlayerTime(0, 1L);
-	    int round = server.getRound();
-	    boolean say = server.tryToLayCard(0, round);
-	
-	    int size = server.getDeckSize();
-	    int deck0 = server.getPlayer(0).getPlayerDeck().getDeckSize();
-	    int deck1 = server.getPlayer(1).getPlayerDeck().getDeckSize();
-	
-	    System.out.println(say+" round: "+round+" , Player 1: "+deck0 + ", player 2: "+deck1 +", size: "+size);
-	    assertTrue(size == 1);
+	Game testGame = setUpNonRMIGame4();
+	assertEquals(testGame.getDeckSize(),4);
+	for (int i = 0; i < 4; i++) {
+	    assertTrue(testGame.getPlayer(i).getPlayerDeck().getDeckSize() == 1);
 	}
-	catch(Exception e) {assertFalse(true);}*/
-	assertFalse(false);
+	boolean say = testGame.tryToLayCard(0, 5);
+	Card topCard = testGame.getGameDeck().getCard(false);
+	assertEquals(topCard.getSuit(),"Diamond");
+	assertEquals(topCard.getRank(),2);
     }
+
     
     @Test
     public void test_getRound() throws Exception {
 	assertTrue(true);
     }
+
     
     @Test
     public void test_getGameDeck() throws Exception {
 	assertTrue(true);
     }
+
     
     @Test
     public void test_getStarterDeck() throws Exception {
 	assertTrue(true);
     }
+
     
     @Test
     public void test_getGamePlayers() throws Exception {
 	assertTrue(true);
     }
+
     
     @Test
     public void test_setGameValues() throws Exception {
 	assertTrue(true);
     }
+
     
     @Test
     public void test_addPlayer() throws Exception {
 	assertTrue(true);
     }
+
     
     @Test
     public void test_getPlayerAlias() throws Exception {
 	assertTrue(true);
     }
+
     
     @Test
     public void test_askIsGameFull() throws Exception {
 	assertTrue(true);
     }   
+
     
     @Test
     public void test_waitingForPlayers() throws Exception {
 	assertTrue(true);
     }  
+
     
     @Test
     public void test_everyoneHasMadeMove() throws Exception {
 	assertTrue(true);
     }  
+
     
     @Test
     public void test_askGameEnded() throws Exception {
 	assertTrue(true);
     }  
+
     
     @Test
     public void test_displayGameResult() throws Exception {
 	assertTrue(true);
-    }  
+    }
     
-	
-    /*
-      /**
-      * This is commented out because if we test several games at the same time
-      * their will be conflict because they use the same port.
-      * @throws RemoteException
-      */
-    /*
-      @Test
-      public void test_newGame() {
-      boolean knas = false;
-      try {
-      Game testGame = new Game(2);
-      knas = testGame.getAmountOfPlayers() == 2;
-      //assertTrue(testGame.getAmountOfPlayers() == 2);
-      } 	
-      catch (RemoteException e) {
-      System.out.println("Error " + e.getMessage());
-      e.printStackTrace();
-      }	
-      assertTrue(knas);
-      }
-	
-      @Test
-      public void test_timeToHit() {	
-      try{
-      Game testGame = new Game(2);
-      boolean isItTrue = testGame.timeToHit();
-      assertFalse(isItTrue);
-      }
-      catch (RemoteException e) {
-      System.out.println("Error " + e.getMessage());
-      e.printStackTrace();
-      }
-      assertTrue(true);
-      }
-    */
-
-    /*
-      @Test
-	
-
-	
-      @Test
-      public void test_setReadyValue() {
-      Game testGame1 = null;
-      boolean value = false;
-      try {
-      testGame1 = new Game(1);
-      int i = testGame1.addPlayer("125.323.32.5", "125.323.32.5", "mupp");
-      testGame1.setReadyValue(i, true);
-      value = testGame1.getPlayer("mupp").getReadyValue();
-      }
-      catch (RemoteException e) {
-      System.out.println("Error" + e.getMessage());
-      e.printStackTrace();
-      } 
-      assertTrue(value == true);
-      }  */
-    
-    /*
-      @Test
-      public void test_updatePlayerTime() {
-      Game testGame3 = null;
-      int test = 0;
-      try {
-      testGame3 = new Game(3);
-      int i = testGame3.addPlayer("125.323.32.5", "125.323.32.5", "kanelbullen75");
-      testGame3.updatePlayerTime(i, 10);
-      test = testGame3.findPlayer("kanelbullen75").getPlayerTime();
-      }
-      catch(RemoteException e){
-      System.out.println("Error" + e.getMessage());
-      e.printStackTrace();
-      }
-      assertTrue(test == 10);
-      } */
-
-    /*
-      @Test
-      public void test_findPlayer() {
-      Game testGame2 = null;
-      int q = 0;
-      int lall = 0;
-      try {
-      testGame2 = new Game(3);
-      int i = testGame2.addPlayer("77.218.245.102", "77.218.245.102", "knasboll");
-      int p = testGame2.addPlayer("192.343.23.09", "189.234.231.22", "banankontakt");
-      int s = testGame2.addPlayer("234.234.21.12", "123.456.78.90", "kamel");
-      Player person = testGame2.findPlayer("banankontakt");
-      Player person2 = testGame2.findPlayer("kamel");
-      q = person.getPlayerNumber();
-      lall = person2.getPlayerNumber();
-	    
-      }
-      catch(RemoteException e){
-      System.out.println("Error" + e.getMessage());
-      e.printStackTrace();
-      }
-      assertTrue(q == 1);
-      assertTrue(lall == 2);
-      } */
-	
-    /*	
-	@Test
-	public void test_nextplayer() {
-	assertTrue(true);	
-	}
-	
-	@Test
-	public void test_looseGame() {
-	assertTrue(true);
-	}
-	
-	@Test
-	public void test_giveWholeDeck() {
-	assertTrue(true);
-	}
-	
-	@Test
-	public void test_handleWrongHit() {
-	assertTrue(true);
-	}
-	
-	@Test
-	public void test_handleRightHit() {
-	assertTrue(true);
-	}
-	
-	@Test
-	public void test_whatFourCards() {
-	assertTrue(true);
-	}
-    */
-    /*
-      @Test
-      public void test_startGame() {
-      try {
-      Game server = new Game(2); 
-      Player player1 = new Player(0, "123546", "123546", "Dess", true);
-      Player player2 = new Player(1, "123546", "123546", "Elsa", true);
-      int size = server.getDeckSize();
-	
-      server.startGame(2);
-      int deck0 = server.getPlayer(0).getPlayerDeck().getDeckSize();
-      int deck1 = server.getPlayer(1).getPlayerDeck().getDeckSize();
-      System.out.println("startGame: player 1 size="+deck0);
-      System.out.println("startGame: player 2 size="+deck1);
-      assertTrue(deck0==deck1);
-
-      }
-      catch(Exception e) {
-      System.out.println(e);
-      }
-      assertTrue(true);
-      }*/
-    
-    
-
-    
-
-
-    /*	
-	@Test
-	public void test_whoLostRightHit() {
-	assertTrue(true);
-	}*/
-
-    /*
-      @Test
-      public void test_addPlayerAndGetPlayerAlias(){
-      Game theGame = null;
-      String test = "";
-      try {
-      theGame = new Game(1);
-      int i =  theGame.addPlayer("125.323.32.5", "125.323.32.5", "mupp");
-      test = theGame.getPlayerAlias(i);
-      }
-      catch (RemoteException e) {
-      System.out.println("Error " + e.getMessage());
-      e.printStackTrace();
-      }
-      assertTrue(test.equals("mupp"));
-      } 
-    */
 }
 

@@ -18,7 +18,7 @@ public class DeckTest extends TestCase {
     @Test
     public void test_getCard() {
 	Deck theDeck = new Deck();
-	assertTrue(theDeck.getCard().showCard().equals("[Diamond 13]"));
+	assertTrue(theDeck.getCard(false).showCard().equals("[Diamond 13]"));
     }
 
     @Test
@@ -26,7 +26,7 @@ public class DeckTest extends TestCase {
 	Deck theDeck2 = new Deck();
 	Deck theDeck3 = new Deck();
 	theDeck2.mixup();
-	assertFalse(theDeck2.getCard().showCard().equals(theDeck3.getCard().showCard()));
+	assertFalse(theDeck2.getCard(false).showCard().equals(theDeck3.getCard(false).showCard()));
     }
 
     @Test
@@ -79,22 +79,28 @@ public class DeckTest extends TestCase {
     public void test_combineDeck() {
 	Deck theDeck8 = new Deck(3);
 	Deck theDeck9 = new Deck(3);
-       	Card theCard = new Card(6,"Club");
+
+	Card theCard = new Card(6,"Club");
 	Card theCard2 = new Card(8,"Spade");
 	Card theCard3 = new Card(1,"Heart");
+
 	boolean knas;
+
 	theDeck8.addCard(theCard);
 	theDeck8.addCard(theCard2);
 	theDeck8.addCard(theCard3);
+	
 	theDeck9.addCard(theCard);
 	theDeck9.addCard(theCard2);
 	theDeck9.addCard(theCard3);
+
 	theDeck8.combineDeck(theDeck9.getCardList());
+
 	if (theDeck8.getCardList().get(0).showCard().equals("[Club 6]") &&
-	    theDeck8.getCardList().get(3).showCard().equals("[Club 6]") &&
 	    theDeck8.getCardList().get(1).showCard().equals("[Spade 8]") &&
-	    theDeck8.getCardList().get(4).showCard().equals("[Spade 8]") &&
 	    theDeck8.getCardList().get(2).showCard().equals("[Heart 1]") &&
+	    theDeck8.getCardList().get(3).showCard().equals("[Club 6]") &&
+	    theDeck8.getCardList().get(4).showCard().equals("[Spade 8]") &&
 	    theDeck8.getCardList().get(5).showCard().equals("[Heart 1]")){
 	    knas = true;
 	}

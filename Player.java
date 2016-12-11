@@ -104,10 +104,11 @@ public class Player implements java.io.Serializable{
 
     
     /** 
-     * TODO
+     * Removes the card from the players deck and adds it to the deck specified
+     * @param gameDeck is the deck which a card should be added to.
      */
     public void playNextCard(Deck gameDeck){
-	Card cardToLay = playerDeck.getCard();
+	Card cardToLay = playerDeck.getCard(true);
 	gameDeck.addCard(cardToLay);
     }
 

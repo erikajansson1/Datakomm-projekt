@@ -42,9 +42,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     /** Get middle deck size
      */
     public int getDeckSize() throws RemoteException{
-	
-	Deck middle = this.gameDeck;
-	return middle.getDeckSize();
+	return gameDeck.getDeckSize();
     }
 
     /** 
@@ -197,7 +195,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 		for (int i = 0; i < gamePlayers.size(); i++){
 		    if (starterDeck.getAmount() > 0){
 			thePlayer = gamePlayers.get(i);
-			cardToInsert = starterDeck.getCard();
+			cardToInsert = starterDeck.getCard(true);
 			thePlayer.getPlayerDeck().addCard(cardToInsert);
 			
 
@@ -224,7 +222,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     /**
      * Gives the deck in the middle to whoever lost
      */
-    public void giveWholeDeck(Player loserPlayer){ 
+    public void giveWholeDeck(Player loserPlayer){
 	loserPlayer.getCardFromMiddleDeck(this.gameDeck);
     } 
 	 
@@ -266,13 +264,12 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
      * Move all cards from one deck to another
      * @param from Deck to take cards from
      * @param to Deck to add cards to
-     * @comments This function is private simply because there's no reason for it to be public
      */
-    private void moveDeck(Deck from, Deck to) {
+    public void moveDeck(Deck from, Deck to) {
 	Card curr;
 	int to_len = to.getDeckSize();
 	for (int i=0; i<to_len; i++) {
-	    curr = from.getCard();
+	    curr = from.getCard(true);
 	    to.addCard(curr);
 	}
     }

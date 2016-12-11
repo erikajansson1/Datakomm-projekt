@@ -72,14 +72,16 @@ public class Deck implements java.io.Serializable{
 
     
     /**
-     * Gets the card last in order and removes it from the current deck.
+     * Gets the card last in order and removes it from the current deck. 
+     * If boolean is true.
+     * @param remove is set if to remove or keep the card in the deck
      * @return The last card and removes it from the deck.
      */
-    public Card getCard() {
+    public Card getCard(boolean remove) {
 	cardList.trimToSize();
 	int indexLastCard = cardList.size()-1;
     	Card getCard = cardList.get(indexLastCard);
-	cardList.remove(indexLastCard);
+	if(remove) cardList.remove(indexLastCard);
     	return getCard;
     }
         
@@ -163,6 +165,7 @@ public class Deck implements java.io.Serializable{
      * Adds a external deck to this deck.
      */
     public void combineDeck(ArrayList<Card> toAdd) {
+	this.cardList.trimToSize();
 	this.cardList.addAll(toAdd);
     }
     
