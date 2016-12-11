@@ -317,7 +317,8 @@ public class GameTest extends TestCase {
     
     @Test
     public void test_getRound() throws Exception {
-	assertTrue(true);
+	Game testGame = setUpNonRMIGame4();
+	assertTrue(testGame.getRound() == 5);
     }
 
     
@@ -353,7 +354,8 @@ public class GameTest extends TestCase {
     
     @Test
     public void test_getPlayerAlias() throws Exception {
-	assertTrue(true);
+	Game testGame = setUpNonRMIGame4();
+	assertEquals(testGame.getPlayerAlias(0),"player0");
     }
 
     
