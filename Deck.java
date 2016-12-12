@@ -93,7 +93,8 @@ public class Deck implements java.io.Serializable{
     	Collections.shuffle(this.cardList);
         }
     
-    /**Add a card to the deck
+    /**
+     * Add a card to the deck
      * Do we want to have the circle game deck to be a own deck class?
     */
     public void addCard(Card newCard) {

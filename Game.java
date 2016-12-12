@@ -218,11 +218,12 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
      * @param Player who will recieve the deck.
      */
     public void giveWholeDeck (Player loserPlayer) throws RemoteException{
-	loserPlayer.getCardFromMiddleDeck(this.gameDeck);
+	loserPlayer.getCardFromMiddleDeck(gameDeck);
+	this.gameDeck.cleanDeck();
     } 
 
   
-    //SAME AS ABOVE!
+    //SAME AS ABOVE! DOESNT CLEAN DECK??
     /** 
      * Gives the losing player all the thrown cards
      * @param Number ID of the player
@@ -586,7 +587,8 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 		for (int i = 0; i < sortedList.size(); i++){
 		    if (gameDeck.getAmount() > 0){
 			Card cardToInsert = gameDeck.getCard(true);
-			sortedList.get(i).getPlayerDeck().addCard(cardToInsert);
+			int playerNo = sortedList.get(i).getPlayerNumber();
+			gamePlayers.get(playerNo).getPlayerDeck().addCard(cardToInsert);
 		    }
 		}
 	}
@@ -602,21 +604,23 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 		    return "Player: "+
 			sortedList.get(0).getPlayerName()+
 			"picks up the game deck";
+		    
 	     } else if (sortedList.size() == 1 && action.equals("n")) {
 		 return "Goooooood";
 
 	     } else if (sortedList.get(i).getPlayerAction().equals(action)) {
 		 sortedList.remove(i);
+
 	     } else i++;
 
 	 }
-	 distributeCards(sortedList);
-	 String returnString = "Players: ";
-	 for (int i = 0; i < sortedList.size(); i++) {
-	     returnString += sortedList.get(0).getPlayerName()+" ";
-	 }
-	 returnString += "\nPicks up the game deck \n";
-	 return returnString;
+	distributeCards(sortedList);
+	String returnString = "Players: ";
+	for (int i = 0; i < sortedList.size(); i++) {
+	    returnString += sortedList.get(0).getPlayerName()+" ";
+	}
+	returnString += "\nPicks up the game deck \n";
+	return returnString;
     }
 
 
@@ -659,6 +663,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	}
 	
 	tryToLayCard(gamePlayers.get(whoseTurn()).getPlayerNumber(), round);
+	
 	if( gamePlayers.get(whoseTurn()).getPlayerDeck().getDeckSize() == 0) {
 	    int rank = 1;
 	    for (int i = 0; i < gamePlayers.size(); i++) {

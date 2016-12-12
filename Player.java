@@ -120,7 +120,6 @@ public class Player implements java.io.Serializable{
      */
     public void getCardFromMiddleDeck(Deck gameDeck){
 	playerDeck.combineDeck(gameDeck.getCardList());
-	gameDeck.cleanDeck();
     }
 
 

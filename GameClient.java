@@ -75,6 +75,7 @@ public class GameClient {
 
 		//Let the player make its move
 		getAnswer(serverGame, playerNo, maxAnswerTime);
+		String nameTurnPlayer = serverGame.getPlayer(serverGame.whoseTurn()).getPlayerName();
 		serverGame.setReadyValue(playerNo, true);
 		if(playerNo == 0) serverGame.askDealer();
 		
@@ -90,7 +91,7 @@ public class GameClient {
 		// 2.You won but still se the outprint in another loop
 		
 	       
-		
+
 		//loop until next round
 		while (oldRound == round) {
 		    System.out.printf("\033[2J\033[;H");
@@ -100,7 +101,7 @@ public class GameClient {
 		}
 		System.out.println(serverGame.getLastEvent());
 		System.out.println("Player: "+
-				   serverGame.getPlayer(serverGame.whoseTurn()).getPlayerName() +
+				   nameTurnPlayer +
 				   " laid a card.");
 		serverGame.setReadyValue(playerNo, false);
 		serverGame.updatePlayerTime(playerNo, 0L);
