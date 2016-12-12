@@ -107,7 +107,10 @@ public class GameClient {
 		    Thread.sleep(2000);
 		}
 		System.out.println(serverGame.getLastEvent());
-		//TODO player put down a card.
+		System.out.println("Player: "+
+				   serverGame.getPlayer(serverGame.whoseTurn()).getPlayerName() +
+				   " laid a card.");
+
 		Thread.sleep(8000);
 
       

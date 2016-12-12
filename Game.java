@@ -377,22 +377,11 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
      * @return Returns true if player could lay a card, otherwise false
      */
     public boolean tryToLayCard(int playerNo, int playerRound) throws RemoteException {
-	try {
-	    this.lock.acquire();
-	    if(playerRound == this.round) {
-
-		Player trying = this.gamePlayers.get(playerNo);
-		trying.playNextCard(this.gameDeck);
-		this.round++;
-		this.lock.release();
-		return true;
+	if(playerRound == this.round) {
+	    Player trying = this.gamePlayers.get(playerNo);
+	    trying.playNextCard(this.gameDeck);
+	    return true;
 	    }
-	}catch(InterruptedException e) {
-	    System.out.println("Something went wrong when trying to lay card");
-	    e.printStackTrace();
-	}
-
-	this.lock.release();
 	return false;
     }
    
