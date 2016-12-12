@@ -66,26 +66,21 @@ public class GameClient {
 		canHit = serverGame.timeToHit(); 
 
 		//Display board
-		System.out.printf("\033[2J\033[;H"); //Why do we print out this?
-		// to "Refresh" the display?
+		System.out.printf("\033[2J\033[;H"); 
 		System.out.println(serverGame.displayBoard());
 		System.out.println("Current dick size " + serverGame.getDeckSize());
-		System.out.println(checkVar);
+		//System.out.println(checkVar);
 
 		//Check if it's current player's time to lay card
 		if (serverGame.whoseTurn() == playerNo) { myRound = true; }
 		else { myRound = false; }
 		
 
-		    
-		serverGame.setReadyValue(playerNo, false); 
-		
 		//Let the player make its move
 		checkVar = userAction(serverGame, playerNo, round, canHit,myRound);
 
 		serverGame.setReadyValue(playerNo, true);
-
-		
+	
 		//TODO UPDATE THE WHOLE GAME STATUS TBH.
 		//Kolla sa att alla har gjort sitt och att losern har fatt kort
 		//Completely lost in how we compare players to eachother from this loop
@@ -107,7 +102,7 @@ public class GameClient {
 		    round = serverGame.updateRound(oldRound);
 		    System.out.println(serverGame.displayBoard());
 		    //round = serverGame.getRound();
-		    Thread.sleep(1000);
+		    Thread.sleep(5000);
 		}
       
 		oldRound = round;
@@ -117,7 +112,7 @@ public class GameClient {
 	    while((serverGame.getPlayer(playerNo).getPlayerRank() != -1) &&
 		  !serverGame.askGameEnded()) {
 		serverGame.displayBoard();
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 	    }
 	    System.out.println(serverGame.displayGameResult());
 	}
@@ -142,7 +137,7 @@ public class GameClient {
       2a. Hit is possible
       2b. Hit is not possible      
     */
-    public static boolean  userAction(GameInterface serverGame, int playerNo, int round, boolean canHit, boolean myRound) throws RemoteException {
+    public static boolean userAction(GameInterface serverGame, int playerNo, int round, boolean canHit, boolean myRound) throws RemoteException {
 	String answer = "";
 	String actionMessage = "";
 	long answerTime;
@@ -164,7 +159,7 @@ public class GameClient {
 	    else {
 		switch(answer) {
 		case "h": actionMessage = serverGame.handleWrongHit(playerNo, round); break; //what happens with message?
-		case "c": card = serverGame.tryToLayCard(playerNo, round); break; //Creates Error, IndexOutOfBoundsException
+		case "c": card = serverGame.tryToLayCard(playerNo, round); break; 
 		default: break;
 		}
 	    }
@@ -183,7 +178,7 @@ public class GameClient {
 	    else {
 		switch(answer) {
 		case "y": actionMessage = serverGame.handleWrongHit(playerNo, round); break;
-		case "n": serverGame.handleRightHit(playerNo, round); break;
+		    //		case "n": serverGame.handleRightHit(playerNo, round); break;
 		default: break;
 		}
 	    }
@@ -201,16 +196,16 @@ public class GameClient {
     */
     public static String getAnswer(GameInterface game, int playerNo, long maxAnswerTime)  throws RemoteException {
 	Scanner userInput = new Scanner(System.in);
-	String answer = "";
+	String answer = "erika";
 	long answerTime = 0L;
 	long startTime = System.nanoTime();
 	answer = userInput.nextLine();
 	while(answerTime < maxAnswerTime) {
-	    if (!answer.equals("")) { break; }
+	    if (!answer.equals("erika")) { break; }
 	    answer = userInput.nextLine();
 	    answerTime = System.nanoTime() - startTime;  
 	}	
-	if(answer.equals("")) { answerTime = -1L; }
+	if(answer.equals("erika")) { answerTime = 0L; }
 	game.updatePlayerTime(playerNo, answerTime);
 	return answer;       
     }

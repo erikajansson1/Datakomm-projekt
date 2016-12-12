@@ -387,6 +387,7 @@ class Network {
 	    
 	}catch (Exception e){
 	    System.out.printf("You got fucked!%n");
+	    e.printStackTrace();
 	    System.exit(0);
 	}
 	return argvClient;
