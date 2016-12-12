@@ -72,9 +72,8 @@ public class GameClient {
 
 		//Display board
 		System.out.printf("\033[2J\033[;H"); 
-		System.out.println(serverGame.displayBoard());
+		//System.out.println(serverGame.displayBoard());
 		System.out.println("Current dick size " + serverGame.getDeckSize());
-		//System.out.println(checkVar);
 
 		//Check if it's current player's time to lay card
 		if (serverGame.whoseTurn() == playerNo) { myRound = true; }
@@ -103,7 +102,7 @@ public class GameClient {
 		while (oldRound == round) {
 		    System.out.printf("\033[2J\033[;H");
 		    round = serverGame.getRound();
-		    System.out.println(serverGame.displayBoard());
+		    //System.out.println(serverGame.displayBoard());
 		    Thread.sleep(2000);
 		}
 		System.out.println(serverGame.getLastEvent());
@@ -131,70 +130,6 @@ public class GameClient {
 	}
 
 
-    }
-
-
-
-   
-
-    /*
-      Function that acts out following scenarios (this client/player= I, me, my):
-      1. It is my round and I can choose whether to hit or play next card:
-      1a. Hit is possible
-      1b. Hit is not possible
-      2. It is someone else's round, and I can choose whether to hit or not:
-      2a. Hit is possible
-      2b. Hit is not possible      
-    *//*
-    public static boolean  userAction(GameInterface serverGame, int playerNo, int round, boolean canHit, boolean myRound) throws RemoteException {
-	String answer = "";
-	String actionMessage = "";
-	long answerTime;
-	long startCounting;
-	long maxAnswerTime = 30000000000L; //30 sekunder
-	boolean card = false;
-	
-	if(myRound) {  //TODO: ar det har vi kollar ifall ngn har forsvunnit? iom att den personen inte kommer gora sitt drag
-   	    System.out.println("Do you wan to hit the dick(h) or play next card(c)?");
-	    answer = getAnswer(serverGame, playerNo, maxAnswerTime);
-	    
-	    if (canHit) {
-		switch(answer) {
-		case "h": serverGame.handleRightHit(playerNo, round); break; 
-		case "c": card = serverGame.tryToLayCard(playerNo, round); break;
-		default: break;
-		}
-	    } 
-	    else {
-		switch(answer) {
-		case "h": actionMessage = serverGame.handleWrongHit(playerNo, round); break; //what happens with message?
-		case "c": card = serverGame.tryToLayCard(playerNo, round); break; //Creates Error, IndexOutOfBoundsException
-		default: break;
-		}
-	    }
-	}
-	else if (!myRound) {
-	    System.out.println("Do you want to hit the dick? (y/n)"); 
-	    answer = getAnswer(serverGame, playerNo, maxAnswerTime);
-		
-	    if(canHit) {
-		switch(answer) {
-		case "y": serverGame.handleRightHit(playerNo, round); break;
-		case "n": actionMessage = serverGame.handleWrongHit(playerNo, round); break;
-		default: break;
-		}
-	    }
-	    else {
-		switch(answer) {
-		case "y": actionMessage = serverGame.handleWrongHit(playerNo, round); break;
-		    //	case "n": serverGame.handleRightHit(playerNo, round); break;
-		default: break;
-		}
-	    }
-	    
-	}
-
-	return card;
     }
 
     /** Asks user for input
