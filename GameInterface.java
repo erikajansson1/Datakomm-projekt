@@ -105,7 +105,7 @@ public interface GameInterface extends Remote {
      */
     public boolean tryToLayCard(int playerNo, int playerRound) throws RemoteException;
 
-    public void askDealer() throws RemoteException;
+    public void askDealer() throws Exception;
 
     /** 
      * Update the action for a player

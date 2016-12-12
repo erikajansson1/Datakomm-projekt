@@ -629,7 +629,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     }
 
     
-    public void askDealer() throws RemoteException{
+    public void askDealer() throws Exception{
 	while(!everyoneHasMadeMove()) {
 	    Thread.sleep(1000);
 	    System.out.println("sleeeep");
