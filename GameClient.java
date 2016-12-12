@@ -71,7 +71,7 @@ public class GameClient {
 
 		//Display board
 		System.out.printf("\033[2J\033[;H"); 
-		//System.out.println(serverGame.displayBoard());
+		System.out.println(serverGame.displayBoard());
 		System.out.println("Current dick size " + serverGame.getDeckSize());
 
 		//Let the player make its move
@@ -105,7 +105,7 @@ public class GameClient {
 				   serverGame.getPlayer(serverGame.whoseTurn()).getPlayerName() +
 				   " laid a card.");
 
-		Thread.sleep(5000);
+		Thread.sleep(3000);
 
       
 		oldRound = round;
@@ -141,13 +141,10 @@ public class GameClient {
 	System.out.println("Do you want to hit the dick? (y/n)"); 
 	//answer = userInput.nextLine();
 	while(answerTime < maxAnswerTime) {
-	    System.out.println("hejjj");
 	    if (!answer.equals("")) { break; }
 	    answer = userInput.nextLine();
 	    answerTime = System.nanoTime() - startTime; 
-	    System.out.println("time: " +System.nanoTime());
 	}	
-	System.out.println("Your answer: "+answer+" time:"+answerTime);
 	if(answer.equals("")) { answerTime = 0L; }
 	game.updatePlayerTime(playerNo, answerTime);
 	game.updatePlayerAction(playerNo,answer);

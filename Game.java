@@ -597,7 +597,8 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	for (int i = 0; i < sortedList.size();) {
 
 	     if(sortedList.size() == 1 && action.equals("y")) {
-		 giveWholeDeck(sortedList.get(0));
+		 int playerNo =sortedList.get(0).getPlayerNumber(); 
+		 giveWholeDeck(this.gamePlayers.get(playerNo));
 		    return "Player: "+
 			sortedList.get(0).getPlayerName()+
 			"picks up the game deck";
@@ -642,7 +643,6 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     public void askDealer() throws Exception{
 	while(!everyoneHasMadeMove()) {
 	    Thread.sleep(1000);
-	    System.out.println("sleeeep");
 	}
 	ArrayList <Player> sortedList = sortPlayers();
 	String action = sortedList.get(0).getPlayerAction();
