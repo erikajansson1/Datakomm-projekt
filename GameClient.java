@@ -141,9 +141,7 @@ public class GameClient {
 	    if (!answer.equals("")) { break; }
 	    answer = userInput.nextLine();
 	    answerTime = System.nanoTime() - startTime; 
-	    System.out.println("time: " +System.nanoTime());
 	}	
-	System.out.println("Your answer: "+answer+" time:"+answerTime);
 	if(answer.equals("")) { answerTime = 0L; }
 	game.updatePlayerTime(playerNo, answerTime);
 	game.updatePlayerAction(playerNo,answer);
