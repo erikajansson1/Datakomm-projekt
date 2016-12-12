@@ -71,16 +71,15 @@ public class GameClient {
 		canHit = serverGame.timeToHit(); 
 
 		//Display board
-		System.out.printf("\033[2J\033[;H"); //Why do we print out this?
-		// to "Refresh" the display?
+		System.out.printf("\033[2J\033[;H"); 
 		System.out.println(serverGame.displayBoard());
 		System.out.println("Current dick size " + serverGame.getDeckSize());
-		System.out.println(checkVar);
+		//System.out.println(checkVar);
 
 		//Check if it's current player's time to lay card
 		if (serverGame.whoseTurn() == playerNo) { myRound = true; }
 		else { myRound = false; }
-				
+
 		//Let the player make its move
 		serverGame.setReadyValue(playerNo, true);
 		getAnswer(serverGame, playerNo, maxAnswerTime);

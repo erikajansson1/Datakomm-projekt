@@ -183,9 +183,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     /**
      * Initiate game by giving out cards and select who start first 
      */
-    // TODO : This won't be printed, save instead in list and return !
-    // TODO : The prints are for debugging and are printed on server side...
-    public void startGame(int playerNo) throws RemoteException {
+     public void startGame(int playerNo) throws RemoteException {
 	if(playerNo == 0) {
 	    this.starterDeck.mixup();
 	    Player thePlayer;
@@ -196,14 +194,11 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 			thePlayer = gamePlayers.get(i);
 			cardToInsert = starterDeck.getCard(true);
 			thePlayer.getPlayerDeck().addCard(cardToInsert);
-			
-
 		    }
 		}
 	    }
 	    for(int j=0; j<gamePlayers.size();j++) {
 		thePlayer = gamePlayers.get(j);
-		System.out.println("Game.java:207. Player "+j+": "+thePlayer.getPlayerDeck().getDeckSize());
 	    }
 	}
     }
@@ -297,33 +292,25 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	try{
 	    this.lock.acquire();
 	    
-    	    while(!everyoneHasMadeMove()) { /* WAITING LOOP */ }
+	    while(!everyoneHasMadeMove()) { /* WAITING LOOP */ }
+	    
 	    if(round < this.round) { 	    
 		this.lock.release();
 		return loserMessage; 
 	    }
-	    
-	    //KALLA VEM SAM SLAG FARST
-	    long fastestAnswerTime = 0;
-	    Player currGuy;
-	    long currAnswerTime;
-	    int len = this.gamePlayers.size();
-	    int firstID = -1;
-	    Player first = null;
-	    for(int i=0; i<len; i++) {
-		currGuy = this.gamePlayers.get(i);
-		currAnswerTime = currGuy.getPlayerTime();
-		if(currAnswerTime < fastestAnswerTime) { 
-		    fastestAnswerTime = currAnswerTime; 
-		    firstID = i;
-		    first = currGuy;
-		}
-	    }
 
-	    if(firstID == playerNo){
-		loserMessage = "Your hit was wrong, pick up the deck!";
-		this.giveWholeDeck(playerNo);
+	    int currentPlayer = whoseTurn();
+	    long myTime = this.gamePlayers.get(playerNo).getPlayerTime();
+	    long theirTime =  this.gamePlayers.get(currentPlayer).getPlayerTime();
+	    if ((currentPlayer != playerNo) && (myTime > theirTime)) {
+		giveWholeDeck(playerNo);
+		loserMessage = "Wrong hit! Pick up all the cards.";
 	    }
+	    else if (currentPlayer == playerNo) {
+		giveWholeDeck(playerNo);
+		loserMessage = "Wrong hit! Pick up all the cards.";	    
+	    }
+	    
 	}
 	catch( Exception e) {
 	    e.printStackTrace();
@@ -341,12 +328,13 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     	String actionMessage = ""; 
 	try {
 	    this.lock.acquire();
-	    if(playerRound < this.round) { 	    
+	    if((playerRound < this.round) | (playerRound > this.round)) { 	    
 		this.lock.release();
-		return "Too slow, it's a new round!"; }
+		return "Too slow, it's a new round!"; 
+	    }
 	    while(!everyoneHasMadeMove()) { /* WAITING LOOP */ }
+	    
 
-	    //KOLLA VEM SOM VAR LONGSOMMOST	    
 	    long longestAnswerTime = 0;
 	    Player currGuy;
 	    long currAnswerTime;
@@ -362,16 +350,20 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 		    loser = currGuy;
 		}
 	    }
-	    
-    	    giveWholeDeck(loserID);
-	    String loserName = loser.getPlayerName();
-	    actionMessage = "Hit succesfull! "+loserName+" lost.";
+	    actionMessage = "Hit successful!"; 
+	    // Player loser = this.gamePlayers.get(playerNo);
+    	    if (loser != null) {
+		    giveWholeDeck(loser);
+		    String loserName = loser.getPlayerName();
+		    actionMessage = "Hit succesfull! "+loserName+" lost.";
+	    }
 	    
 	    this.lock.release();
 	    return actionMessage;
 	}
 	catch(Exception e){
 	    System.out.println("handleRightHit: "+e);
+	    e.printStackTrace();
 	}
 	this.lock.release();
 	return actionMessage; 
@@ -388,10 +380,9 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	try {
 	    this.lock.acquire();
 	    if(playerRound == this.round) {
+
 		Player trying = this.gamePlayers.get(playerNo);
 		trying.playNextCard(this.gameDeck);
-		System.out.println("Game.java:191 gameDeck=" +gameDeck.getDeckSize()
-				   + ", Player"+playerNo+" deck="+trying.getPlayerDeck().getDeckSize());
 		this.round++;
 		this.lock.release();
 		return true;
