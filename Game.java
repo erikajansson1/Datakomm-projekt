@@ -221,12 +221,24 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
  
     /**
      * Gives the deck in the middle to whoever lost
+     * @param Player who will recieve the deck.
      */
-    public void giveWholeDeck(Player loserPlayer){
+    public void giveWholeDeck (Player loserPlayer) throws RemoteException{
 	loserPlayer.getCardFromMiddleDeck(this.gameDeck);
     } 
-	 
-   
+
+  
+    //SAME AS ABOVE!
+    /** 
+     * Gives the losing player all the thrown cards
+     * @param Number ID of the player
+     */
+    public void giveWholeDeck (int playerNo) throws RemoteException {
+	Player loser = this.gamePlayers.get(playerNo);
+	Deck loserDeck = loser.getPlayerDeck();
+	moveDeck(this.gameDeck, loserDeck);    
+    }
+    
      
     /** 
      * Get the rank of player #playerNo 
@@ -275,15 +287,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     }
 
     
-    /** 
-     * Gives the losing player all the thrown cards
-     * @param Number ID of the player
-     */
-    public void loserTakesItAll(int playerNo) throws RemoteException {
-	Player loser = this.gamePlayers.get(playerNo);
-	Deck loserDeck = loser.getPlayerDeck();
-	moveDeck(this.gameDeck, loserDeck);    
-    }
+ 
 
     
     /**
@@ -322,7 +326,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 
 	    if(firstID == playerNo){
 		loserMessage = "Your hit was wrong, pick up the deck!";
-		this.loserTakesItAll(playerNo);
+		this.giveWholeDeck(playerNo);
 	    }
 	}
 	catch( Exception e) {
@@ -343,7 +347,9 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	    if(playerRound < this.round) { 	    
 		this.lock.release();
 		return "Too slow, it's a new round!"; }
-	    while(!everyoneHasMadeMove()) { /* WAITING LOOP */ }
+	    // while(!everyoneHasMadeMove()) { /* WAITING LOOP */ }
+	    //NOT POSSIBLE SINCE ONLY ONE SEMPAHORE EXISTS!
+	    //WHILE IN THE LOOP ABOVE NO ONE CAN MAKE THEIR MOVES.
 
 	    //KOLLA VEM SOM VAR LONGSOMMOST	    
 	    long longestAnswerTime = 0;
@@ -362,7 +368,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 		}
 	    }
 	    
-    	    loserTakesItAll(loserID);
+    	    giveWholeDeck(loserID);
 	    String loserName = loser.getPlayerName();
 	    actionMessage = "Hit succesfull! "+loserName+" lost.";
 	    
@@ -526,12 +532,13 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	return true;
     }
     
-    /**  Checks every players answer time and returns a boolean saying if all are ready.
+    /**  
+     * Checks every players answer time and returns a boolean saying if all are ready.
      * @return returns true if all players have answered
      */
     public boolean everyoneHasMadeMove() throws RemoteException{
 	for (int i = 0; i < gamePlayers.size(); i++) {
-	    if( (gamePlayers.get(i).getPlayerTime() == -1) ) { return false; }
+	    if( (gamePlayers.get(i).getPlayerTime() == 0L) ) { return false; }
 	       
 	}
 	return true;
@@ -555,9 +562,9 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
      * @return a string describing the result.
      */
     public String displayGameResult() throws RemoteException{
-	String result = null;
+	String result = "";
 	for (int i = 0; i < this.gamePlayers.size(); i++) {
-	    if(!(i == 0)) result += "\n";
+	    if(i != 0) result += "\n";
 	    result += gamePlayers.get(i).getPlayerName();
 	    result += "\nPlace: " + gamePlayers.get(i).getPlayerRank() + "\n";
 	}

@@ -45,7 +45,7 @@ public class GameTest extends TestCase {
 						       "/"+
 						       "theGame");
 	    
-	    serverGame.setGameValues(5,deck,null,gamePlayers);
+	    serverGame.setGameValues(5,deck,new Deck(0),gamePlayers);
 	} catch (Throwable e) {
 	    e.printStackTrace();
 	    assertFalse(true);
@@ -70,7 +70,7 @@ public class GameTest extends TestCase {
 	deck.addCard(new Card(3,"Spade"));
 	deck.addCard(new Card(2,"Spade"));
 	
-	newGame.setGameValues(5,deck,null,gamePlayers);
+	newGame.setGameValues(5,deck,new Deck(0),gamePlayers);
 	return newGame;
     }
 
@@ -89,7 +89,7 @@ public class GameTest extends TestCase {
 	deck.addCard(new Card(1,"Heart"));
 	deck.addCard(new Card(2,"Heart"));
 	
-	newGame.setGameValues(3,deck,null,gamePlayers);
+	newGame.setGameValues(3,deck,new Deck(0),gamePlayers);
 	return newGame;
     }
 
@@ -282,13 +282,7 @@ public class GameTest extends TestCase {
 	assertTrue(b.getAmount() == 2);
     }
 
-    
-    @Test
-    public void test_loserTakesItAll() throws Exception {
-	assertTrue(true);
-    }
 
-    
     @Test
     public void test_handleWrongHit() throws Exception {
 	assertTrue(true);
@@ -297,7 +291,12 @@ public class GameTest extends TestCase {
     
     @Test
     public void test_handleRightHit() throws Exception {
-	assertTrue(true);
+	Game testGame = setUpNonRMIGame4();
+	for (int i = 0; i < 4; i++) {
+	    testGame.getPlayer(i).setPlayerTime(i+1);	    
+	}
+	assertEquals(testGame.handleRightHit(0,5),"Hit succesfull! player3 lost.");
+
     }
 
     
@@ -324,31 +323,44 @@ public class GameTest extends TestCase {
     
     @Test
     public void test_getGameDeck() throws Exception {
-	assertTrue(true);
+	Game testGame = setUpNonRMIGame4();
+	assertTrue(testGame.getGameDeck() != null);
+	assertTrue(testGame.getGameDeck().getAmount() == 4);
     }
 
     
     @Test
     public void test_getStarterDeck() throws Exception {
-	assertTrue(true);
+	Game testGame = setUpNonRMIGame4();
+	assertTrue(testGame.getStarterDeck() != null);
+	assertTrue(testGame.getStarterDeck().getAmount() == 0);
     }
 
     
     @Test
     public void test_getGamePlayers() throws Exception {
-	assertTrue(true);
+	Game testGame = setUpNonRMIGame4();
+	assertTrue(testGame.getGamePlayers() != null);
+	assertEquals(testGame.getGamePlayers().get(0).getPlayerName(),"player0");
     }
 
     
     @Test
     public void test_setGameValues() throws Exception {
-	assertTrue(true);
+	Game testGame = new Game(4);
+	assertTrue(testGame.getRound() == 0);
+	testGame.setGameValues(10,new Deck(0),null,null);
+	assertTrue(testGame.getRound() == 10);
+	assertTrue(testGame.getGameDeck().getAmount() == 0);
     }
 
     
     @Test
     public void test_addPlayer() throws Exception {
-	assertTrue(true);
+	Game testGame = new Game(1);
+	assertEquals(testGame.getPlayer(0).getPlayerName(), "Empty");
+	testGame.addPlayer("","","Muppet0");
+	assertEquals(testGame.getPlayer(0).getPlayerName(), "Muppet0");
     }
 
     
@@ -361,31 +373,55 @@ public class GameTest extends TestCase {
     
     @Test
     public void test_askIsGameFull() throws Exception {
-	assertTrue(true);
+	Game testGame = setUpNonRMIGame4();
+	assertTrue(testGame.askIsGameFull());
+	Game testGameEmpty = new Game(4);
+	assertFalse(testGameEmpty.askIsGameFull());
     }   
 
     
     @Test
     public void test_waitingForPlayers() throws Exception {
-	assertTrue(true);
+	Game testGame = setUpNonRMIGame4();
+	assertTrue(testGame.waitingForPlayers());
+	Game testGameEmpty = new Game(4);
+	assertFalse(testGameEmpty.waitingForPlayers());
     }  
 
     
     @Test
     public void test_everyoneHasMadeMove() throws Exception {
-	assertTrue(true);
+	Game testGame = setUpNonRMIGame4();
+	assertFalse(testGame.everyoneHasMadeMove());
+	for (int i = 0; i < 4; i++) {
+	    testGame.getPlayer(i).setPlayerTime(i+1);
+	}
+	assertTrue(testGame.everyoneHasMadeMove());
     }  
 
     
     @Test
     public void test_askGameEnded() throws Exception {
-	assertTrue(true);
+	Game testGame = setUpNonRMIGame4();
+	assertFalse(testGame.askGameEnded());
+	for (int i = 0; i < 4; i++) {
+	    testGame.getPlayer(i).setPlayerRank(i);
+	}
+	assertTrue(testGame.askGameEnded());
     }  
 
     
     @Test
     public void test_displayGameResult() throws Exception {
-	assertTrue(true);
+	Game testGame = setUpNonRMIGame4();
+	String result = "";
+	for (int i = 0; i < 4; i++) {
+	    testGame.getPlayer(i).setPlayerRank(i);
+
+	    if (i != 0) result += "\n";
+	    result += "player"+i+"\nPlace: "+i+"\n";
+	}
+	assertEquals(testGame.displayGameResult(),result);
     }
     
 }

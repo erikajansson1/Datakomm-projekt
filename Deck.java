@@ -133,11 +133,11 @@ public class Deck implements java.io.Serializable{
 			amount--;
 			n++;
 		    }
-		    if(amount != 0){
-			return true; 
+		    if(amount == 1){
+			return false; 
 		    }
 		    else {
-			return false;
+			return true;
 		    }		    
 	    }
     }
