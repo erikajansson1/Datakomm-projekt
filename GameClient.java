@@ -77,13 +77,12 @@ public class GameClient {
 		String nameTurnPlayer = serverGame.getPlayer(serverGame.whoseTurn()).getPlayerName();
 		serverGame.setReadyValue(playerNo, true);
 		while(!serverGame.everyoneHasMadeMove()){
-		    if(playerNo == 0) {
 			System.out.printf("\033[2J\033[;H");
 			System.out.println(serverGame.displayBoard());
 			Thread.sleep(1000);
-		    }
-		    serverGame.askDealer();
 		}
+		if(playerNo == 0) serverGame.askDealer();
+		
 
 		while (oldRound == round) {
 		    round = serverGame.getRound();
