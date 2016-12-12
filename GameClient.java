@@ -54,7 +54,7 @@ public class GameClient {
 	    long hitTime;
 	    String answer = "";
 	    int oldRound = 0;
-	    int round = serverGame.updateRound(oldRound);
+	    int round = 0;
 	    oldRound = round;
 	    Scanner userInput = new Scanner(System.in);
 	    long maxAnswerTime = 30000000000L; //30 sekunder
@@ -106,7 +106,7 @@ public class GameClient {
 				   serverGame.getPlayer(serverGame.whoseTurn()).getPlayerName() +
 				   " laid a card.");
 
-		Thread.sleep(8000);
+		Thread.sleep(5000);
 
       
 		oldRound = round;
@@ -204,7 +204,6 @@ public class GameClient {
 	long answerTime = 0L;
 	long startTime = System.nanoTime();
 	System.out.println("Do you want to hit the dick? (y/n)"); 
-	answer = userInput.nextLine();
 	while(answerTime < maxAnswerTime) {
 	    if (!answer.equals("")) { break; }
 	    answer = userInput.nextLine();
@@ -213,6 +212,7 @@ public class GameClient {
 	if(answer.equals("")) { answerTime = 0L; }
 	game.updatePlayerTime(playerNo, answerTime);
 	game.updatePlayerAction(playerNo,answer);
+	System.out.println(answerTime);
     }
 
 }
