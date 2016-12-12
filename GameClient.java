@@ -54,7 +54,7 @@ public class GameClient {
 	    long hitTime;
 	    String answer = "";
 	    int oldRound = 0;
-	    int round = serverGame.updateRound(oldRound);
+	    int round = 0;
 	    oldRound = round;
 	    Scanner userInput = new Scanner(System.in);
 	    long maxAnswerTime = 30000000000L; //30 sekunder
@@ -139,12 +139,15 @@ public class GameClient {
 	long answerTime = 0L;
 	long startTime = System.nanoTime();
 	System.out.println("Do you want to hit the dick? (y/n)"); 
-	answer = userInput.nextLine();
+	//answer = userInput.nextLine();
 	while(answerTime < maxAnswerTime) {
+	    System.out.println("hejjj");
 	    if (!answer.equals("")) { break; }
 	    answer = userInput.nextLine();
 	    answerTime = System.nanoTime() - startTime; 
+	    System.out.println("time: " +System.nanoTime());
 	}	
+	System.out.println("Your answer: "+answer+" time:"+answerTime);
 	if(answer.equals("")) { answerTime = 0L; }
 	game.updatePlayerTime(playerNo, answerTime);
 	game.updatePlayerAction(playerNo,answer);

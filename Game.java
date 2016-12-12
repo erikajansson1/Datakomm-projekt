@@ -550,20 +550,30 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     public ArrayList<Player> sortPlayers() {
 	ArrayList <Player> returnList = new ArrayList<Player>();
 	for (int i = 0; i < gamePlayers.size(); i++) {
-	    if (returnList.size() == 0) returnList.add(0,gamePlayers.get(i));
+
+	    if (returnList.size() == 0) { 
+		returnList.add(0,gamePlayers.get(i)); 
+		i++; 
+	    }
 
 	    for (int i2 = 0; i2 < returnList.size(); i2++) {
-		int compareTime = gamePlayers.get(i).compareTime(gamePlayers.get(i2));
-		switch (compareTime) {
-		case  1: if (gamePlayers.size()-1 == i &&
-			     gamePlayers.size()-2 == i2) {
-			//Kanske fett fel!
-			returnList.add(i2+1,gamePlayers.get(i));
-		    }
-			break;
-		case -1: returnList.add(i2,gamePlayers.get(i)); break;
-		case  0: returnList.add(i2,gamePlayers.get(i)); break;
+		Player compareTo = returnList.get(i2); 
+		int compareTime = gamePlayers.get(i).compareTime(compareTo);
+		if (compareTime==1 && gamePlayers.size()-1 == i &&
+		    gamePlayers.size()-2 == i2) {
+		    //Kanske fett fel!
+		    returnList.add(i2+1,gamePlayers.get(i));
+		    break;
 		}
+		if (compareTime == -1) { 
+		    returnList.add(i2,gamePlayers.get(i)); 
+		    i2++; 
+		    break; 
+		}
+		if (compareTime ==  0) { 
+		    returnList.add(i2+1,gamePlayers.get(i)); 
+		    i2++; 
+		    break; }
 	    }
 	}
 	return returnList;
@@ -629,7 +639,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     }
 
     
-    public void askDealer() throws RemoteException{
+    public void askDealer() throws Exception{
 	while(!everyoneHasMadeMove()) {
 	    Thread.sleep(1000);
 	    System.out.println("sleeeep");
