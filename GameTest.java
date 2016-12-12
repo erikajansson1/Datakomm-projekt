@@ -9,7 +9,6 @@ import java.rmi.server.*;
 import java.rmi.registry.*;
 
 
-// Don't know how to make catch exception to work as I want to
 public class GameTest extends TestCase {
     private static GameInterface serverGame;
 
@@ -29,8 +28,8 @@ public class GameTest extends TestCase {
 		gamePlayers.add(new Player(i,"","","player"+i,false));
 		gamePlayers.get(i).getPlayerDeck().addCard(new Card((i+1)*2,"Diamond"));
 	    }
-
-
+	    
+	    
 	    
 	    Deck deck = new Deck(4);
 	    deck.addCard(new Card(1,"Heart"));

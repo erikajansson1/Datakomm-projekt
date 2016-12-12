@@ -41,6 +41,9 @@ public class GameClient {
 	    //BEGINNING OF GAME
 	    //PLAYER ZERo Starts the game always.
 	    serverGame.startGame(playerNo);
+	    while(serverGame.getPlayer(playerNo).getPlayerDeck().getAmount() == 0) {
+		Thread.sleep(1000);
+	    }
 	    
 	    //Gives out information about how many player. We need functions to get strings that get aliases
 	    // and everyones Deck size.
@@ -74,7 +77,6 @@ public class GameClient {
 		//Check if it's current player's time to lay card
 		if (serverGame.whoseTurn() == playerNo) { myRound = true; }
 		else { myRound = false; }
-		
 
 		//Let the player make its move
 		checkVar = userAction(serverGame, playerNo, round, canHit,myRound);

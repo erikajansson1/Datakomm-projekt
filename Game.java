@@ -151,6 +151,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	return this.round % gamePlayers.size();
     }
 
+    
     /** 
      * Finds the Player object in an array whose name matches the given parameter
      * @param alias 
@@ -168,7 +169,6 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	Player nobody = new Player(-1,"","","",false);
 	return nobody;
     }
-
 
     
     /** 
@@ -282,9 +282,6 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     }
 
     
- 
-
-    
     /**
      * Handle if someone hits at the wrong time.
      * @param playerNo of the player trying to hit.
@@ -323,6 +320,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	return loserMessage;
     }  
 
+    
     /**
      * handle when the hit is in the right time.
      * @param playerNo of the player trying to hit.
@@ -337,9 +335,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	    }
 	    while(!everyoneHasMadeMove()) { /* WAITING LOOP */ }
 	    
-	    System.out.println("HRH post everyoneHasMadeMove");
-	    
-	    //KOLLA VEM SOM VAR LONGSOMMOST	    
+
 	    long longestAnswerTime = 0;
 	    Player currGuy;
 	    long currAnswerTime;
@@ -385,7 +381,6 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	try {
 	    this.lock.acquire();
 	    if(playerRound == this.round) {
-		System.out.println("tryToLayCard");
 
 		Player trying = this.gamePlayers.get(playerNo);
 		trying.playNextCard(this.gameDeck);
