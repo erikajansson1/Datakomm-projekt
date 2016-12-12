@@ -68,7 +68,6 @@ public class GameClient {
 		serverGame.setReadyValue(playerNo, false);
 		serverGame.updatePlayerTime(playerNo, 0L);
 		//Check if it's possible to hit
-		canHit = serverGame.timeToHit(); 
 
 		//Display board
 		System.out.printf("\033[2J\033[;H"); 
@@ -76,13 +75,9 @@ public class GameClient {
 		System.out.println("Current dick size " + serverGame.getDeckSize());
 		//System.out.println(checkVar);
 
-		//Check if it's current player's time to lay card
-		if (serverGame.whoseTurn() == playerNo) { myRound = true; }
-		else { myRound = false; }
-
 		//Let the player make its move
-		serverGame.setReadyValue(playerNo, true);
 		getAnswer(serverGame, playerNo, maxAnswerTime);
+		serverGame.setReadyValue(playerNo, true);
 		if(playerNo == 0) serverGame.askDealer();
 		
 		//TODO UPDATE THE WHOLE GAME STATUS TBH.
