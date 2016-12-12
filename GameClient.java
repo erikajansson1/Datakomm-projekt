@@ -43,7 +43,6 @@ public class GameClient {
 	    serverGame.startGame(playerNo);
 	    while(serverGame.getPlayer(playerNo).getPlayerDeck().getAmount() == 0) {
 		Thread.sleep(1000);
-
 	    }
 	    
 	    //Gives out information about how many player. We need functions to get strings that get aliases
@@ -62,7 +61,7 @@ public class GameClient {
 	    boolean canHit = false;
 	    boolean myRound = false; 
 	    boolean checkVar = false;
-	    serverGame.setReadyValue(playerNo, false);
+	    
 	    //>>>>STOR LOOP: Here we should also have a check if the game is finished or not
 	    while (serverGame.getPlayer(playerNo).getPlayerRank() == -1) {
 		backup.update(serverGame);
@@ -77,8 +76,29 @@ public class GameClient {
 		getAnswer(serverGame, playerNo, maxAnswerTime);
 		String nameTurnPlayer = serverGame.getPlayer(serverGame.whoseTurn()).getPlayerName();
 		serverGame.setReadyValue(playerNo, true);
-		if(playerNo == 0) serverGame.askDealer();
-		
+		while(!serverGame.everyoneHasMadeMove()){
+		    if(playerNo == 0) {
+			System.out.printf("\033[2J\033[;H");
+			System.out.println(serverGame.displayBoard());
+			Thread.sleep(1000);
+		    }
+		    serverGame.askDealer();
+		}
+
+		while (oldRound == round) {
+		    round = serverGame.getRound();
+		    Thread.sleep(500);
+		}
+
+		System.out.println(serverGame.getLastEvent());
+		System.out.println("Player: "+
+				   nameTurnPlayer +
+				   " laid a card.");
+		serverGame.setReadyValue(playerNo, false);
+		serverGame.updatePlayerTime(playerNo, 0L);
+		Thread.sleep(4000);
+		oldRound = round;
+	    }
 		//TODO UPDATE THE WHOLE GAME STATUS TBH.
 		//Kolla sa att alla har gjort sitt och att losern har fatt kort
 		//Completely lost in how we compare players to eachother from this loop
@@ -89,32 +109,36 @@ public class GameClient {
 		// state, 
 		// 1.You are still playing and go though this loop
 		// 2.You won but still se the outprint in another loop
-		
-	       
-
-		//loop until next round
-		while (oldRound == round) {
+	    
+	    	
+	    serverGame.setReadyValue(playerNo, true);
+	    serverGame.updatePlayerTime(playerNo, 1L);
+	    	
+	    while(!serverGame.askGameEnded()) {
+		while(!serverGame.everyoneHasMadeMove()){
 		    System.out.printf("\033[2J\033[;H");
-		    round = serverGame.getRound();
 		    System.out.println(serverGame.displayBoard());
-		    Thread.sleep(2000);
+		    Thread.sleep(1000);
+		}
+		String nameTurnPlayer = serverGame.getPlayer(serverGame.whoseTurn()).getPlayerName();
+		if (playerNo == 0) {
+		    serverGame.askDealer();
+		}
+		while (oldRound == round) {
+		    round = serverGame.getRound();
+		    Thread.sleep(500);
 		}
 		System.out.println(serverGame.getLastEvent());
 		System.out.println("Player: "+
 				   nameTurnPlayer +
 				   " laid a card.");
-		serverGame.setReadyValue(playerNo, false);
-		serverGame.updatePlayerTime(playerNo, 0L);
-		Thread.sleep(5000);
 		oldRound = round;
-
+		Thread.sleep(4000);
 	    }
+		
+	
 	    
-	    while((serverGame.getPlayer(playerNo).getPlayerRank() != -1) &&
-		  !serverGame.askGameEnded()) {
-		serverGame.displayBoard();
-		Thread.sleep(2000);
-	    }
+	    
 	    System.out.println(serverGame.displayGameResult());
 	}
 	catch (Exception e) {

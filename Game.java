@@ -56,7 +56,13 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	for (int i = 0; i < this.gamePlayers.size(); i++) {
 	    if(!(i == 0)) players += "\n";
 	    players += ""+gamePlayers.get(i).getPlayerName();
-	    players += "\nCards on hand: "+gamePlayers.get(i).getAmountOfCardsOnHand();
+
+	    if(gamePlayers.get(i).getPlayerRank() == -1) {
+		players += "\nCards on hand: "+gamePlayers.get(i).getAmountOfCardsOnHand();
+	    } else {
+		players += "\nFinished on place: "+gamePlayers.get(i).getPlayerRank();
+	    }
+	    
 	    players += "\nStatus: ";
 	    
 	    
@@ -144,9 +150,12 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
      */
     public int whoseTurn() throws RemoteException{
 	int playerNo = this.round % gamePlayers.size();
+	if(askGameEnded()) return playerNo;
+	
 	while(gamePlayers.get(playerNo).getPlayerRank() != -1) {
 	    playerNo++;
 	}
+	
 	return playerNo;
     }
 
@@ -184,6 +193,18 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
      * Initiate game by giving out cards and select who start first 
      */
      public void startGame(int playerNo) throws RemoteException {
+	 if (playerNo == 0) {
+	     gamePlayers.get(0).getPlayerDeck().addCard(new Card(1,"Special"));
+	     gamePlayers.get(1).getPlayerDeck().addCard(new Card(1,"Special"));
+	     gamePlayers.get(1).getPlayerDeck().addCard(new Card(1,"Special"));
+	     gamePlayers.get(1).getPlayerDeck().addCard(new Card(1,"Special"));
+	     gamePlayers.get(2).getPlayerDeck().addCard(new Card(2,"Special"));
+	     gamePlayers.get(2).getPlayerDeck().addCard(new Card(2,"Special"));
+	     gamePlayers.get(2).getPlayerDeck().addCard(new Card(2,"Special"));
+	     return;
+	 }
+	 else{
+	     
 	if(playerNo == 0) {
 	    this.starterDeck.mixup();
 	    Player thePlayer;
@@ -197,11 +218,12 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 		    }
 		}
 	    }
-	    for(int j=0; j<gamePlayers.size();j++) {
-		thePlayer = gamePlayers.get(j);
-	    }
 	}
-    }
+	 }
+	 for(int j=0; j<gamePlayers.size();j++) {
+	     this.setReadyValue(j,false);
+	 }
+     }
 	
 	 
     /**
@@ -551,7 +573,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     public ArrayList<Player> sortPlayers() {
 	ArrayList <Player> returnList = new ArrayList<Player>();
 	for (int i = 0; i < gamePlayers.size(); i++) {
-
+	    
 	    if (returnList.size() == 0) { 
 		returnList.add(0,gamePlayers.get(i)); 
 		i++; 
@@ -577,13 +599,19 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 		    break; }
 	    }
 	}
+
+    for (int i = 0; i < returnList.size(); i++) {
+	if(returnList.get(i).getPlayerRank() != -1) {
+	    returnList.remove(i);
+	}
+    }
 	return returnList;
     }
 
 
     
     public void distributeCards(ArrayList <Player> sortedList) throws RemoteException{
-	while (starterDeck.getAmount() > 0) {
+	while (gameDeck.getAmount() > 0) {
 		for (int i = 0; i < sortedList.size(); i++){
 		    if (gameDeck.getAmount() > 0){
 			Card cardToInsert = gameDeck.getCard(true);
@@ -605,8 +633,12 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 			sortedList.get(0).getPlayerName()+
 			"picks up the game deck";
 		    
-	     } else if (sortedList.size() == 1 && action.equals("n")) {
-		 return "Goooooood";
+		    /* 
+		    //WHY this?... 
+		    //it is flawed because if last player ="y" he doesnt pick up
+		      } else if (sortedList.size() == 1 && action.equals("n")) {
+		      return "Goooooood";
+		    */
 
 	     } else if (sortedList.get(i).getPlayerAction().equals(action)) {
 		 sortedList.remove(i);
@@ -614,6 +646,9 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	     } else i++;
 
 	 }
+	if(gamePlayers.size() == sortedList.size() && action.equals("y")) return "Blindstyren!";
+	if(sortedList.size() == 0) return "Goooooooood";
+	
 	distributeCards(sortedList);
 	String returnString = "Players: ";
 	for (int i = 0; i < sortedList.size(); i++) {
@@ -645,9 +680,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 
     
     public void askDealer() throws Exception{
-	while(!everyoneHasMadeMove()) {
-	    Thread.sleep(1000);
-	}
+	
 	ArrayList <Player> sortedList = sortPlayers();
 	String action = sortedList.get(0).getPlayerAction();
 	boolean movingOn = sortedList.get(0).getPlayerNumber() == whoseTurn() &&
@@ -667,9 +700,19 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	if( gamePlayers.get(whoseTurn()).getPlayerDeck().getDeckSize() == 0) {
 	    int rank = 1;
 	    for (int i = 0; i < gamePlayers.size(); i++) {
-		if(gamePlayers.get(i).getPlayerNumber() != -1) rank++;
+		if(gamePlayers.get(i).getPlayerRank() != -1) rank++;
 	    }
 	    gamePlayers.get(whoseTurn()).setPlayerRank(rank);
+
+	    if(rank == gamePlayers.size()-1) {
+		for (int i = 0; i < gamePlayers.size(); i++) {
+		    if(gamePlayers.get(i).getPlayerRank() == -1) {
+			rank++;
+			gamePlayers.get(i).setPlayerRank(rank);
+			
+		    }
+		}	
+	    }
 	}
 	round++;
 	

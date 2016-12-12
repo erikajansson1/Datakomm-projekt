@@ -80,8 +80,11 @@ public interface GameInterface extends Remote {
      */
     public int whoseTurn() throws RemoteException;
 
-
-
+    /**  
+     * Checks every players answer time and returns a boolean saying if all are ready.
+     * @return returns true if all players have answered
+     */
+    public boolean everyoneHasMadeMove() throws RemoteException;
 
 
     /////////// Action //////////////////////////////////////
