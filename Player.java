@@ -9,7 +9,8 @@ public class Player implements java.io.Serializable{
     private boolean readyToPlay;
     private int rankWhenFinished;
     private long answerTime;
-      
+    private String action;
+          
 
     public Player (int numberOfPlayer, String inIp, String exIp, String alias,boolean ready) {
 	this.numberOfPlayer = numberOfPlayer;
@@ -20,6 +21,7 @@ public class Player implements java.io.Serializable{
 	this.readyToPlay = ready;
 	this.rankWhenFinished = -1;
 	this.answerTime = 0L;
+	this.action = "";
     }
 
     
@@ -128,5 +130,31 @@ public class Player implements java.io.Serializable{
     public int getAmountOfCardsOnHand() {
 	return this.playerDeck.getDeckSize();
     }
- 
+
+
+    /**
+     * A get method for the players action.
+     * @return A string describing the current action status.
+     */
+    public String getPlayerAction() {
+	return action;
+    }
+
+    public void setPlayerAction(String action) {
+	this.action = action;
+    }
+
+
+    /**
+     * 
+     *
+     */
+    public int compareTime(Player playerToCompare) {
+	if (playerToCompare.getPlayerTime() >
+	    this.answerTime) return -1;
+	else if (playerToCompare.getPlayerTime() <
+		 this.answerTime) return 1;
+	else return 0;
+				
+    }
 }

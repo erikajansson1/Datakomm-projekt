@@ -57,6 +57,7 @@ public class GameClient {
 	    int round = serverGame.updateRound(oldRound);
 	    oldRound = round;
 	    Scanner userInput = new Scanner(System.in);
+	    long maxAnswerTime = 30000000000L; //30 sekunder
 	    boolean canHit = false;
 	    boolean myRound = false; 
 	    boolean checkVar = false;
@@ -65,6 +66,7 @@ public class GameClient {
 	    while (serverGame.getPlayer(playerNo).getPlayerRank() == -1) {
 		backup.update(serverGame);
 		serverGame.setReadyValue(playerNo, false);
+		serverGame.updatePlayerTime(playerNo, 0L);
 		//Check if it's possible to hit
 		canHit = serverGame.timeToHit(); 
 
@@ -80,10 +82,9 @@ public class GameClient {
 		else { myRound = false; }
 				
 		//Let the player make its move
-		checkVar = userAction(serverGame, playerNo, round, canHit,myRound);
-
 		serverGame.setReadyValue(playerNo, true);
-
+		getAnswer(serverGame, playerNo, maxAnswerTime);
+		if(playerNo == 0) serverGame.askDealer();
 		
 		//TODO UPDATE THE WHOLE GAME STATUS TBH.
 		//Kolla sa att alla har gjort sitt och att losern har fatt kort
@@ -99,15 +100,17 @@ public class GameClient {
 	       
 		
 		//loop until next round
-		serverGame.updatePlayerTime(playerNo, 0L);
 		//round = serverGame.updateRound(oldRound); 
 		while (oldRound == round) {
 		    System.out.printf("\033[2J\033[;H");
-		    round = serverGame.updateRound(oldRound);
+		    round = serverGame.getRound();
 		    System.out.println(serverGame.displayBoard());
-		    //round = serverGame.getRound();
 		    Thread.sleep(2000);
 		}
+		System.out.println(serverGame.getLastEvent());
+		//TODO player put down a card.
+		Thread.sleep(8000);
+
       
 		oldRound = round;
 
@@ -140,7 +143,7 @@ public class GameClient {
       2. It is someone else's round, and I can choose whether to hit or not:
       2a. Hit is possible
       2b. Hit is not possible      
-    */
+    *//*
     public static boolean  userAction(GameInterface serverGame, int playerNo, int round, boolean canHit, boolean myRound) throws RemoteException {
 	String answer = "";
 	String actionMessage = "";
@@ -198,20 +201,21 @@ public class GameClient {
 	@param maxAnswerTime The maximum time for the user to wait to answer
 	@comments The first two parameters are used to update the players hitTime/answerTime attribute
     */
-    public static String getAnswer(GameInterface game, int playerNo, long maxAnswerTime)  throws RemoteException {
+    public static void getAnswer(GameInterface game, int playerNo, long maxAnswerTime)  throws RemoteException {
 	Scanner userInput = new Scanner(System.in);
 	String answer = "";
 	long answerTime = 0L;
 	long startTime = System.nanoTime();
+	System.out.println("Do you want to hit the dick? (y/n)"); 
 	answer = userInput.nextLine();
 	while(answerTime < maxAnswerTime) {
 	    if (!answer.equals("")) { break; }
 	    answer = userInput.nextLine();
-	    answerTime = System.nanoTime() - startTime;  
+	    answerTime = System.nanoTime() - startTime; 
 	}	
 	if(answer.equals("")) { answerTime = 0L; }
 	game.updatePlayerTime(playerNo, answerTime);
-	return answer;       
+	game.updatePlayerAction(playerNo,answer);
     }
 
 }

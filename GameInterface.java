@@ -105,9 +105,14 @@ public interface GameInterface extends Remote {
      */
     public boolean tryToLayCard(int playerNo, int playerRound) throws RemoteException;
 
+    public void askDealer() throws RemoteException;
 
-
-
+    /** 
+     * Update the action for a player
+     * @param playerNo The player's number ID
+     * @param action to set.
+     */
+    public void updatePlayerAction(int playerNo, String action) throws RemoteException;
 
     /////////// Player related //////////////////////////////////////
 
@@ -196,5 +201,9 @@ public interface GameInterface extends Remote {
      * @return a string describing the result.
      */
     public String displayGameResult() throws RemoteException;
+
+
+    public String getLastEvent() throws RemoteException;
+
 }
 

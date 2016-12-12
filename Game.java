@@ -9,7 +9,8 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     private int round;
     private Deck gameDeck;
     private Deck starterDeck;
-    private ArrayList<Player> gamePlayers; 
+    private ArrayList<Player> gamePlayers;
+    private String lastEvent;
  
     public Game (int round,Deck gameDeck,Deck starterDeck,ArrayList<Player> gamePlayers) throws RemoteException {
 	//super(1099);
@@ -23,6 +24,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	this.round = 0;
 	this.gameDeck = new Deck(0); 
 	this.starterDeck = new Deck();
+	this.lastEvent = "";
 	this.gamePlayers = new ArrayList<Player>(numberOfPlayers);
 	for (int i = 0; i < numberOfPlayers; i++) {
 	    gamePlayers.add(i,new Player(i,"","","Empty",false));
@@ -88,13 +90,6 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
      * @param hitTime The new hit time
      */
     public void updatePlayerTime(int playerNo, long hitTime) throws RemoteException { 
-	/*Player thisGuy = findPlayer(alias);
-	  String name = thisGuy.getPlayerName();
-	  if (name.equals("")) { return; }
-	  else {
-	  setPlayerTime(hitTime);
-	  return;
-	  }*/
 	Player thisGuy = gamePlayers.get(playerNo);
 	thisGuy.setPlayerTime(hitTime);
     }
@@ -148,7 +143,11 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
      * @return an int which is the players index.
      */
     public int whoseTurn() throws RemoteException{
-	return this.round % gamePlayers.size();
+	int playerNo = this.round % gamePlayers.size();
+	while(gamePlayers.get(playerNo).getPlayerRank() != -1) {
+	    playerNo++;
+	}
+	return playerNo;
     }
 
     
@@ -186,7 +185,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
      */
     // TODO : This won't be printed, save instead in list and return !
     // TODO : The prints are for debugging and are printed on server side...
-     public void startGame(int playerNo) throws RemoteException {
+    public void startGame(int playerNo) throws RemoteException {
 	if(playerNo == 0) {
 	    this.starterDeck.mixup();
 	    Player thePlayer;
@@ -202,7 +201,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 		    }
 		}
 	    }
-	   for(int j=0; j<gamePlayers.size();j++) {
+	    for(int j=0; j<gamePlayers.size();j++) {
 		thePlayer = gamePlayers.get(j);
 		System.out.println("Game.java:207. Player "+j+": "+thePlayer.getPlayerDeck().getDeckSize());
 	    }
@@ -566,5 +565,119 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	}
 	return result;
     }
+
+    
+    public ArrayList<Player> sortPlayers() {
+	ArrayList <Player> returnList = new ArrayList<Player>();
+	for (int i = 0; i < gamePlayers.size(); i++) {
+	    if (returnList.size() == 0) returnList.add(0,gamePlayers.get(i));
+
+	    for (int i2 = 0; i2 < returnList.size(); i2++) {
+		int compareTime = gamePlayers.get(i).compareTime(gamePlayers.get(i2));
+		switch (compareTime) {
+		case  1: if (gamePlayers.size()-1 == i &&
+			     gamePlayers.size()-2 == i2) {
+			//Kanske fett fel!
+			returnList.add(i2+1,gamePlayers.get(i));
+		    }
+			break;
+		case -1: returnList.add(i2,gamePlayers.get(i)); break;
+		case  0: returnList.add(i2,gamePlayers.get(i)); break;
+		}
+	    }
+	}
+	return returnList;
+    }
+
+
+    
+    public void distributeCards(ArrayList <Player> sortedList) throws RemoteException{
+	while (starterDeck.getAmount() > 0) {
+		for (int i = 0; i < sortedList.size(); i++){
+		    if (gameDeck.getAmount() > 0){
+			Card cardToInsert = gameDeck.getCard(true);
+			sortedList.get(i).getPlayerDeck().addCard(cardToInsert);
+		    }
+		}
+	}
+    }
+
+
+    public String enforceHitStatus(ArrayList <Player> sortedList, String action) throws RemoteException{
+	for (int i = 0; i < sortedList.size();) {
+
+	     if(sortedList.size() == 1 && action.equals("y")) {
+		 giveWholeDeck(sortedList.get(0));
+		    return "Player: "+
+			sortedList.get(0).getPlayerName()+
+			"picks up the game deck";
+	     } else if (sortedList.size() == 1 && action.equals("n")) {
+		 return "Goooooood";
+
+	     } else if (sortedList.get(i).getPlayerAction().equals(action)) {
+		 sortedList.remove(i);
+	     } else i++;
+
+	 }
+	 distributeCards(sortedList);
+	 String returnString = "Players: ";
+	 for (int i = 0; i < sortedList.size(); i++) {
+	     returnString += sortedList.get(0).getPlayerName()+" ";
+	 }
+	 returnString += "\nPicks up the game deck \n";
+	 return returnString;
+    }
+
+
+    /**
+     * get method for last event. 
+     * @return returns the last event.
+     */
+    public String getLastEvent() throws RemoteException{
+	return lastEvent;
+    }
+    
+    
+    /** 
+     * Update the action for a player
+     * @param playerNo The player's number ID
+     * @param action to set.
+     */
+    public void updatePlayerAction(int playerNo, String action) throws RemoteException { 
+	Player thisGuy = gamePlayers.get(playerNo);
+	thisGuy.setPlayerAction(action);
+    }
+
+    
+    public void askDealer() throws RemoteException{
+	while(!everyoneHasMadeMove()) {}
+	ArrayList <Player> sortedList = sortPlayers();
+	String action = sortedList.get(0).getPlayerAction();
+	boolean movingOn = sortedList.get(0).getPlayerNumber() == whoseTurn() &&
+	    action.equals("n");
+	if (movingOn) {
+	    lastEvent = "";
+	} else if (!movingOn && timeToHit()) {
+	    lastEvent = enforceHitStatus(sortedList,"y");
+	    
+	} else if (!movingOn && !timeToHit()) {
+	    lastEvent = enforceHitStatus(sortedList,"n");
+	    
+	}
+	
+	tryToLayCard(gamePlayers.get(whoseTurn()).getPlayerNumber(), round);
+	if( gamePlayers.get(whoseTurn()).getPlayerDeck().getDeckSize() == 0) {
+	    int rank = 1;
+	    for (int i = 0; i < gamePlayers.size(); i++) {
+		if(gamePlayers.get(i).getPlayerNumber() != -1) rank++;
+	    }
+	    gamePlayers.get(whoseTurn()).setPlayerRank(rank);
+	}
+	round++;
+	
+    }
+
 }
+
+    
 
