@@ -43,6 +43,7 @@ public class GameClient {
 	    serverGame.startGame(playerNo);
 	    while(serverGame.getPlayer(playerNo).getPlayerDeck().getAmount() == 0) {
 		Thread.sleep(1000);
+
 	    }
 	    
 	    //Gives out information about how many player. We need functions to get strings that get aliases
@@ -61,17 +62,15 @@ public class GameClient {
 	    boolean canHit = false;
 	    boolean myRound = false; 
 	    boolean checkVar = false;
-	    
+	    serverGame.setReadyValue(playerNo, false);
 	    //>>>>STOR LOOP: Here we should also have a check if the game is finished or not
 	    while (serverGame.getPlayer(playerNo).getPlayerRank() == -1) {
 		backup.update(serverGame);
-		serverGame.setReadyValue(playerNo, false);
-		serverGame.updatePlayerTime(playerNo, 0L);
-		//Check if it's possible to hit
+		
 
 		//Display board
 		System.out.printf("\033[2J\033[;H"); 
-		//System.out.println(serverGame.displayBoard());
+		System.out.println(serverGame.displayBoard());
 		System.out.println("Current dick size " + serverGame.getDeckSize());
 
 		//Let the player make its move
@@ -93,7 +92,6 @@ public class GameClient {
 	       
 		
 		//loop until next round
-		//round = serverGame.updateRound(oldRound); 
 		while (oldRound == round) {
 		    System.out.printf("\033[2J\033[;H");
 		    round = serverGame.getRound();
@@ -104,10 +102,9 @@ public class GameClient {
 		System.out.println("Player: "+
 				   serverGame.getPlayer(serverGame.whoseTurn()).getPlayerName() +
 				   " laid a card.");
-
+		serverGame.setReadyValue(playerNo, false);
+		serverGame.updatePlayerTime(playerNo, 0L);
 		Thread.sleep(5000);
-
-      
 		oldRound = round;
 
 	    }
@@ -141,7 +138,6 @@ public class GameClient {
 	System.out.println("Do you want to hit the dick? (y/n)"); 
 	//answer = userInput.nextLine();
 	while(answerTime < maxAnswerTime) {
-	    System.out.println("hejjj");
 	    if (!answer.equals("")) { break; }
 	    answer = userInput.nextLine();
 	    answerTime = System.nanoTime() - startTime; 
