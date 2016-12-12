@@ -151,6 +151,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	return this.round % gamePlayers.size();
     }
 
+    
     /** 
      * Finds the Player object in an array whose name matches the given parameter
      * @param alias 
@@ -168,7 +169,6 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	Player nobody = new Player(-1,"","","",false);
 	return nobody;
     }
-
 
     
     /** 
@@ -287,9 +287,6 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     }
 
     
- 
-
-    
     /**
      * Handle if someone hits at the wrong time.
      * @param playerNo of the player trying to hit.
@@ -336,6 +333,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	return loserMessage;
     }  
 
+    
     /**
      * handle when the hit is in the right time.
      * @param playerNo of the player trying to hit.
@@ -347,9 +345,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	    if(playerRound < this.round) { 	    
 		this.lock.release();
 		return "Too slow, it's a new round!"; }
-	    // while(!everyoneHasMadeMove()) { /* WAITING LOOP */ }
-	    //NOT POSSIBLE SINCE ONLY ONE SEMPAHORE EXISTS!
-	    //WHILE IN THE LOOP ABOVE NO ONE CAN MAKE THEIR MOVES.
+	    while(!everyoneHasMadeMove()) { /* WAITING LOOP */ }
 
 	    //KOLLA VEM SOM VAR LONGSOMMOST	    
 	    long longestAnswerTime = 0;
@@ -392,7 +388,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     public boolean tryToLayCard(int playerNo, int playerRound) throws RemoteException {
 	try {
 	    this.lock.acquire();
-	    if(playerRound <= this.round) {
+	    if(playerRound == this.round) {
 		Player trying = this.gamePlayers.get(playerNo);
 		trying.playNextCard(this.gameDeck);
 		System.out.println("Game.java:191 gameDeck=" +gameDeck.getDeckSize()
