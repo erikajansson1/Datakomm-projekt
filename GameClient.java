@@ -119,7 +119,7 @@ public class GameClient {
 		    System.out.println(serverGame.displayBoard());
 		    Thread.sleep(1000);
 		}
-		String nameTurnPlayer = serverGame.getPlayer(serverGame.whoseTurn()).getPlayerName();
+		String nameTurnPlayer = serverGame.getPlayerAlias(serverGame.whoseTurn());
 		if (playerNo == 0) {
 		    serverGame.askDealer();
 		}
