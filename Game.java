@@ -491,7 +491,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	    }
 
 	    for (int i2 = 0; i2 < returnList.size(); i2++) {
-		System.out.println("checking Player: "+i+" Agianst player: "+i2);
+		//System.out.println("checking Player: "+i+" Agianst player: "+i2);
 		Player compareTo = returnList.get(i2); 
 		int compareTime = gamePlayers.get(i).compareTime(compareTo);
 
@@ -602,6 +602,10 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     public void askDealer() throws Exception{
 	
 	ArrayList <Player> sortedList = sortPlayers();
+
+	//TODO: Ta bort spelare som inte svarade
+	//TODO: Omd det var den personens tur: ändra dess rank och hoppa till nästa tur?
+
 	String action = sortedList.get(0).getPlayerAction();
 	boolean movingOn = sortedList.get(0).getPlayerNumber() == whoseTurn() &&
 	    action.equals("n");

@@ -155,7 +155,7 @@ public class GameClient {
 	game.updatePlayerTime(playerNo, answerTime); // SECURITY! check if playerNO is the "matching" ip for that player.
 	//In the player class the IP for each player is stored....
 	game.updatePlayerAction(playerNo,answer);
-	System.out.println(answerTime);
+	System.out.println("Your answer: "+ answer);
     }
 
 }
