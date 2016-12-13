@@ -45,10 +45,6 @@ public class GameClient {
 		Thread.sleep(1000);
 	    }
 	    
-	    //Gives out information about how many player. We need functions to get strings that get aliases
-	    // and everyones Deck size.
-	   
-	    
 	    //START VALUES
 	    long startTime;
 	    long hitTime;
@@ -97,18 +93,7 @@ public class GameClient {
 		serverGame.updatePlayerTime(playerNo, 0L);
 		Thread.sleep(4000);
 		oldRound = round;
-	    }
-		//TODO UPDATE THE WHOLE GAME STATUS TBH.
-		//Kolla sa att alla har gjort sitt och att losern har fatt kort
-		//Completely lost in how we compare players to eachother from this loop
-		//TODO: kolla ifall personen fortfarande deltar i spelet eller har vunnit.
-		//Take rankWhenFinished from player in startGame function
-		//When cards on hand == 0, change the rankWhenFinished in player (need function)
-		//Put in while a statement about rankWhenFinished. If we do this we can have to
-		// state, 
-		// 1.You are still playing and go though this loop
-		// 2.You won but still se the outprint in another loop
-	    
+	    }    
 	    	
 	    serverGame.setReadyValue(playerNo, true);
 	    serverGame.updatePlayerTime(playerNo, 1L);
@@ -148,19 +133,19 @@ public class GameClient {
 
     }
 
-    /** Asks user for input
-	@param game Current game being played
-	@param playerNo Number ID of player
-	@param maxAnswerTime The maximum time for the user to wait to answer
-	@comments The first two parameters are used to update the players hitTime/answerTime attribute
+    /** 
+     * Asks user for input
+	 * @param game Current game being played
+	 * @param playerNo Number ID of player
+	 * @param maxAnswerTime The maximum time for the user to wait to answer
+	 * @comments The first two parameters are used to update the players hitTime/answerTime attribute
     */
     public static void getAnswer(GameInterface game, int playerNo, long maxAnswerTime)  throws RemoteException {
 	Scanner userInput = new Scanner(System.in);
 	String answer = "";
 	long answerTime = 0L;
 	long startTime = System.nanoTime();
-	System.out.println("Do you want to hit the dick? (y/n)"); 
-	//answer = userInput.nextLine();
+	System.out.println("Do you want to hit the deck? (y/n)"); 
 	while(answerTime < maxAnswerTime) {
 	    if (!answer.equals("")) { break; }
 	    answer = userInput.nextLine();
