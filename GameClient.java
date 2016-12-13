@@ -74,7 +74,7 @@ public class GameClient {
 
 		//Let the player make its move
 		getAnswer(serverGame, playerNo, maxAnswerTime);
-		String nameTurnPlayer = serverGame.getPlayer(serverGame.whoseTurn()).getPlayerName();
+		String nameTurnPlayer = serverGame.getPlayerAlias(serverGame.whoseTurn());
 		serverGame.setReadyValue(playerNo, true);
 		while(!serverGame.everyoneHasMadeMove()){
 			System.out.printf("\033[2J\033[;H");
