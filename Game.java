@@ -118,6 +118,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 		return this.round;
 	    }
 	    
+	    //kk
 	    //If all the players are ready to continue, round++
 	    int allReady = gamePlayers.size();
 	    int readyPlayers = 0;
