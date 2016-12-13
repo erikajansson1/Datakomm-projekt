@@ -6,7 +6,6 @@ import java.net.InetAddress;
 import java.net.*;
 import java.io.*;
 
-
 public class GameClient {
     public static void main (String[] args) {
 	int playerNo = -1;
@@ -53,7 +52,7 @@ public class GameClient {
 	    int round = 0;
 	    oldRound = round;
 	    Scanner userInput = new Scanner(System.in);
-	    long maxAnswerTime = 30000000000L; //30 sekunder
+	    long maxAnswerTime = 30000000L; //30 sekunder
 	    boolean canHit = false;
 	    boolean myRound = false; 
 	    boolean checkVar = false;
@@ -138,18 +137,19 @@ public class GameClient {
 	long answerTime = 0L;
 	long startTime = System.nanoTime();
 	System.out.println("Do you want to hit the deck? (y/n)"); 
-	while(answerTime < maxAnswerTime) {
-	    if (!answer.equals("")) { break; }
+	//while(answerTime < maxAnswerTime) {
+	//if (!answer.equals("")) { break; }
 	    answer = userInput.nextLine();
 	    answerTime = System.nanoTime() - startTime; 
-	}	
+	    //System.out.println("time: "+answerTime);
+	    //}	
 	if(answer.equals("")) { answerTime = 0L; }
-	game.updatePlayerTime(playerNo, answerTime); // SECURITY! check if playerNO is the "matching" ip for that player.
+	game.updatePlayerTime(playerNo, answerTime); 
+	// SECURITY! check if playerNO is the "matching" ip for that player.
 	//In the player class the IP for each player is stored....
 	game.updatePlayerAction(playerNo,answer);
 	System.out.println("Your answer: "+ answer);
     }
-
 
     public static void waitingDisplay(GameInterface serverGame) throws Exception {
 	long currentTime = 0L;
