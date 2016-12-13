@@ -138,7 +138,7 @@ public interface GameInterface extends Remote {
     public String getPlayerAlias(int playerNo) throws RemoteException;
 
 
-
+    public int myRank(int playerNo) throws RemoteException;
 
     /////////// Other //////////////////////////////////////
 
