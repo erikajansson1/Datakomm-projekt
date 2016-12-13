@@ -59,7 +59,7 @@ public class GameClient {
 	    boolean checkVar = false;
 	    
 	    //>>>>STOR LOOP: Here we should also have a check if the game is finished or not
-	    while (serverGame.getPlayer(playerNo).getPlayerRank() == -1) {
+	    while (serverGame.myrank(playerNo) == -1) {
 		backup.update(serverGame);
 		
 
