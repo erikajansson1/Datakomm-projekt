@@ -193,7 +193,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
      * Initiate game by giving out cards and select who start first 
      */
      public void startGame(int playerNo) throws RemoteException {
-	 if (playerNo == 0) {
+	 /*if (playerNo == 0) {
 	     gamePlayers.get(0).getPlayerDeck().addCard(new Card(1,"Special"));
 	     gamePlayers.get(1).getPlayerDeck().addCard(new Card(1,"Special"));
 	     gamePlayers.get(1).getPlayerDeck().addCard(new Card(1,"Special"));
@@ -204,7 +204,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	     return;
 	 }
 	 else{
-	     
+	 */
 	if(playerNo == 0) {
 	    this.starterDeck.mixup();
 	    Player thePlayer;
@@ -218,11 +218,10 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 		    }
 		}
 	    }
+	    for(int j=0; j<gamePlayers.size();j++) {
+		this.setReadyValue(j,false);
+	    }
 	}
-	 }
-	 for(int j=0; j<gamePlayers.size();j++) {
-	     this.setReadyValue(j,false);
-	 }
      }
 	
 	 
@@ -573,38 +572,40 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     public ArrayList<Player> sortPlayers() {
 	ArrayList <Player> returnList = new ArrayList<Player>();
 	for (int i = 0; i < gamePlayers.size(); i++) {
-	    
 	    if (returnList.size() == 0) { 
 		returnList.add(0,gamePlayers.get(i)); 
 		i++; 
 	    }
 
 	    for (int i2 = 0; i2 < returnList.size(); i2++) {
+		System.out.println("checking Player: "+i+" Agianst player: "+i2);
 		Player compareTo = returnList.get(i2); 
 		int compareTime = gamePlayers.get(i).compareTime(compareTo);
-		if (compareTime==1 && gamePlayers.size()-1 == i &&
-		    gamePlayers.size()-2 == i2) {
-		    //Kanske fett fel!
-		    returnList.add(i2+1,gamePlayers.get(i));
-		    break;
-		}
+
 		if (compareTime == -1) { 
 		    returnList.add(i2,gamePlayers.get(i)); 
-		    i2++; 
 		    break; 
 		}
 		if (compareTime ==  0) { 
 		    returnList.add(i2+1,gamePlayers.get(i)); 
-		    i2++; 
-		    break; }
+		    break;
+		}
+		if (compareTime ==  1 && i2+1 == returnList.size()) { 
+		    returnList.add(i2+1,gamePlayers.get(i)); 
+		    break;
+		}
 	    }
 	}
 
-    for (int i = 0; i < returnList.size(); i++) {
-	if(returnList.get(i).getPlayerRank() != -1) {
-	    returnList.remove(i);
+	for (int i = 0; i < returnList.size();) {
+	    if(returnList.get(i).getPlayerRank() != -1) {
+		returnList.remove(i);
+		System.out.println("remove player: "+i);
+		System.out.println(returnList.size());
+		System.out.println(returnList.get(0).getPlayerName());
+	    }
+	    else i++;
 	}
-    }
 	return returnList;
     }
 
@@ -646,13 +647,19 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	     } else i++;
 
 	 }
-	if(gamePlayers.size() == sortedList.size() && action.equals("y")) return "Blindstyren!";
+	
+	int donePlayers = 0;
+	for (int i = 0; i < gamePlayers.size(); i++) {
+	    if(gamePlayers.get(i).getPlayerRank() != -1) donePlayers++;
+	}
+	
+	if(gamePlayers.size() == sortedList.size()+donePlayers && action.equals("y")) return "Blindstyren!";
 	if(sortedList.size() == 0) return "Goooooooood";
 	
 	distributeCards(sortedList);
 	String returnString = "Players: ";
 	for (int i = 0; i < sortedList.size(); i++) {
-	    returnString += sortedList.get(0).getPlayerName()+" ";
+	    returnString += sortedList.get(i).getPlayerName()+" ";
 	}
 	returnString += "\nPicks up the game deck \n";
 	return returnString;

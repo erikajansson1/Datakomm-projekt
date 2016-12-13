@@ -137,7 +137,7 @@ public class GameClient {
 		
 	
 	    
-	    
+	    System.out.printf("\033[2J\033[;H");
 	    System.out.println(serverGame.displayGameResult());
 	}
 	catch (Exception e) {
