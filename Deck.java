@@ -69,6 +69,20 @@ public class Deck implements java.io.Serializable{
 	}
 	return this.cardList.get(cardList.size()-1).showCard();
     }
+    
+    public String showFourCards() {
+	String ret = "";
+	for(int i=0; i<4; i++) {
+	    if((cardList.size() == 0) || (cardList.size()-i-1 < 0)) {
+		Card emptyCard = new Card (0,"EMPTY");
+		ret += emptyCard.showCard();
+	    }
+	    else { 
+		ret += this.cardList.get(cardList.size()-i-1).showCard();
+	    }
+	}
+	return ret;
+    }
 
     
     /**

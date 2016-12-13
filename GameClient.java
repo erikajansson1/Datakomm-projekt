@@ -66,17 +66,13 @@ public class GameClient {
 		//Display board
 		System.out.printf("\033[2J\033[;H"); 
 		System.out.println(serverGame.displayBoard());
-		System.out.println("Current dick size " + serverGame.getDeckSize());
+		//System.out.println("Current dick size " + serverGame.getDeckSize());
 
 		//Let the player make its move
 		getAnswer(serverGame, playerNo, maxAnswerTime);
 		String nameTurnPlayer = serverGame.getPlayerAlias(serverGame.whoseTurn());
 		serverGame.setReadyValue(playerNo, true);
-		while(!serverGame.everyoneHasMadeMove()){
-			System.out.printf("\033[2J\033[;H");
-			System.out.println(serverGame.displayBoard());
-			Thread.sleep(1000);
-		}
+		waitingDisplay(serverGame);
 		if(playerNo == 0) serverGame.askDealer();
 		
 
@@ -99,11 +95,7 @@ public class GameClient {
 	    serverGame.updatePlayerTime(playerNo, 1L);
 	    	
 	    while(!serverGame.askGameEnded()) {
-		while(!serverGame.everyoneHasMadeMove()){
-		    System.out.printf("\033[2J\033[;H");
-		    System.out.println(serverGame.displayBoard());
-		    Thread.sleep(1000);
-		}
+		waitingDisplay(serverGame);
 		String nameTurnPlayer = serverGame.getPlayerAlias(serverGame.whoseTurn());
 		if (playerNo == 0) {
 		    serverGame.askDealer();
@@ -117,7 +109,7 @@ public class GameClient {
 				   nameTurnPlayer +
 				   " laid a card.");
 		oldRound = round;
-		Thread.sleep(4000);
+		Thread.sleep(2000);
 	    }
 		
 	
@@ -156,6 +148,20 @@ public class GameClient {
 	//In the player class the IP for each player is stored....
 	game.updatePlayerAction(playerNo,answer);
 	System.out.println("Your answer: "+ answer);
+    }
+
+
+    public static void waitingDisplay(GameInterface serverGame) throws Exception {
+	long currentTime = 0L;
+	long startTime = System.nanoTime();
+	long endTime = 30000000000L;
+	while(!serverGame.everyoneHasMadeMove()){
+	    if (currentTime > endTime) { break; }
+	    currentTime = System.nanoTime() - startTime;
+	    System.out.printf("\033[2J\033[;H");
+	    System.out.println(serverGame.displayBoard());
+	    Thread.sleep(1000);
+	}
     }
 
 }
