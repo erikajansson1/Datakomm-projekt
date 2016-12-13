@@ -41,7 +41,8 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     }
 
 
-    /** Get middle deck size
+    /**
+     *  Get middle deck size
      */
     public int getDeckSize() throws RemoteException{
 	return gameDeck.getDeckSize();
@@ -106,6 +107,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
      * @param currRound Taken to ensure that only one such update is done every round.
      * @return The round value 
      */
+  
     public int updateRound(int currRound) throws RemoteException{
 	try{
 	    this.lock.acquire();
@@ -116,6 +118,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 		return this.round;
 	    }
 	    
+	    //kk
 	    //If all the players are ready to continue, round++
 	    int allReady = gamePlayers.size();
 	    int readyPlayers = 0;
@@ -300,97 +303,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	    curr = from.getCard(true);
 	    to.addCard(curr);
 	}
-    }
-
-    
-    /**
-     * Handle if someone hits at the wrong time.
-     * @param playerNo of the player trying to hit.
-     */
-    public String handleWrongHit(int playerNo, int round) throws RemoteException { 
-	String loserMessage = "Too slow, it's a new round!";
-	//String loserMessage = "Awh you hit at the wrong time buddy";
-	//String loserMessage = "You said no, to bad you should have said yes!";
-	try{
-	    this.lock.acquire();
-	    
-	    while(!everyoneHasMadeMove()) { /* WAITING LOOP */ }
-	    
-	    if(round < this.round) { 	    
-		this.lock.release();
-		return loserMessage; 
-	    }
-
-	    int currentPlayer = whoseTurn();
-	    long myTime = this.gamePlayers.get(playerNo).getPlayerTime();
-	    long theirTime =  this.gamePlayers.get(currentPlayer).getPlayerTime();
-	    if ((currentPlayer != playerNo) && (myTime > theirTime)) {
-		giveWholeDeck(playerNo);
-		loserMessage = "Wrong hit! Pick up all the cards.";
-	    }
-	    else if (currentPlayer == playerNo) {
-		giveWholeDeck(playerNo);
-		loserMessage = "Wrong hit! Pick up all the cards.";	    
-	    }
-	    
-	}
-	catch( Exception e) {
-	    e.printStackTrace();
-	}
-	this.lock.release();
-	return loserMessage;
-    }  
-
-    
-    /**
-     * handle when the hit is in the right time.
-     * @param playerNo of the player trying to hit.
-     */
-    public String handleRightHit(int playerNo, int playerRound) throws RemoteException{
-    	String actionMessage = ""; 
-	try {
-	    this.lock.acquire();
-	    if((playerRound < this.round) | (playerRound > this.round)) { 	    
-		this.lock.release();
-		return "Too slow, it's a new round!"; 
-	    }
-	    while(!everyoneHasMadeMove()) { /* WAITING LOOP */ }
-	    
-
-	    long longestAnswerTime = 0;
-	    Player currGuy;
-	    long currAnswerTime;
-	    int len = this.gamePlayers.size();
-	    int loserID = -1;
-	    Player loser = null;
-	    for(int i=0; i<len; i++) {
-		currGuy = this.gamePlayers.get(i);
-		currAnswerTime = currGuy.getPlayerTime();
-		if(currAnswerTime > longestAnswerTime) { 
-		    longestAnswerTime = currAnswerTime; 
-		    loserID = i;
-		    loser = currGuy;
-		}
-	    }
-	    actionMessage = "Hit successful!"; 
-	    // Player loser = this.gamePlayers.get(playerNo);
-    	    if (loser != null) {
-		    giveWholeDeck(loser);
-		    String loserName = loser.getPlayerName();
-		    actionMessage = "Hit succesfull! "+loserName+" lost.";
-	    }
-	    
-	    this.lock.release();
-	    return actionMessage;
-	}
-	catch(Exception e){
-	    System.out.println("handleRightHit: "+e);
-	    e.printStackTrace();
-	}
-	this.lock.release();
-	return actionMessage; 
-    }
-	 
+    }	 
       
     /** 
      * Player tries to lay a card
