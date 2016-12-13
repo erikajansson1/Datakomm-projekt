@@ -167,7 +167,8 @@ public class GameClient {
 	    answerTime = System.nanoTime() - startTime; 
 	}	
 	if(answer.equals("")) { answerTime = 0L; }
-	game.updatePlayerTime(playerNo, answerTime);
+	game.updatePlayerTime(playerNo, answerTime); // SECURITY! check if playerNO is the "matching" ip for that player.
+	//In the player class the IP for each player is stored....
 	game.updatePlayerAction(playerNo,answer);
 	System.out.println(answerTime);
     }
