@@ -268,7 +268,8 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	int rank = pyret.getPlayerRank();
 	return rank;	
     } 	 
-	 
+
+    //Dead code... inte bokstaven o med prickar :P ?
     /** 
      * Check who lost the whole(!) game
      * @return player number id of the loser
