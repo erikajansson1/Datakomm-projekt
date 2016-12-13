@@ -154,7 +154,7 @@ public class GameClient {
 	if(answer.equals("")) { answerTime = 0L; }
 	game.updatePlayerTime(playerNo, answerTime);
 	game.updatePlayerAction(playerNo,answer);
-	System.out.println(answerTime);
+	System.out.println("Your answer: "+ answer);
     }
 
 }
