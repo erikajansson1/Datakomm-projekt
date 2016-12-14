@@ -56,6 +56,7 @@ public class GameClient {
 	    boolean canHit = false;
 	    boolean myRound = false; 
 	    boolean checkVar = false;
+	    String alias = serverGame.getPlayerAlias(playerNo);
 	    
 	    //>>>>STOR LOOP: Here we should also have a check if the game is finished or not
 	    while (serverGame.myRank(playerNo) == -1) {
@@ -73,7 +74,9 @@ public class GameClient {
 		serverGame.setReadyValue(playerNo, true);
 		waitingDisplay(serverGame);
 		if(playerNo == 0) serverGame.askDealer();
-		
+		Thread.sleep(100);
+		playerNo = serverGame.getPlayerNo(alias);
+		System.out.println(alias+" no "+playerNo);
 
 		while (oldRound == round) {
 		    round = serverGame.getRound();

@@ -103,7 +103,31 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	thisGuy.setPlayerTime(hitTime);
     }
 
-    
+    /** Get the player number for a player 
+	@param alias The player's alias
+     */
+    public int getPlayerNo(String alias) throws RemoteException {
+	/*try {
+	  this.lock.acquire();*/
+	    int len = gamePlayers.size();
+	    String name;
+	    int i = 0;
+	 
+	    for(; i < len; i++) {
+		name = gamePlayers.get(i).getPlayerName();
+		if (name.equals(alias)) {
+		    //	this.lock.release();
+		    	return i;
+		}
+	    }	
+	    /*	}catch(Exception e){
+	    e.printStackTrace();
+	}
+	this.lock.release();*/
+	return 0;
+    }
+
+
     /** 
      * Checks whose turn it is, and if it's time for a new turn. If so, it updates accordingly. 
      * @param currRound Taken to ensure that only one such update is done every round.
@@ -622,69 +646,73 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 
     
     public void askDealer() throws Exception{
-	
-	ArrayList <Player> sortedList = sortPlayers();
-	this.lastEvent = "";
+	//try {
+	//  this.lock.acquire();
+	    ArrayList <Player> sortedList = sortPlayers();
+	    this.lastEvent = "";
 
-	//TODO: Ta bort spelare som inte svarade
-	//TODO: Omd det var den personens tur: ändra dess rank och hoppa till nästa tur?
-	Player potentialGoner;
-	int times;
-	long silent;
-	for(int i=0; i<sortedList.size(); i++) {
-	    potentialGoner = sortedList.get(i);
-	    times = potentialGoner.getAnswerValue();
-	    silent = potentialGoner.getPlayerTime();
-	    if (silent == 0L) {
-		potentialGoner.incrementAnswerValue();
+	    //TODO: Ta bort spelare som inte svarade
+	    //TODO: Omd det var den personens tur: ändra dess rank och hoppa till nästa tur?
+	    Player potentialGoner;
+	    int times;
+	    long silent;
+	    for(int i=0; i<sortedList.size(); i++) {
+		potentialGoner = sortedList.get(i);
+		times = potentialGoner.getAnswerValue();
+		silent = potentialGoner.getPlayerTime();
+		if (silent == 0L) {
+		    potentialGoner.incrementAnswerValue();
+		}
+		if (times > 0) {
+		    String alias = potentialGoner.getPlayerName();
+		    sortedList.remove(i);
+		    this.lastEvent += "Player "+alias+" quit\n";
+		    //TODO: distributera kort
+		    removePlayer(alias);
+		}
+	    
 	    }
-	    if (times > 0) {
-		String alias = potentialGoner.getPlayerName();
-		sortedList.remove(i);
-		this.lastEvent += "Player "+alias+" quit";
-		//TODO: distributera kort
-		removePlayer(alias);
+
+	    String action = sortedList.get(0).getPlayerAction();
+	    boolean movingOn = sortedList.get(0).getPlayerNumber() == whoseTurn() &&
+		action.equals("n");
+	    if (movingOn) {
+		//this.lastEvent = "";
+	    } else if (!movingOn && timeToHit()) {
+		this.lastEvent += enforceHitStatus(sortedList,"y");
+	    
+	    } else if (!movingOn && !timeToHit()) {
+		this.lastEvent += enforceHitStatus(sortedList,"n");
+	    
 	    }
-	    
-	}
 
-	String action = sortedList.get(0).getPlayerAction();
-	boolean movingOn = sortedList.get(0).getPlayerNumber() == whoseTurn() &&
-	    action.equals("n");
-	if (movingOn) {
-	    //this.lastEvent = "";
-	} else if (!movingOn && timeToHit()) {
-	    this.lastEvent += enforceHitStatus(sortedList,"y");
-	    
-	} else if (!movingOn && !timeToHit()) {
-	    this.lastEvent += enforceHitStatus(sortedList,"n");
-	    
-	}
-
-	System.out.println("player: " + whoseTurn()
-			   + " size: " + this.gamePlayers.size());
+	    System.out.println("player: " + whoseTurn()
+			       + " size: " + this.gamePlayers.size());
     
-	tryToLayCard(gamePlayers.get(whoseTurn()).getPlayerNumber(), round);
-	
-	if( gamePlayers.get(whoseTurn()).getPlayerDeck().getDeckSize() == 0) {
-	    int rank = 1;
-	    for (int i = 0; i < gamePlayers.size(); i++) {
-		if(gamePlayers.get(i).getPlayerRank() != -1) rank++;
-	    }
-	    gamePlayers.get(whoseTurn()).setPlayerRank(rank);
+	    tryToLayCard(gamePlayers.get(whoseTurn()).getPlayerNumber(), round);
+	    // this.lock.release();
 
-	    if(rank == gamePlayers.size()-1) {
+	    if( gamePlayers.get(whoseTurn()).getPlayerDeck().getDeckSize() == 0) {
+		int rank = 1;
 		for (int i = 0; i < gamePlayers.size(); i++) {
-		    if(gamePlayers.get(i).getPlayerRank() == -1) {
-			rank++;
-			gamePlayers.get(i).setPlayerRank(rank);
+		    if(gamePlayers.get(i).getPlayerRank() != -1) rank++;
+		}
+		gamePlayers.get(whoseTurn()).setPlayerRank(rank);
+
+		if(rank == gamePlayers.size()-1) {
+		    for (int i = 0; i < gamePlayers.size(); i++) {
+			if(gamePlayers.get(i).getPlayerRank() == -1) {
+			    rank++;
+			    gamePlayers.get(i).setPlayerRank(rank);
 			
-		    }
-		}	
+			}
+		    }	
+		}
 	    }
-	}
-	round++;
-	
+	    round++;
+	    /*	} catch(Exception e) {
+		}*/
+
     }
 
 }
