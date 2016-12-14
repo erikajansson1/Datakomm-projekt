@@ -10,6 +10,7 @@ public class Player implements java.io.Serializable{
     private int rankWhenFinished;
     private long answerTime;
     private String action;
+    private int timesNotAnswered;
           
 
     public Player (int numberOfPlayer, String inIp, String exIp, String alias,boolean ready) {
@@ -25,6 +26,16 @@ public class Player implements java.io.Serializable{
     }
 
     
+    /** 
+     * Get the number of times this player hasn't answered
+     */
+    public int getAnswerValue() {
+	return this.timesNotAnswered;
+    }
+
+    public void incrementAnswerValue() {
+	this.timesNotAnswered++;
+    }
     /** 
      * Get this Player's ready value
      */
@@ -95,6 +106,7 @@ public class Player implements java.io.Serializable{
      */
     public void setPlayerTime(long time) {
 	this.answerTime = time;
+	this.timesNotAnswered = 0;
     }
 
 /**

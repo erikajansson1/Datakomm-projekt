@@ -154,7 +154,7 @@ public class GameClient {
     public static void waitingDisplay(GameInterface serverGame) throws Exception {
 	long currentTime = 0L;
 	long startTime = System.nanoTime();
-	long endTime = 30000000000L;
+	long endTime = 3000000000L;
 	while(!serverGame.everyoneHasMadeMove()){
 	    if (currentTime > endTime) { break; }
 	    currentTime = System.nanoTime() - startTime;

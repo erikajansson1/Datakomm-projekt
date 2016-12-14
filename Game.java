@@ -159,8 +159,27 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	while(gamePlayers.get(playerNo).getPlayerRank() != -1) {
 	    playerNo++;
 	}
-	
+	//System.out.println("gamesize"+gamePlayers.size()+" noP:"+playerNo);
 	return playerNo;
+    }
+
+    /**
+       Remove Player 
+       @param alias Name of the player
+       TODO: Security for if wrong alias?
+     */
+    public void removePlayer(String alias) throws RemoteException {
+	int len = gamePlayers.size();
+	String name;
+	int index = 0;
+	for(int i=0; i < len; i++) {
+	    name = gamePlayers.get(i).getPlayerName();
+	    if (name.equals(alias)) {
+		index = i;
+		break;
+	    }
+	}
+	this.gamePlayers.remove(index);
     }
 
     
@@ -604,23 +623,46 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     public void askDealer() throws Exception{
 	
 	ArrayList <Player> sortedList = sortPlayers();
+	this.lastEvent = "";
 
 	//TODO: Ta bort spelare som inte svarade
 	//TODO: Omd det var den personens tur: ändra dess rank och hoppa till nästa tur?
+	Player potentialGoner;
+	int times;
+	long silent;
+	for(int i=0; i<sortedList.size(); i++) {
+	    potentialGoner = sortedList.get(i);
+	    times = potentialGoner.getAnswerValue();
+	    silent = potentialGoner.getPlayerTime();
+	    if (silent == 0L) {
+		potentialGoner.incrementAnswerValue();
+	    }
+	    if (times > 0) {
+		String alias = potentialGoner.getPlayerName();
+		sortedList.remove(i);
+		this.lastEvent += "Player "+alias+" quit";
+		//TODO: distributera kort
+		removePlayer(alias);
+	    }
+	    
+	}
 
 	String action = sortedList.get(0).getPlayerAction();
 	boolean movingOn = sortedList.get(0).getPlayerNumber() == whoseTurn() &&
 	    action.equals("n");
 	if (movingOn) {
-	    lastEvent = "";
+	    //this.lastEvent = "";
 	} else if (!movingOn && timeToHit()) {
-	    lastEvent = enforceHitStatus(sortedList,"y");
+	    this.lastEvent += enforceHitStatus(sortedList,"y");
 	    
 	} else if (!movingOn && !timeToHit()) {
-	    lastEvent = enforceHitStatus(sortedList,"n");
+	    this.lastEvent += enforceHitStatus(sortedList,"n");
 	    
 	}
-	
+
+	System.out.println("player: " + whoseTurn()
+			   + " size: " + this.gamePlayers.size());
+    
 	tryToLayCard(gamePlayers.get(whoseTurn()).getPlayerNumber(), round);
 	
 	if( gamePlayers.get(whoseTurn()).getPlayerDeck().getDeckSize() == 0) {
