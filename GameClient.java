@@ -73,10 +73,13 @@ public class GameClient {
 		String nameTurnPlayer = serverGame.getPlayerAlias(serverGame.whoseTurn());
 		serverGame.setReadyValue(playerNo, true);
 		waitingDisplay(serverGame);
-		if(playerNo == 0) serverGame.askDealer();
-		Thread.sleep(100);
+
+		serverGame.removeQuitters();
 		playerNo = serverGame.getPlayerNo(alias);
-		System.out.println(alias+" no "+playerNo);
+		//	System.out.println(alias+" no "+playerNo);
+
+		if(playerNo == 0) serverGame.askDealer();
+
 
 		while (oldRound == round) {
 		    round = serverGame.getRound();

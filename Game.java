@@ -107,25 +107,19 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	@param alias The player's alias
      */
     public int getPlayerNo(String alias) throws RemoteException {
-	/*try {
-	  this.lock.acquire();*/
-	    int len = gamePlayers.size();
-	    String name;
-	    int i = 0;
+	int len = gamePlayers.size();
+	String name;
+	int i = 0;
 	 
-	    for(; i < len; i++) {
-		name = gamePlayers.get(i).getPlayerName();
-		if (name.equals(alias)) {
-		    //	this.lock.release();
-		    	return i;
-		}
-	    }	
-	    /*	}catch(Exception e){
-	    e.printStackTrace();
+	for(; i < len; i++) {
+	    name = gamePlayers.get(i).getPlayerName();
+	    if (name.equals(alias)) {
+		return i;
+	    }
 	}
-	this.lock.release();*/
-	return 0;
+	return 0; //detta får inte hände lol
     }
+
 
 
     /** 
@@ -644,34 +638,38 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	thisGuy.setPlayerAction(action);
     }
 
-    
+    public void removeQuitters() throws RemoteException {
+	//TODO: Ta bort spelare som inte svarade
+    //TODO: Omd det var den personens tur: ändra dess rank och hoppa till nästa tur?
+
+	Player potentialQuitter;
+	int times;
+	long silent;
+	int rank;
+	for(int i=0; i<gamePlayers.size(); i++) {
+	    potentialQuitter = gamePlayers.get(i);
+	    times = potentialQuitter.getAnswerValue();
+	    silent = potentialQuitter.getPlayerTime();
+	    rank = potentialQuitter.getPlayerRank();
+	    if (silent == 0L && rank == -1) {
+		potentialQuitter.incrementAnswerValue();
+	    }
+	    if (times > 0) {
+		String alias = potentialQuitter.getPlayerName();
+		//	sortedList.remove(i);
+		this.lastEvent += "Player "+alias+" quit\n";
+		//TODO: distributera kort
+		removePlayer(alias);
+	    }
+	    
+	}
+    }
+
     public void askDealer() throws Exception{
-	//try {
-	//  this.lock.acquire();
 	    ArrayList <Player> sortedList = sortPlayers();
 	    this.lastEvent = "";
-
-	    //TODO: Ta bort spelare som inte svarade
-	    //TODO: Omd det var den personens tur: ändra dess rank och hoppa till nästa tur?
-	    Player potentialGoner;
-	    int times;
-	    long silent;
-	    for(int i=0; i<sortedList.size(); i++) {
-		potentialGoner = sortedList.get(i);
-		times = potentialGoner.getAnswerValue();
-		silent = potentialGoner.getPlayerTime();
-		if (silent == 0L) {
-		    potentialGoner.incrementAnswerValue();
-		}
-		if (times > 0) {
-		    String alias = potentialGoner.getPlayerName();
-		    sortedList.remove(i);
-		    this.lastEvent += "Player "+alias+" quit\n";
-		    //TODO: distributera kort
-		    removePlayer(alias);
-		}
 	    
-	    }
+	    // TODO: rensa sortedList på spelare som är klara med spelet?
 
 	    String action = sortedList.get(0).getPlayerAction();
 	    boolean movingOn = sortedList.get(0).getPlayerNumber() == whoseTurn() &&
@@ -690,7 +688,6 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 			       + " size: " + this.gamePlayers.size());
     
 	    tryToLayCard(gamePlayers.get(whoseTurn()).getPlayerNumber(), round);
-	    // this.lock.release();
 
 	    if( gamePlayers.get(whoseTurn()).getPlayerDeck().getDeckSize() == 0) {
 		int rank = 1;
