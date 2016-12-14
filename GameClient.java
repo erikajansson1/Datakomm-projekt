@@ -52,7 +52,7 @@ public class GameClient {
 	    int round = 0;
 	    oldRound = round;
 	    Scanner userInput = new Scanner(System.in);
-	    long maxAnswerTime = 30000000L; //30 sekunder
+	    long maxAnswerTime = 3000000000L; //30 sekunder
 	    boolean canHit = false;
 	    boolean myRound = false; 
 	    boolean checkVar = false;
@@ -107,7 +107,7 @@ public class GameClient {
 		}
 		while (oldRound == round) {
 		    round = serverGame.getRound();
-		    Thread.sleep(500);
+		    Thread.sleep(1000);
 		}
 		System.out.println(serverGame.getLastEvent());
 		System.out.println("Player: "+

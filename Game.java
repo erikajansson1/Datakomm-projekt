@@ -73,13 +73,14 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 		players += "NOT READY\n";
 	    }	
 	}
+	
 	String whosTurn = "\n\nTurn: "+ gamePlayers.get(this.whoseTurn()).getPlayerName();
 	String round = "\nRound: "+this.round;
 	//String currCard = "\nLatest Card: "+this.gameDeck.showTopCard();
 	String currCard = "\nLatest Cards:"+this.gameDeck.showCards(gamePlayers.size());
 	//	String currCard = "\nLatest Cards:"+this.gameDeck.showFourCards();
-
-	return ""+ players + whosTurn + round + currCard;
+	String noOfPlayers = "\n No of players: " + this.gamePlayers.size();
+	return ""+ players + whosTurn + round + currCard + noOfPlayers;
     }
 
     
@@ -654,7 +655,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	    if (silent == 0L && rank == -1) {
 		potentialQuitter.incrementAnswerValue();
 	    }
-	    if (times > 0) {
+	    if (times > 3) {
 		String alias = potentialQuitter.getPlayerName();
 		//	sortedList.remove(i);
 		this.lastEvent += "Player "+alias+" quit\n";
