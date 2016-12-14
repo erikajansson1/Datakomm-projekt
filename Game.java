@@ -76,7 +76,8 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	String whosTurn = "\n\nTurn: "+ gamePlayers.get(this.whoseTurn()).getPlayerName();
 	String round = "\nRound: "+this.round;
 	//String currCard = "\nLatest Card: "+this.gameDeck.showTopCard();
-	String currCard = "\nLatest Cards:"+this.gameDeck.showFourCards();
+	String currCard = "\nLatest Cards:"+this.gameDeck.showCards(gamePlayers.size());
+	//	String currCard = "\nLatest Cards:"+this.gameDeck.showFourCards();
 
 	return ""+ players + whosTurn + round + currCard;
     }
