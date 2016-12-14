@@ -84,6 +84,26 @@ public class Deck implements java.io.Serializable{
 	return ret;
     }
 
+    public String showCards(int AmountOfPlayers) {
+	String ret = "";
+	if(cardList.size() == 0) {
+	    Card emptyCard = new Card (0,"EMPTY");
+	    return emptyCard.showCard();
+	}
+	else if (cardList.size() < AmountOfPlayers){
+	    for (int i = 0; i < cardList.size(); i++){
+		ret += this.cardList.get(cardList.size()-i-1).showCard();
+	    }
+	    return ret;
+	}
+	else {
+	    for (int i = 0; i < AmountOfPlayers; i++){
+ret += this.cardList.get(cardList.size()-i-1).showCard();
+	    }
+	    return ret;
+	}
+    }
+
     
     /**
      * Gets the card last in order and removes it from the current deck. 
