@@ -25,6 +25,14 @@ public class Player implements java.io.Serializable{
 	this.action = "";
     }
 
+
+    public String getInIp() {
+	return inIp;
+    }
+
+    public String getExIp() {
+	return exIp;
+    }
     
     /** 
      * Get the number of times this player hasn't answered
@@ -76,6 +84,13 @@ public class Player implements java.io.Serializable{
 	return this.numberOfPlayer;
     }
 
+
+        /** 
+     * Set this Player's no
+     */
+    public void setNumberOfPlayer(int no) {
+	this.numberOfPlayer = no;
+    }
     
     /** 
      * Get the final rank of the players     

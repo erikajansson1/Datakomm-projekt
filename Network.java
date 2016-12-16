@@ -40,7 +40,10 @@ class Network {
      */
     public void buildNetwork(GameInterface serverGame) throws Exception  {
 	this.serverGame = serverGame;
+	this.exIP = this.extIP();
+	this.inIP = this.inIP();
     }
+    
 
 
     /**
@@ -316,10 +319,13 @@ class Network {
      * @return int symbolising the players assigned player number.
      */
     public int joinGame() throws RemoteException {
-	int playerNo = -1;
-	System.out.println("You are now connected!\nChecking if game is full!");
-	if(!this.serverGame.askIsGameFull()) {
-	    playerNo = serverGame.addPlayer(inIP,exIP,this.askAlias());
+
+	System.out.println("You are now connected!\n");
+	String alias = this.askAlias();
+	int playerNo = this.serverGame.askPlayerExist(inIP,exIP,alias);
+	System.out.println("Checking if game is full!");
+	if(playerNo == -1 && !this.serverGame.askIsGameFull())  {
+	    playerNo = serverGame.addPlayer(inIP,exIP,alias);
 	}
 	if(playerNo == -1)
 	    {

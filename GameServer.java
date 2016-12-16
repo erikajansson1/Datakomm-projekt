@@ -13,7 +13,8 @@ public class GameServer {
 	try
 	    {
 		Network networkBuild = new Network();
-		int noPlayers = networkBuild.askPlayerNo();
+		int noPlayers = 0;
+		noPlayers = networkBuild.askPlayerNo();
 		System.out.println("Creating a game for "+noPlayers+".");
 		String RMIPort = "1099";
 		networkBuild.buildNetwork();
@@ -32,17 +33,42 @@ public class GameServer {
 		String[] argvClient = new String[]{
 		    networkBuild.getInIp(),
 		    networkBuild.getExIp(),
-		    RMIPort
+		    RMIPort,
+		    "0"
 		};
-		
 		GameClient.main(argvClient);
+		
 	    }catch (Exception e) {
 	    System.out.println("Game Server failed: " + e);
 
 	}
 	return;
     }
+
+    public static void rebuild(Game serverGameOLD, String serverRetryCount) throws Exception {
+	    String RMIPort = "1099";
+	    Network networkBuild = new Network();
+	    networkBuild.buildNetwork();
+	    networkBuild.welcomeMSG("server",0);
+	    Registry registry = networkBuild.startRMIserver("standard",false);
+
+	    Game serverGameNEW = new Game(serverGameOLD.getAmountOfPlayers());
+	    serverGameNEW.setGameValues(serverGameOLD.getRound(),
+					serverGameOLD.getGameDeck(),
+					serverGameOLD.getGamePlayers()
+					);
+	    Naming.rebind("//"+networkBuild.getInIp()+":"+RMIPort+"/theGame", serverGameNEW);
+	    networkBuild.publishReady();
+	    String[] argvClient = new String[]{
+		networkBuild.getInIp(),
+		networkBuild.getExIp(),
+		RMIPort,
+		serverRetryCount
+	    };
+	    GameClient.main(argvClient);
+	}
 }
+
 
 
 

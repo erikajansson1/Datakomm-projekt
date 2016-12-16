@@ -16,6 +16,7 @@ public class GameClient {
 	String serverInIp = null;
 	String serverExIp = null;
 	String serverRMIPort = null;
+	int serverRetryCount = 0;
 	if(args.length == 0) {
 	    serverInIp = networkBuild.askServerInIp();
 	    serverExIp = networkBuild.askServerExIp();
@@ -24,22 +25,26 @@ public class GameClient {
 	    serverInIp = args[0];
 	    serverExIp = args[1];
 	    serverRMIPort = args[2];
+	    serverRetryCount = Integer.parseInt(args[3]);
 	}
 	GameInterface serverGame = networkBuild.getServerObj(serverInIp,
 							     serverExIp,
 							     serverRMIPort,
 							     gameToGet);
+	BackUp backup = new BackUp();
 	try {
+	    backup = new BackUp(serverGame);
+	    //if(backup == null) System.exit(0);
 	    networkBuild.buildNetwork(serverGame);
-	    System.out.println("Build complete");
+	    //System.out.println("Build complete");
 	    playerNo = networkBuild.joinGame();
-	    BackUp backup = new BackUp(serverGame);
+	  
 	    networkBuild.waitingUntilGameCanStart();
 
 	    
 	    //BEGINNING OF GAME
 	    //PLAYER ZERo Starts the game always.
-	    serverGame.startGame(playerNo);
+	    if (serverRetryCount == 0) serverGame.startGame(playerNo);
 	    while(serverGame.getPlayer(playerNo).getPlayerDeck().getAmount() == 0) {
 		Thread.sleep(1000);
 	    }
@@ -61,8 +66,6 @@ public class GameClient {
 	    //>>>>STOR LOOP: Here we should also have a check if the game is finished or not
 	    while (serverGame.myRank(playerNo) == -1) {
 		backup.update(serverGame);
-		
-
 		//Display board
 		System.out.printf("\033[2J\033[;H"); 
 		System.out.println(serverGame.displayBoard());
@@ -122,9 +125,53 @@ public class GameClient {
 	    System.out.printf("\033[2J\033[;H");
 	    System.out.println(serverGame.displayGameResult());
 	}
+	
 	catch (Exception e) {
-	    System.out.println("Error " + e.getMessage());
-	    e.printStackTrace();
+		e.printStackTrace();
+	    try {
+   
+		System.out.println("Error! Connection lost!\n"+
+				   "Assuming server chrashed! \n"+
+				   "reconnecting to new server!");
+
+		if(playerNo == 1) {
+		    backup.removePlayer(0);
+		    GameServer.rebuild(backup.getBackUp(),"1");
+		} else if (serverRetryCount < 10 && serverRetryCount >= 1){
+		    String[] argvClient2 = new String[]{
+			args[0],
+			args[1],
+			"1099",
+			Integer.toString(serverRetryCount++)
+		    };
+		    System.out.println("Waiting before retrying connection");
+		    Thread.sleep(10000);
+		    GameClient.main(argvClient2);
+		} else if (serverRetryCount == 0) {
+		    String[] argvClient2 = new String[]{
+			backup.getBackupInIp(),
+			backup.getBackupExIp(),
+			"1099",
+			Integer.toString(serverRetryCount++)
+		    };
+		    System.out.println("trying to connect to"+
+				       	backup.getBackupInIp() +
+				       	backup.getBackupExIp() +
+				       Integer.toString(serverRetryCount)
+				       );
+
+		    System.out.println("Waiting before retrying connection");
+		    Thread.sleep(10000);
+		    GameClient.main(argvClient2);
+		}
+		System.exit(0);
+	    }
+	    catch (Throwable e2) {
+		System.out.println("Inte ska du va har! :D");
+
+		e2.printStackTrace();
+		System.exit(0);
+	    }
 	}
 
 
@@ -132,11 +179,11 @@ public class GameClient {
 
     /** 
      * Asks user for input
-	 * @param game Current game being played
-	 * @param playerNo Number ID of player
-	 * @param maxAnswerTime The maximum time for the user to wait to answer
-	 * @comments The first two parameters are used to update the players hitTime/answerTime attribute
-    */
+     * @param game Current game being played
+     * @param playerNo Number ID of player
+     * @param maxAnswerTime The maximum time for the user to wait to answer
+     * @comments The first two parameters are used to update the players hitTime/answerTime attribute
+     */
     public static void getAnswer(GameInterface game, int playerNo, long maxAnswerTime)  throws RemoteException {
 	Scanner userInput = new Scanner(System.in);
 	String answer = "";
@@ -145,10 +192,10 @@ public class GameClient {
 	System.out.println("Do you want to hit the deck? (y/n)"); 
 	//while(answerTime < maxAnswerTime) {
 	//if (!answer.equals("")) { break; }
-	    answer = userInput.nextLine();
-	    answerTime = System.nanoTime() - startTime; 
-	    //System.out.println("time: "+answerTime);
-	    //}	
+	answer = userInput.nextLine();
+	answerTime = System.nanoTime() - startTime; 
+	//System.out.println("time: "+answerTime);
+	//}	
 	if(answer.equals("")) { answerTime = 0L; }
 	game.updatePlayerTime(playerNo, answerTime); 
 	// SECURITY! check if playerNO is the "matching" ip for that player.

@@ -12,10 +12,11 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     private ArrayList<Player> gamePlayers;
     private String lastEvent;
  
-    public Game (int round,Deck gameDeck,Deck starterDeck,ArrayList<Player> gamePlayers) throws RemoteException {
-	//super(1099);
+    public Game (int round,Deck gameDeck,ArrayList<Player> gamePlayers) throws RemoteException {
+	//	super(1100);
 	this.lock = new Semaphore(1);
-	setGameValues (round,gameDeck,starterDeck,gamePlayers);
+	this.lastEvent = "";
+	setGameValues (round,gameDeck,gamePlayers);
     }
 
     public Game (int numberOfPlayers) throws RemoteException {
@@ -31,6 +32,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	}
     }
 
+    
     /** 
      * Checks whether it's time to hit,
      * that is, check whether any of the previous 4 cards
@@ -118,7 +120,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 		return i;
 	    }
 	}
-	return 0; //detta får inte hände lol
+	return 0; //detta far inte hande lol
     }
 
 
@@ -189,18 +191,23 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
        TODO: Security for if wrong alias?
      */
     public void removePlayer(String alias) throws RemoteException {
-	int len = gamePlayers.size();
 	String name;
-	int index = 0;
-	for(int i=0; i < len; i++) {
-	    name = gamePlayers.get(i).getPlayerName();
-	    if (name.equals(alias)) {
-		index = i;
-		break;
+	boolean found = false;
+	    for(int i=0; i < gamePlayers.size(); i++) {
+		name = gamePlayers.get(i).getPlayerName();
+		if (found) {
+		    this.gamePlayers.get(i).setNumberOfPlayer(i);
+		}
+		if (name.equals(alias)) {
+		    this.gamePlayers.remove(i);
+		    found = true;
+		    i= i-1;
+		   
+		}
 	    }
-	}
-	this.gamePlayers.remove(index);
     }
+
+    
 
     
     /** 
@@ -231,6 +238,16 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	return gamePlayers.get(playerNo);
     }
 
+
+    public String getPlayerInIp(int no) throws RemoteException {
+	return gamePlayers.get(no).getInIp();
+    }
+
+    
+    public String getPlayerExIp(int no) throws RemoteException {
+	return gamePlayers.get(no).getExIp();
+    }
+    
 
     /**
      * Initiate game by giving out cards and select who start first 
@@ -271,7 +288,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     /**
      * Tells the amount of players in the game
      */
-    public int getAmountOfPlayers(){
+    public int getAmountOfPlayers() throws RemoteException {
     	int amountPlayers = this.gamePlayers.size();
     	return amountPlayers;
     }
@@ -405,7 +422,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
      * @param starterDeck is the new starterDeck value.
      * @param gamePlayers is the new gamePlayers value.
      */
-    public void setGameValues (int round,Deck gameDeck,Deck starterDeck,ArrayList<Player> gamePlayers) throws RemoteException {
+    public void setGameValues (int round,Deck gameDeck,ArrayList<Player> gamePlayers) throws RemoteException {
 	this.round = round;
 	this.gameDeck = gameDeck;
 	this.starterDeck = starterDeck;
@@ -471,6 +488,17 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
     }
 
 
+    public int askPlayerExist(String inIP, String exIP, String alias) throws RemoteException {
+	for (int i = 0; i < gamePlayers.size(); i++) {
+	    if(gamePlayers.get(i).getPlayerName().equals(alias) &&
+	       gamePlayers.get(i).getInIp().equals(inIP) &&
+	       gamePlayers.get(i).getExIp().equals(exIP)
+	       )
+		return gamePlayers.get(i).getPlayerNumber();
+	}
+	return -1;
+    }
+    
     /**
      * Checks every players ready status and returns a boolean saying if all are ready.
      * @return returns true if all players are ready.
@@ -641,7 +669,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 
     public void removeQuitters() throws RemoteException {
 	//TODO: Ta bort spelare som inte svarade
-    //TODO: Omd det var den personens tur: ändra dess rank och hoppa till nästa tur?
+    //TODO: Omd det var den personens tur: andra dess rank och hoppa till nasta tur?
 
 	Player potentialQuitter;
 	int times;
@@ -670,7 +698,7 @@ public class Game extends UnicastRemoteObject implements GameInterface, java.io.
 	    ArrayList <Player> sortedList = sortPlayers();
 	    this.lastEvent = "";
 	    
-	    // TODO: rensa sortedList på spelare som är klara med spelet?
+	    // TODO: rensa sortedList pa spelare som ar klara med spelet?
 
 	    String action = sortedList.get(0).getPlayerAction();
 	    boolean movingOn = sortedList.get(0).getPlayerNumber() == whoseTurn() &&

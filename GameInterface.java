@@ -35,7 +35,7 @@ public interface GameInterface extends Remote {
      * @rparam gamePlayers is the new gamePlayers value
      * @rparam playerAliases is the new playerAliases value
      */
-    public void setGameValues (int round,Deck gameDeck,Deck starterDeck,ArrayList<Player> gamePlayers) throws RemoteException;
+    public void setGameValues (int round,Deck gameDeck,ArrayList<Player> gamePlayers) throws RemoteException;
 
 
     /**
@@ -48,9 +48,13 @@ public interface GameInterface extends Remote {
      */
     public int addPlayer(String inIp, String exIp, String alias) throws RemoteException;
 
+    public String getPlayerInIp(int no) throws RemoteException;
 
+    public String getPlayerExIp(int no) throws RemoteException;
 
+    public int getAmountOfPlayers() throws RemoteException;
 
+    public int askPlayerExist(String inIP, String exIP, String alias) throws RemoteException;
 
     /////////// Game status related //////////////////////////////////////
     
